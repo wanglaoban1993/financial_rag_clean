@@ -1,0 +1,106 @@
+# Golden eval cases for the agentic RAG (rag/agent_retriever.py + rag/agent_tools.py).
+#
+# Each case is run once through an adapter (eval/adapters/single_agent.py today) and
+# checked by whichever evaluators recognize keys under `expect`:
+#   - tool_selection.py   -> expect.tools_called (exact ordered list)
+#   - rule_compliance.py  -> expect.answer_must_contain_date /
+#                             expect.answer_keywords_any / expect.answer_keywords_none
+#   - retrieval.py        -> expect.passages_keywords_any
+#
+# NOTE: the `retrieval` category cases below check against whatever is actually in
+# *your* local FAISS index / watchlist CSVs. Swap the keywords for something you know
+# is currently indexed (or drop the case) before trusting those results.
+
+- id: greeting_no_tool
+  category: tool_selection
+  query: "Wer bist du?"
+  expect:
+    tools_called: []
+
+- id: list_sources
+  category: tool_selection
+  query: "Was ist in meinem Dokumentenindex?"
+  expect:
+    tools_called: ["list_indexed_sources"]
+
+- id: list_sources_alt_phrasing
+  category: tool_selection
+  query: "Gib mir eine Übersicht über indexierte Quellen"
+  expect:
+    tools_called: ["list_indexed_sources"]
+
+- id: isin_gate_blocks_bare_name
+  category: rule_compliance
+  query: "Wie steht SAP gerade?"
+  expect:
+    tools_called: ["search_watchlist"]
+    answer_keywords_any: ["ISIN", "WKN"]
+
+- id: isin_gate_blocks_bare_name_alibaba
+  category: rule_compliance
+  query: "Was macht Alibaba aktuell?"
+  expect:
+    tools_called: ["search_watchlist"]
+    answer_keywords_any: ["ISIN", "WKN"]
+
+- id: isin_gate_followup_allows_quote
+  category: rule_compliance
+  query: "DE0007164600"
+  history:
+    - {role: user, content: "Wie steht SAP gerade?"}
+    - {role: assistant, content: "Bitte gib mir die ISIN oder WKN von SAP."}
+  expect:
+    tools_called: ["get_market_quote"]
+
+- id: index_query_no_isin_gate
+  category: tool_selection
+  query: "Wie steht der DAX gerade?"
+  expect:
+    tools_called: ["get_market_quote"]
+
+- id: commodity_query_no_isin_gate
+  category: tool_selection
+  query: "Wie steht Gold gerade?"
+  expect:
+    tools_called: ["get_market_quote"]
+
+- id: price_answer_has_date
+  category: rule_compliance
+  query: "Wie steht Gold gerade?"
+  expect:
+    tools_called: ["get_market_quote"]
+    answer_must_contain_date: true
+
+- id: watchlist_theme_search_china
+  category: tool_selection
+  query: "Welche China ETFs habe ich?"
+  expect:
+    tools_called: ["search_watchlist"]
+
+- id: watchlist_theme_search_health
+  category: tool_selection
+  query: "Zeig mir meine Health-Sektor Positionen"
+  expect:
+    tools_called: ["search_watchlist"]
+
+- id: doc_search_generic
+  category: tool_selection
+  query: "Suche in den Dokumenten nach Informationen zur Zinspolitik"
+  expect:
+    tools_called: ["search_documents"]
+
+# --- retrieval-quality cases: adjust keywords to match your real index ---
+
+- id: doc_search_relevant_inflation
+  category: retrieval
+  query: "Was schreibt die UBS zu Inflation?"
+  expect:
+    tools_called: ["search_documents"]
+    passages_keywords_any: ["Inflation", "inflation"]
+
+- id: watchlist_search_relevant_china
+  category: retrieval
+  query: "Welche China ETFs habe ich?"
+  expect:
+    tools_called: ["search_watchlist"]
+    passages_keywords_any: ["China"]

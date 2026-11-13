@@ -1,0 +1,2550 @@
+# Financial RAG
+
+**A watchlist dashboard with a document question-answering assistant.** Equity, ETF, index and top-list tables with live quotes and analyst target prices, 1-year price history, and a RAG agent that answers from your own newsletters, PDFs and market data.
+
+![Watchlist Intelligence demo: sector tables, price history, market commentary and document Q&A](docs/screenshots/watchlist_demo.gif)
+
+## Try the demo
+
+The demo is one self-contained [Streamlit page](demo/dashboard_demo.py). It reads the sample files in `demo_data/` and needs **no login, no API keys and no database; it makes no network call**.
+
+```sh
+pip install -r demo/requirements.txt
+streamlit run demo/dashboard_demo.py      # opens http://localhost:8501
+```
+
+| Tab                             | What it shows                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Equity**, **ETF** | One sub-tab per list (HEALTH, TECH, GLOBAL): up / down counters and a table with colour-coded 1-day, 1-month and 1-year changes. **Click a cell** to open a dialog: an ISIN, WKN or name opens the price history with **EMA 20** and **MACD** switches (MACD with buy / sell crossings), the **TMP** cell of an equity the price-target and analyst-recommendation charts, the day-change cell how the figure is calculated. Below the table the same price chart for any instrument |
+| **Market Commentary**     | Three short sample market notes, each expandable                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Ask the Documents**     | Preset question and answer cards, with the source note each answer cites                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+
+**What is real and what is not.** Prices, price history, analyst targets, recommendations and commentary are invented for the demo, and the pages say so; the price chart is a synthetic path, not a quote history. The charts and dialogs themselves are the full dashboard's own (`server_app/history_charts.py`, `server_app/target_chart.py`, `server_app/diff_explain.py`), fed with the invented numbers (`demo/synthetic.py`): the same instrument gets the same numbers on every start, and the previous close in the day-change dialog is the one that reproduces the table's percentage. The answers in "Ask the Documents" are **prewritten and no model is called**. In the full system (`query.py`, `rag/retriever.py`) the documents are embedded, the matching passages are retrieved with FAISS, and a local (Ollama) or cloud (MiniMax) model writes the answer.
+
+To host it yourself, point [Streamlit Community Cloud](https://streamlit.io/cloud) at `demo/dashboard_demo.py` with `demo/requirements.txt`; it needs no secrets.
+
+**What the full system adds** (the demo has no live data: where the full system shows real numbers, the demo shows invented ones):
+
+- Live Bid/Ask from onvista with Yahoo as the fallback, an analyst target price per instrument, the Top list and the index lists (DAX, TecDAX, MDAX, SDAX, EURO STOXX 50, Hang Seng, Dow Jones, Nasdaq 100).
+- The same dialogs on real data: the **TMP** cell shows the analyst targets Yahoo publishes, converted into the row's currency, and the recommendations ([Target price dialog](#target-price-dialog)); an ISIN cell the 1-year history with indicators ([Price-history chart](#price-history-chart)); a day-change cell the stored previous close and where it came from.
+- A RAG agent that answers from emails, PDFs and market data, local first with a cloud fallback.
+
+<details>
+<summary>More screenshots of the demo</summary>
+
+![Dashboard demo screenshot](docs/screenshots/dashboard_demo.png)
+![Dashboard demo history chart](docs/screenshots/dashboard_demo_history_chart.png)
+![Dashboard demo document Q&A](docs/screenshots/dashboard_demo_qa.png)
+
+</details>
+
+This folder contains two related workflows:
+
+- A local financial RAG pipeline for emails, PDFs, market snapshots, embeddings, FAISS retrieval, and a local LLM query interface.
+- Watchlist maintenance tools for ActiveTrader CSV exports, including target prices, fund metadata, technical signals, embedded Top List sheets, and subcategory management.
+- Market overview helpers, including finanzen.net Top/Flop exports for the homepage Aktien Top/Flop indices.
+
+## Dependency Installation (Auto CPU/GPU)
+
+Use one command to install dependencies across machines:
+
+```sh
+./scripts/install_requirements.sh
+```
+
+The script auto-detects NVIDIA GPU support:
+
+- If available, it installs CUDA-enabled Torch wheels.
+- If not available, it installs CPU-only Torch wheels.
+
+Then it installs `requirements.txt`.
+
+Most day-to-day work currently happens through `csv_analyse_watchlist.py`.
+
+## Server MVP
+
+Stage 1 infrastructure lives in [`ops/stage1.md`](ops/stage1.md):
+
+- PostgreSQL in Docker Compose
+- local-only database port binding
+- automatic `pg_dump` backups
+- internal-only check page for Cloudflare Access/Tunnel verification
+- optional Cloudflare Tunnel connector behind Cloudflare Access
+
+Start with:
+
+```sh
+cp .env.example .env
+docker compose up -d postgres postgres-backup stage1-check
+```
+
+Before starting services that read runtime config, set `FIN_RAG_CONFIG` in `.env`
+to an external host path (outside the repository), for example:
+
+```sh
+FIN_RAG_CONFIG=/home/your-user/.config/financial_rag/config.yaml
+```
+
+The Compose stack now mounts that host file read-only into the container and
+sets container-side `FIN_RAG_CONFIG` automatically, so services no longer depend
+on `./config.yaml` in the project root.
+
+### Update the Cloudflare Tunnel connector
+
+The Compose service uses `cloudflare/cloudflared:latest`. To pull the latest image
+and recreate the running connector:
+
+```sh
+docker compose --profile tunnel up -d --pull always --force-recreate cloudflared
+docker compose --profile tunnel exec cloudflared cloudflared --version
+```
+
+The `--no-autoupdate` argument in the service command disables updates from
+inside the running `cloudflared` process; it does not prevent Docker Compose
+from pulling a new image. Compose manages this service, so update it with the
+commands above rather than starting a separate `docker run` container. The
+connector briefly reconnects during recreation, so expect a short interruption
+to tunnel traffic.
+
+Stage 2 starts the local API/dashboard pair:
+
+```sh
+docker compose up -d api dashboard
+docker compose run --rm api python -m server_app.import_watchlists
+```
+
+If you prefer one-shot shell exports instead of editing `.env`:
+
+```sh
+FIN_RAG_CONFIG=/home/your-user/.config/financial_rag/config.yaml \
+docker compose up -d api agent-api dashboard
+```
+
+More detail lives in [`ops/stage2.md`](ops/stage2.md).
+
+Local URLs:
+
+- API health: http://127.0.0.1:8000/health
+- Dashboard: http://127.0.0.1:8501
+
+### Dashboard tabs and list editing
+
+The dashboard has six tabs, one per folder under `csv_update/`: `TOP_LIST` and `INDEX` (generated by
+scripts, read-only) and `EQUITY`, `ETF`, `BUYLIST`, `DEPOTS` (hand-edited lists). Each list is one CSV
+file; the file name is the list name.
+
+The four editable tabs offer the same controls, all writing to the CSV first and then re-importing
+that file into Postgres:
+
+| Control                                                                                                                | What it does                                                                                                                                                                                                                                                                         |
+| ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Action` › `+ New list`                                                                                           | Creates an empty list (header-only CSV). Names may not contain `/ \ ; : * ? " < > \|`, start with `_` or `.`, or end in `_top` / `_merged`.                                                                                                                                 |
+| `Action` dropdown: `+ Add instrument` / `- Remove instrument` / `⧉ Copy instrument` / `🗑 Delete this list` | One dropdown under the list selector; pick an action and its form appears below. Add looks the ISIN up on onvista.de and Yahoo (name, WKN, Bid/Ask, returns, TA code); remove drops one ISIN.                                                                                        |
+| `🗑 Delete this list`                                                                                                | Needs the confirmation checkbox. The CSV and its XLSX are **moved** to `csv_update/_deleted/<TAB>/<name>_<timestamp>.*`, not erased, and the list leaves Postgres (`DELETE /watchlists`). To undo, move the files back and run `python -m server_app.import_watchlists`. |
+| Click an ISIN/WKN/Note/COMMENT cell                                                                                    | Price-history chart, note, and (editable tabs) the list's COMMENT.                                                                                                                                                                                                                   |
+
+The price-history chart opened from an ISIN/WKN cell is described under "Price-history chart" below.
+
+**BUYLIST and DEPOTS** hold a mix of equities and ETFs. Differences from EQUITY/ETF:
+
+- Adding an ISIN detects its type from onvista (`/etf/` or `/fonds/` means ETF, otherwise stock) and
+  looks it up accordingly. If the ISIN is already in an `EQUITY` or `ETF` list, its row is copied
+  from there and nothing is looked up (`server_app/shared_lists.py`).
+- `COMMENT2` is shown as two columns, `TMP` (the analyst target, for an equity) and `Laufende Kosten` (the
+  running costs, for an ETF); each row fills only one. A value ending in `%`, or `-`, counts as
+  Laufende Kosten, anything else as TMP (display-only: the CSV and DB still hold one `COMMENT2`/`tmp`
+  column). The Potential columns are empty on ETF rows.
+- Price refresh avoids duplicate fetches, see "BUYLIST and DEPOTS refresh".
+
+### Copying instruments between lists
+
+Every editable tab (EQUITY, ETF, BUYLIST, DEPOTS) has a `⧉ Copy instrument` expander: pick an
+instrument and a target list (`POST /instruments/copy`, `watchlist_edit.copy_instrument`). The source
+list keeps its row; to take it out of there as well, use `- Remove instrument`. Where an instrument may
+go is `shared_lists.COPY_TARGETS`:
+
+| From                                        | To                                                        |
+| ------------------------------------------- | --------------------------------------------------------- |
+| EQUITY list                                 | other EQUITY lists, BUYLIST, DEPOTS                       |
+| ETF list                                    | other ETF lists, BUYLIST, DEPOTS                          |
+| TOP_LIST (`top_liste_latest`), INDEX list | EQUITY lists, BUYLIST, DEPOTS (not ETF: both hold stocks) |
+| BUYLIST / DEPOTS list                       | other BUYLIST / DEPOTS lists                              |
+
+An equity never goes to an ETF list or the other way round, and nothing goes back from BUYLIST/DEPOTS
+to EQUITY/ETF. TOP_LIST and INDEX are rewritten by the scrapers and can't be edited.
+
+The TOP_LIST and INDEX tabs have the same `⧉ Copy instrument` expander, as a source only. A
+Top list or INDEX row is comma separated with its own column names, so it is mapped: `TMP` to `COMMENT2`, `Pot` to
+`Kurspotential`, `Pot %` to `Kurspotential %`, `Diff Basis` to `DIFF_BASIS`; `Index`, `Rank`, `Source %` and
+`Diff Flag` are dropped, and `COMMENT`, `QUANTITY` and `STOCK_ID` stay empty (like after `+ Add instrument`; the
+next scheduled enrichment fills what it can). The row has no WKN, so the API looks it up on onvista
+(best-effort, blank if it fails). A stock in several indices has one row per index and the rows differ (after the
+Xetra close Deutsche Bank's DAX row had no Bid/Ask/day change, its EURO STOXX 50 row had them), so the row with
+the most filled-in market values is copied (an INDEX file has one row per stock).
+
+The row is carried over as it is, matched to the target's columns by name: the per-list `COMMENT`, the
+TMP/Laufende Kosten value in `COMMENT2`, the quote and the signal columns come along, columns the target
+doesn't have are dropped. An ISIN already in the target is refused. The target CSV is rewritten
+atomically and re-imported into Postgres.
+
+### BUYLIST and DEPOTS refresh
+
+`refresh_shared_lists.py {bid-ask|full}` refreshes every list in `csv_update/BUYLIST` and
+`csv_update/DEPOTS` without re-fetching what the EQUITY/ETF jobs already keep current:
+
+1. An ISIN that also sits in an `EQUITY` or `ETF` list (and has a quote there) gets that row's market
+   columns copied (`QUANTITY`, `COMMENT2`, `COMMENT3`, `Name`, Bid/Ask and times, the three `% Differenz` columns, `Kurspotential`, `DEV`, ...). `COMMENT` is per list and never copied.
+2. Every other ISIN is fetched **once** through `csv_analyse_watchlist.py` (`--bid-ask-only` for
+   `bid-ask`, a full enrichment with `--skip-subcategories` for `full`), even when several BUYLIST/DEPOTS
+   lists contain it, and the result is copied to all of them.
+
+`scripts/run_shared_lists_scheduled.sh` wraps it (own lock, logs in
+`csv_update/_shared_lists_cron_logs/`, bid/ask only 08:40-23:00):
+
+```text
+2-59/6 * * * 1-5 /path/to/financial_rag/scripts/run_shared_lists_scheduled.sh bid-ask
+30 10 * * 1-5 /path/to/financial_rag/scripts/run_shared_lists_scheduled.sh full
+10 17 * * 1-5 /path/to/financial_rag/scripts/run_shared_lists_scheduled.sh full
+```
+
+The bid/ask run starts two minutes before the EQUITY/ETF bid/ask ticks (`:04 :10 ...`) and the full runs
+come after the daily EQUITY/ETF full runs, so the copied values are the latest ones. `--dry-run` reports
+how many ISINs would be fetched. After a deploy, `docker compose up -d --build api dashboard` picks up the
+new tabs and endpoints.
+
+**How fresh the prices are.** Weekdays, German local time:
+
+| Step                                              | When                                                |
+| ------------------------------------------------- | --------------------------------------------------- |
+| Bid/ask refresh of BUYLIST and DEPOTS             | every 6 minutes at `:02 :08 :14 ...`, 08:40-23:00 |
+| Full refresh (targets, history changes, ...)      | 10:30 and 17:10                                     |
+| Import into PostgreSQL (what the dashboard shows) | `:05 :20 :35 :50`, 08:00-22:00, and 23:05         |
+
+A row copied from an EQUITY or ETF list carries the quote that list read at its previous tick (`:04 :10 ...`), so its
+`Bid Time` / `Ask Time` is about 4 to 10 minutes old when copied, and up to 15 minutes more can pass before the
+import. The copy is only as current as its source: EQUITY bid/ask runs 08:40-15:30 and 16:10-23:00, ETF bid/ask
+09:30-16:20 and 17:00-19:00, so an ETF row does not change outside those windows although the shared job still runs.
+Only an ISIN found in no EQUITY/ETF list is fetched from onvista by the shared job itself (4 per run in the log of
+2026-10-29 18:02).
+
+### Price-history chart
+
+Clicking an ISIN/WKN cell opens a dialog with 1 year of daily prices (`server_app/history_charts.py`,
+rendered by `render_history_charts` in `server_app/dashboard.py`). Clicking a **TMP** cell opens the
+target-price dialog instead (see "Target price dialog" below).
+
+**What it does**
+
+- Stacked panels on one shared time axis: price on top, then MACD, then Stochastic. A vertical
+  crosshair marks the same day in every panel.
+- Three checkboxes above the chart, all **off by default** (the chart then shows the closing price only):
+
+| Checkbox   | Draws                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| EMA 20     | Exponential moving average of the close on the price panel (`alpha = 2 / (N + 1)`, blank until 20 closes exist). |
+| MACD       | New panel with the MACD line (EMA12 - EMA26), the signal line (EMA9 of it) and the histogram between them.         |
+| Stochastic | New panel with Slow Stochastic (14, 3, 3): %K and %D, with guide lines at 20 and 80.                               |
+
+- **Buy/sell markers** in the MACD and Stochastic panels: a green triangle up where the line crosses above
+  its signal (MACD over signal, %K over %D), a red triangle down where it crosses below. The parameters and
+  the cross rule are the ones behind the `QUANTITY` TA code (`server_app/indicators.py` mirrors
+  `yahoo_lookup.py` and the batch pipeline), so every marker is a signal that code would also report. They
+  are plain crosses, with no overbought/oversold filter, so the Stochastic panel has many.
+- **Zoom and pan:** the mouse wheel zooms and dragging pans the time axis, for all panels together. The
+  vertical axes do not rescale to the visible range.
+- **Hover:** a tooltip shows the date and the values of the nearest day (Close and EMA 20 on the price
+  panel; MACD, signal and histogram; %K and %D). The toolbar at the chart's top right has the fullscreen
+  button.
+- The dialog is `medium` (up to 750 px; `width=` of `@st.dialog` in `dashboard.py`). There is no EMA 50/200: a 1-year history would leave the 200-day line blank for
+  most of the chart.
+
+**Data.** `/history` returns `date`, `close`, `high`, `low` per day (yfinance, with EODHD as the
+fallback; the ISIN is mapped to a ticker through `isin_symbol_candidates.yaml`). The Stochastic needs high/low; when a source has none,
+the dashboard says so and skips that panel. The API caches a symbol's history for an hour, so after an
+upgrade of the api image the first chart of each symbol is fetched again.
+
+**Implementation notes** (things that cost time):
+
+- The whole chart is one Altair chart (`build_history_chart`), sent to the browser with
+  `st.vega_lite_chart(to_spec(chart))`, not `st.altair_chart`. A built-in `st.line_chart` has zoom and
+  tooltips for free; a hand-built chart has to ask for both, and that is what went missing in the first
+  version of this chart.
+- Altair gives every parameter (the zoom and the crosshair) to every named view of a layer, and Vega then
+  fails with "Duplicate signal name" and draws nothing. `to_spec` therefore restricts the zoom to its own
+  view and keeps the crosshair off it. `.interactive()` must not be used on the layered price panel for
+  the same reason.
+- The crosshair parameter sits on the invisible per-day points that carry the tooltip; a "nearest" selection
+  puts an invisible Voronoi layer over its own view, which would otherwise swallow the tooltips.
+- Streamlit does not reload imported modules while it runs: after editing `history_charts.py` or
+  `indicators.py`, restart `streamlit run` (or rebuild the container) before checking the page.
+- `streamlit run server_app/dashboard.py` puts the `server_app/` folder, not the project root, on
+  `sys.path`; `dashboard.py` and `history_charts.py` therefore try `from server_app import ...` first and fall
+  back to a plain `import ...`.
+
+**Files:** `server_app/history_charts.py` (chart), `server_app/indicators.py` (EMA, MACD, Stochastic,
+crossovers), `server_app/history.py` (`/history` data), `server_app/dashboard.py` (checkboxes and dialog). After changing any of them:
+`docker compose up -d --build api dashboard`.
+
+## RAG Pipeline
+
+### Workflow
+
+```text
+Ingestion (main.py, scheduled + on-demand)
+--------------------------------------------
+Email / PDF / market sources
+        |
+        v
+PDF parsing and text chunking (processing/)
+        |
+        v
+Embeddings (rag/embedder.py)
+        |
+        v
+FAISS vector store (rag/vector_store.py)
+
+
+Query time -- CLI (query.py)
+--------------------------------------------
+User question
+        |
+        v
+CLI-level intent detection (query.py)
+  /quote, /quote_summary, bare ISIN/WKN,
+  "price of ...", "股价/价格/行情" heuristics
+        |
+        +-- matched --> local watchlist (csv_update) lookup, else live
+        |               provider chain (Finnhub -> EODHD -> Alpha Vantage ->
+        |               yfinance); result printed directly AND bridged into
+        |               the next RAG prompt via retriever.set_market_context()
+        |
+        v  (not a quote/summary command)
+   --agent flag?
+        |
+        +-- no  --> Pipeline RAG (rag/retriever.py::RAGRetriever)
+        |            see "Pipeline RAG Flow" below
+        |
+        `-- yes --> Agentic RAG (rag/orchestrator.py::Orchestrator)
+                     see "Agentic RAG Flow" below
+
+
+Query time -- web dashboard (server_app)
+--------------------------------------------
+Dashboard "/chat" request
+        |
+        v
+Single tool-calling agent (rag/agent_retriever.py::AgentRetriever)
+  same FAISS index + market_fetcher, MiniMax cloud model only.
+  Not reachable from query.py -- see "Server-Side Single-Agent Flow" below.
+```
+
+### Main Files
+
+```text
+financial_rag/
+|-- config_loader.py
+|-- main.py
+|-- query.py
+|-- ingestion/
+|   |-- email_fetcher.py
+|   |-- market_fetcher.py
+|   `-- csv_watchlist.py
+|-- processing/
+|   |-- pdf_parser.py
+|   |-- file_reader.py
+|   `-- chunker.py
+|-- rag/
+|   |-- embedder.py
+|   |-- vector_store.py
+|   |-- retriever.py          # Pipeline RAG (query.py, default)
+|   |-- orchestrator.py       # Agentic RAG, multi-agent (query.py --agent)
+|   |-- document_agent.py     # specialist: PDFs/emails/watchlists
+|   |-- market_agent.py       # specialist: live quotes
+|   |-- tool_calling_agent.py # shared tool-calling (ReAct-style) loop + response parsing
+|   |-- agent_tools.py        # LangChain tool defs shared by both agents
+|   |-- local_llm.py          # schema-constrained Ollama client (router/critic/grader)
+|   |-- grounding.py          # numeric/date grounding heuristic (pipeline + agent mode)
+|   |-- sources.py            # tool results -> citable sources for the API
+|   |-- agent_retriever.py    # legacy single-agent implementation
+|   `-- pdf_watch.py          # local PDF auto-reindexing (main.py)
+|-- server_app/                # FastAPI + Streamlit dashboard (uses Orchestrator)
+`-- data/
+    |-- pdfs/
+    |-- faiss_index/
+    `-- raw_texts/
+```
+
+### Basic Run
+
+### Config File Location (FIN_RAG_CONFIG)
+
+Runtime scripts now load configuration via the `FIN_RAG_CONFIG` environment variable.
+
+Recommended secure location:
+
+```sh
+~/.config/financial_rag/config.yaml
+```
+
+Example setup:
+
+```sh
+mkdir -p ~/.config/financial_rag
+mv ~/Projects/config.yaml ~/.config/financial_rag/config.yaml
+chmod 600 ~/.config/financial_rag/config.yaml
+export FIN_RAG_CONFIG="$HOME/.config/financial_rag/config.yaml"
+```
+
+Fallback order when `FIN_RAG_CONFIG` is not set:
+
+1. `~/.config/financial_rag/config.yaml`
+2. `~/Projects/config.yaml`
+3. `./config.yaml` (project root, legacy)
+
+For Docker Compose, `FIN_RAG_CONFIG` should always be set in `.env` (or passed
+inline on the command line), because the `agent-api` service bind-mounts this
+exact host path.
+
+### Docker Demo Stack
+
+The demo stack uses the same `FIN_RAG_CONFIG` mechanism. Set it in `.env.demo`:
+
+```sh
+FIN_RAG_CONFIG=/home/your-user/.config/financial_rag/config.yaml
+```
+
+Then start demo services:
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.demo.yml \
+  -p financial-rag-demo --env-file .env.demo up -d --build
+```
+
+Start Ollama and pull the local model:
+
+```powershell
+ollama serve
+ollama pull qwen3:8b
+```
+
+Smoke-test market ingestion:
+
+```powershell
+python -c "from ingestion.market_fetcher import MarketFetcher; mf = MarketFetcher(['AAPL', '0700.HK']); docs = mf.fetch(); print(docs[0]['text'][:300])"
+```
+
+Run the scheduler (email/PDF/market ingestion + PDF cleanup) and the query interface:
+
+```powershell
+python main.py
+python query.py
+```
+
+`query.py` supports two retriever backends:
+
+- Default (no flag): Pipeline RAG (`rag/retriever.py::RAGRetriever`). Runs locally on Ollama (`qwen2.5:3b` by default) and only escalates to the cloud MiniMax model when a `routing.cloud_keywords` match, retrieval relevance is low, or the local model times out (see `llm.routing` in `config.yaml`). Every answer also passes through a post-generation numeric grounding check -- see "Post-Processing" below.
+- `python query.py --llm minimax`: Pipeline RAG forced to MiniMax cloud generation for every question.
+- `python query.py --llm ollama`: Pipeline RAG forced to local Ollama generation.
+- `python query.py --agent`: Agentic RAG (`rag/orchestrator.py::Orchestrator`) -- a LangGraph supervisor over two MiniMax-backed specialist agents with a critic-driven feedback loop:
+  - `DocumentAgent` -- `search_documents`, `read_file`, `search_watchlist`, `list_indexed_sources`
+  - `MarketAgent` -- `get_market_quote`
+    See "Agentic RAG Flow" below for the full graph.
+
+The web dashboard uses the same agentic backend as `python query.py --agent`. Its
+`server_app/agent_api.py` `/chat` endpoint creates `rag/orchestrator.py::Orchestrator`
+directly and calls `Orchestrator.query()` for each request. It does not start the
+interactive `query.py` process, because the web API needs request handling and shared
+conversation state rather than `input()`-based terminal interaction.
+
+### Pipeline RAG Flow
+
+Each question sent to the default (`RAGRetriever`) backend follows this path
+(step numbers match the comments in `rag/retriever.py::query()`):
+
+1. **Retrieve** -- a directly-referenced file (`find_referenced_file`) takes priority; else a
+   PDF filename match (`search_by_filename`); else semantic search
+   (`search_text_with_scores`), which also returns `best_score`.
+2. **Route** local vs. cloud:
+   - `routing.cloud_keywords` match (e.g. investment-advice questions) -> cloud, always wins.
+   - `best_score < routing.relevance_threshold` -> cloud (unless it's a market question and
+     `force_local_for_market` is set).
+   - local inference exceeds `routing.local_timeout_seconds` -> falls back to cloud mid-query.
+   - otherwise -> local Ollama.
+3. **Generate** -- build the prompt (evidence + live market context + conversation
+   history/summary + question) and stream tokens from the chosen backend.
+4. **Grounding check** (post-processing, see below) -- flag any number/date in the answer
+   that isn't backed by the retrieved evidence or live market data.
+5. **Save history** -- append the turn; once turns fall out of the recent-history window
+   (`rag.history_recent_turns`), fold them into a running summary via a separate,
+   non-blocking local-LLM call.
+6. **Log route stats** (optional, `llm.routing.enable_route_stats`) -- append a JSONL event
+   with the routing decision, relevance score, and matched keyword.
+
+### Agentic RAG Flow
+
+`python query.py --agent` runs a LangGraph state machine (`rag/orchestrator.py::Orchestrator`):
+
+```text
+route (LLM classifier, local Ollama -> MiniMax fallback)
+        |
+        v
+ document | market | both | chitchat
+        |
+        +-- "market" --------> resolve_identifier (bare name -> ISIN/ticker,
+        |                       via DocumentAgent.resolve_identifier)
+        |                              |
+        `-- everything else --> document agent runs first
+                                       |
+                                       v
+                        specialist agent's own tool-calling loop
+             DocumentAgent: search_documents / read_file / read_email / search_watchlist /
+                            list_watchlists / get_watchlist /
+                            list_indexed_sources / list_recent_documents,
+                            each search graded for relevance before the
+                            agent is allowed to answer
+             MarketAgent:   get_market_quote / get_instrument_profile /
+                            get_price_history / get_company_news /
+                            get_news_sentiment
+                                       |
+                                       v
+                    critic (local LLM -> MiniMax fallback) judges the
+                    findings so far against the original question
+                                       |
+                    +------------------+-------------------+
+                    |                                       |
+             need_document / need_market                 complete
+             (targeted follow-up question,          (or hit
+              looped back into that agent,           agent.max_feedback_iterations)
+              up to max_feedback_iterations)                |
+                                                              v
+                                              synthesize (LLM merge, only if BOTH
+                                              document_result and market_result
+                                              contributed; else pass the single
+                                              specialist's result straight through)
+                                                              |
+                                                              v
+                                                        final answer
+```
+
+Every local-model call in this graph (router, critic, per-search grader) is a
+schema-constrained JSON call to Ollama (see "Changes" below) and fails open to the MiniMax
+cloud client on timeout/error/out-of-schema output. MiniMax responses are passed through
+`ToolCallingAgent._strip_think` to drop any `<think>...</think>` block the model leaks despite
+`thinking: disabled`. The shared tool-call parser accepts JSON, standard MiniMax XML
+(`<parameter>` children or attribute style), and the legacy `[/INVOKE]` terminator.
+The numeric grounding check described below runs on every final answer in both modes.
+
+Inside each specialist, `ToolCallingAgent.query()` is a ReAct-style loop (at most
+`MAX_TOOL_HOPS` rounds: 4 for the DocumentAgent, 6 for the MarketAgent, 8 once `read_file` /
+`read_email` has been used; running out returns an `[Incomplete]` reply instead of a forced answer): the model replies, any tool call in the reply is parsed and executed,
+the result is appended as an observation, and the model goes again until it answers without a
+tool call. Tool calls are prompt-and-regex based rather than native function calling because
+MiniMax's `bind_tools` support is unreliable. The critic loop above it is a separate, outer
+reflection loop.
+
+### Post-Processing: Numeric Grounding Check
+
+The prompt tells the model not to invent numbers or dates, but nothing enforced that, so
+`rag/grounding.py::check_numeric_grounding` compares the answer against its evidence. It is
+shared by both modes:
+
+- **Pipeline mode** (`RAGRetriever`, gated by `rag.grounding_check_enabled`, default on): the
+  evidence is the retrieved passages plus live market context.
+- **Agent mode** (`Orchestrator`, gated by `agent.grounding_check_enabled`, default on): the
+  evidence is the **raw tool output** the specialists were shown (`ToolCallingAgent.evidence`:
+  tool results before the grader's note is appended, the injected market context and today's
+  date), plus the recent conversation. The check runs on every final answer, including
+  single-specialist answers that skip `synthesize`. The synthesize step additionally keeps its
+  single regeneration retry (`agent.grounding_retry_enabled`, `agent.grounding_max_retries`).
+
+How a token is matched:
+
+- Percentages, decimal numbers, thousands-separated figures, dates, and 4-digit years are
+  extracted with a single non-overlapping regex pass (`_TOKEN_RE`) -- bare small integers like
+  "3 companies" are deliberately excluded to avoid noisy false positives.
+- Exact, format-agnostic match first: `12.5%` and `12,5%` compare equal, as do `2024-01-15` and
+  `15.01.2024`.
+- Otherwise a **rounding-tolerant** match: a number is grounded if some number in the evidence
+  rounds to it at the precision the answer states. Evidence `165.543` supports `165.54` and
+  `165.5` but not `165.55`; a `%` in the answer matches a bare `3.7` in a JSON field; `165.00`
+  matches `165`. Dates never get tolerance; a bare year must equal an evidence number exactly
+  (the `2026` inside `2026-10-08` counts).
+
+Why raw tool output and not the specialists' answers: if one specialist invents a figure, a
+downstream check against that specialist's own text would accept it.
+
+Unverified tokens are reported, never blocked:
+
+- CLI: `[Grounding Check] ⚠️  Not found in retrieved sources: 99.99, 50.0%`
+- API: `/chat` returns `grounding_warnings: [...]`, and the `/chat/stream` `answer` event carries
+  the same field; the Streamlit dashboard shows "Not found in the retrieved sources -- please
+  verify" under the answer.
+
+It is a rule-based heuristic (no semantic understanding): it cannot tell a number attached to
+the wrong company, cannot verify unit changes such as "1.2 Mrd" vs `1200000000`, and flags
+figures the model computed itself (an average) that never appear in the evidence. The answer
+text and conversation history are never modified by this check.
+
+### Web Dashboard Agent Flow
+
+When a request hits `server_app`'s `/chat` endpoint, it uses the same
+`Orchestrator` flow described above:
+
+1. `server_app/agent_api.py` creates one shared `Orchestrator` at startup.
+2. Each request supplies the browser conversation history to `Orchestrator.set_history(...)`.
+3. The orchestrator routes the question to `DocumentAgent`, `MarketAgent`, or both.
+4. Specialist tool calls are dispatched through `rag/agent_tools.py`.
+5. The critic may request a targeted follow-up before the final answer is returned.
+6. The response carries `sources` and `grounding_warnings` next to the answer; the dashboard
+   renders both.
+
+`rag/agent_retriever.py` remains as a legacy single-agent implementation for older
+experiments and evaluation adapters; it is not the backend used by the current dashboard.
+
+The shared tool-call parser supports JSON/XML and pseudo blocks like:
+
+```text
+[TOOL_CALL]
+{tool => "search_documents", args => { --query "market analysis" }}
+[/TOOL_CALL]
+```
+
+## Agentic RAG: Changes, Reasons, Methods (October 2026)
+
+A review of the agent path found that it was slow, that its hallucination check covered little,
+and that some tools silently returned nothing useful. This section records what was changed, why,
+and how. Timings were measured on this machine (CPU only, no GPU; Ollama 0.34 with `qwen3:4b`
+at ~13 tokens/s), not estimated. MiniMax cloud latency was not measured.
+
+### 1. Grounding check covers the whole agent path
+
+|                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**   | In agent mode the check ran only inside `synthesize`, which is skipped for single-specialist answers (most questions). Its evidence was the specialists' written answers, so a figure one specialist invented could vouch for itself. Warnings were only printed, never shown to the user.                                                                                                                                                                    |
+| **Method**    | `ToolCallingAgent.evidence` collects raw tool results (before the grader's note), the injected market context and today's date. `Orchestrator` accumulates it across specialist runs and critic loops (including the `resolve_identifier` lookup), adds the recent conversation, and checks every final answer. Warnings travel as `last_grounding_warnings` -> `grounding_warnings` in `/chat` and `/chat/stream` -> a caption in the dashboard. |
+| **Tolerance** | `rag/grounding.py` now falls back to a rounding-tolerant match (see "Post-Processing" above), because real tool data is longer than what the model writes (`165.543` vs `165.54`) and JSON carries no `%`. Dates stay exact.                                                                                                                                                                                                                            |
+| **Files**     | `rag/tool_calling_agent.py`, `rag/orchestrator.py`, `rag/grounding.py`, `server_app/agent_api.py`, `server_app/dashboard.py`                                                                                                                                                                                                                                                                                                                          |
+| **Config**    | `agent.grounding_check_enabled` (default `true`)                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+### 2. `get_market_quote` returned no prices
+
+|                   |                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem** | `MarketFetcher.fetch_for_queries()` returned only `symbol/text/timestamp/source`, while the tool read `price`, `currency`, `change_pct` and `provider`, which did not exist. Every quote came back with `price: null`, and the MarketAgent never saw a price. `change_pct` was also looked up under the wrong name (the fetcher uses `change_percent`, as a fraction).                                                    |
+| **Method**  | `_build_results_for_symbols` now adds structured fields (`name`, `price`, `currency`, `price_usd`, `price_eur`, `change`, `change_percent`, `provider`, `error`) next to the existing `text`; nothing was removed, so pipeline mode is unaffected. The tool converts the fraction to a percentage with two decimals (`0.0073` -> `0.73`) and returns an explicit `note`/`error` instead of a silent `null`. |
+| **Files**   | `ingestion/market_fetcher.py`, `rag/agent_tools.py`                                                                                                                                                                                                                                                                                                                                                                                     |
+
+### 3. Local router / critic / grader: constrained output instead of "reply with one word"
+
+|                           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**         | `qwen3:4b` ignored "reply with exactly one word" and wrote pages of reasoning. At ~13 tokens/s the `num_predict=300` cap alone cost ~23 s per call, and the label usually never appeared: replies were empty (-> cloud fallback after the wait) or unparseable (-> silently routed to `document`). Three such calls per question meant ~70 s of local time.                                                                                                                                                                                                                                                                                                                         |
+| **Method**          | `rag/local_llm.py::OllamaJSONClient` calls Ollama's `/api/chat` with a JSON schema in `format` (decoding is constrained to the allowed values, so the object ends as soon as it is complete), `think: false`, `temperature: 0` and a small `num_predict` (route 24, grader 80, critic 120). Router: `{"label": enum}`. Grader: `{"verdict", "reason"}`. Critic: `{"verdict", "follow_up"}`. A model that rejects `think` is retried without it. Timeouts, connection errors, unparseable output and out-of-schema values all fall back to MiniMax (asked for the same JSON), then to the fail-open default (`document` / `sufficient` / `complete`), as before. |
+| **Smaller prompts** | The grader sees source, date and the first 400 characters of each passage instead of pretty-printed JSON; critic inputs are capped at 2500 characters per result. On CPU every prompt token costs time.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Result**          | router 23 s -> **~1.1 s**, critic 23 s -> **~2.5 s**, grader 23 s -> **~6.4 s** (prompt processing dominates; lower `_GRADER_PASSAGE_CHARS` in `rag/orchestrator.py` to go faster).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **Files**           | `rag/local_llm.py` (new), `rag/orchestrator.py`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Config**          | New: `agent.router_base_url` (falls back to `llm.ollama_base_url`, then `http://localhost:11434`; previously hard-coded), `agent.router_keep_alive` (unset = Ollama default). **No longer used:** `agent.router_num_predict`.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+
+Not changed by default: Ollama unloads an idle model after 5 minutes and the next call pays a
+cold start (~27 s measured). Set `agent.router_keep_alive: "30m"` (or `-1`) or `OLLAMA_KEEP_ALIVE`
+to avoid it, at the cost of ~3.2 GB of resident memory.
+
+### 4. Retrieval: no more per-search setup cost
+
+|                      |                                                                                                                                                                                                                                                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**    | Every `search_text_with_scores` call reloaded the Jina CrossEncoder (~2.6 s) and rebuilt BM25 over all ~11k chunks (~0.4 s): 5-7 s per search, and one question may search several times.                                                                                                                                           |
+| **Method**     | `get_reranker()` loads each reranker once per process (thread-safe). `FAISSVectorStore._get_bm25()` builds BM25 once, keyed on the FAISS object and its `ntotal`, and drops it in `_save()`, so adds and deletes are picked up. `FAISSVectorStore.warmup()` pays both costs at startup; `Orchestrator.__init__` calls it. |
+| **Result**     | search 5-7 s -> **~1.1 s**; one-time warmup ~2.7 s.                                                                                                                                                                                                                                                                             |
+| **Left alone** | The extra top-1 `similarity_search_with_relevance_scores` call: it costs ~0.13 s and defines `best_relevance_score`, so removing it would change what the grader sees.                                                                                                                                                            |
+| **Files**      | `rag/vector_store.py`, `rag/orchestrator.py`                                                                                                                                                                                                                                                                                      |
+
+### 5. Watchlists could not be found by list name
+
+|                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**       | The dashboard has tabs `TOP_LIST`, `EQUITY`, `ETF`, `INDEX`, `BUYLIST`, `DEPOTS`, each holding lists (e.g. `top_liste_latest`, `DEFENSE`). `search_watchlist` only matched `name ILIKE ... OR comment ILIKE ...` (instrument name and sector tag), never the list or tab name, returned at most 10 unsorted rows, and no tool could read or rank a whole list. "Top three today" was answered by ranking an arbitrary 10-row sample taken from unrelated keyword hits.                                                                                                                                                                                                                                                                                                                 |
+| **Method**        | `server_app/db.py`: `match_watchlists()` resolves what the user calls a list to real names in tiers (exact normalized name or tab; substring; fuzzy at ratio >= 0.8; the first tier that matches wins). Normalization ignores case and non-alphanumerics, so `TOP_LIST`, `top list` and the typo `top_list_latest` all find `top_liste_latest`. Substring matching goes one way only (a short tab name such as `test` is inside `latest`). `list_watchlists()` and `get_watchlist_rows()` add listing and ranked reads; the `ORDER BY` column comes from a fixed whitelist, never from user text.                                                                                                                                                                                    |
+| **Tools**         | `search_watchlist(keyword)` now also reports matching lists and hints at `get_watchlist`; **`list_watchlists(tab)`** lists lists per tab with sizes; **`get_watchlist(name, sort_by, order, limit, tab)`** reads one list, optionally ranked by `return_1d` / `return_1m` / `return_1y` (max 30 rows). Same name in two tabs (`US BRA`) returns candidates and asks for `tab`.                                                                                                                                                                                                                                                                                                                                                                                               |
+| **Repeated rows** | The same instrument (same ISIN) can appear on several rows, on purpose. In `top_liste_latest` the list holds the top/flop stocks *per index*, so a stock that is a member of two indices has two rows (240 rows, 211 distinct ISINs). `get_watchlist` therefore returns rows exactly as stored and does not collapse them. What tells the rows apart is the `Index` / `Rank` columns of the source CSV, kept in the `raw` json column: `get_watchlist_rows` and `search_watchlist_rows` return them as `index` and `rank_in_index`, and the agent reports each row with its index ("PACIRA: S&P 400 and S&P 600, +44.60%"). Lists without such a column return NULL. Tool text and prompt state this, so the model neither treats repeats as errors nor looks for replacement entries. |
+| **Prompt**        | `DocumentAgent` describes the database lists instead of the old CSV folders and is told to rank with `get_watchlist`, never from `search_watchlist` hits.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Files**         | `server_app/db.py`, `rag/agent_tools.py`, `rag/document_agent.py`, `rag/sources.py`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+
+All tabs are searchable. The dashboard only allows creating/deleting lists and adding/removing
+instruments for `EQUITY`, `ETF`, `BUYLIST` and `DEPOTS` (see "Dashboard tabs and list editing");
+that is a dashboard rule, not an agent limit.
+
+### 6. Router sees the conversation
+
+The classifier used to see only the current sentence, so a follow-up like "i mean top_list_latest"
+was classed as `chitchat`. The router prompt now includes the last 4 messages (200 characters
+each) and a rule that short follow-ups continue the conversation, plus a rule that questions
+about which instruments the user holds or tracks are `document` (a 4B model had classed
+"what do I hold in China ETFs?" as `both`). `rag/orchestrator.py::_router_history`.
+
+### 7. Tool-call loop robustness
+
+|                   |                                                                                                                                                                                                                                                                                                                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem** | (a) MiniMax sometimes emits `<tool name="x" keyword="y"/>`, which no parser matched, so the raw markup was returned to the user as the answer. (b) When the 4-hop limit was reached, the loop returned the model's last *tool request* as the answer.                                                                                                                                    |
+| **Method**  | The parser accepts the attribute style. A reply that looks like a tool call but cannot be parsed gets one repair request ("send it as a JSON object"). If the model still cannot answer, or hops run out, it is asked once for a final answer from the results so far; if that is also unusable the user gets a plain "could not complete" message. Tool-call markup never reaches the user. |
+| **Files**   | `rag/tool_calling_agent.py`                                                                                                                                                                                                                                                                                                                                                                |
+
+**Follow-up (2026-10-19).** The same question sometimes ended as `[Incomplete] ... the model kept sending function calls that could not be read` and worked when asked again, so the failure was
+intermittent output formatting, not missing data. Three causes were closed: (a) `<think>...</think>`
+text is stripped before a reply is parsed, so reasoning that contains braces or an example call is
+no longer read as the call; (b) the JSON call is found by decoding objects one at a time instead of
+slicing from the first `{` to the last `}`, so prose or code fences around it, or a second call
+after it, no longer make the reply unreadable (`arguments` and `args` are accepted like
+`parameters`); (c) an unreadable call is repaired up to `ToolCallingAgent.MAX_REPAIRS` (2) times
+instead of once. `[Incomplete]` can still occur if the model never produces a readable call.
+
+### 8. Critic: MiniMax by default, and skipped when it adds nothing
+
+|                     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**   | The critic judges "is this complete, and what exactly is missing?" and is the only place that can send a specialist back for another run. That is harder than the router's one-label choice, and a wrong "need_*" costs a whole extra specialist run (much more than the critic call itself); a wrong "complete" returns a partial answer. A 4B local model is the weakest option for it. It also ran on every question, though for a single-route question whose specialist answered normally it can only add latency and a chance of a needless follow-up (in one real run it twice asked for a "missing third entry" that was caused by duplicate rows). |
+| **Backend**   | `Orchestrator._call_json(..., prefer=...)`: router and grader stay **local first** (cheap one-label decisions, local -> MiniMax fallback as before, counted as `cloud_fallbacks`); the critic is **MiniMax first**, local only if the cloud call fails. `agent.critic_backend: local` restores the old behaviour. DeepSeek was not added: it would mean a third provider, key and client for no demonstrated gain.                                                                                                                                                                                                                        |
+| **Skip rule** | `Orchestrator._critic_skip_reason`: no critic call when the route is `document`, `market` or `chitchat`, it is the first pass, only that one specialist ran, its answer is non-empty, not an error, and contains no failure signal (`_FAILURE_SIGNAL_RE`: "not found", "could not", "no relevant ...", "please provide ...", "nicht gefunden", "未找到", ...). The `both` route always runs the critic. The signal list is deliberately broad: a false hit costs one critic call, a miss would skip the check it exists for. Logged as `critic_skipped` in the route stats.                                                                   |
+| **Files**     | `rag/orchestrator.py`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Config**    | `agent.critic_backend` (`cloud` default, or `local`), `agent.critic_skip_single_route` (default `true`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+
+Not measured: MiniMax critic latency/cost, and how often the skip rule hides a case the critic
+would have caught. `eval/` still targets the old `AgentRetriever`; adapting it to the
+Orchestrator is the way to compare `critic_backend` and the skip rule on real cases.
+
+### Deployment and known limits
+
+- The Docker images bake the code in (only `data/`, `csv_update/` and the config are mounted).
+  Rebuild to pick these changes up: `docker compose build agent-api dashboard && docker compose up -d agent-api dashboard`
+  (also `api` if it imports `market_fetcher.py`).
+- **Auto-deploy.** `scripts/deploy_dashboard.sh` runs from cron once a day at 05:00 (server time, `0 5 * * *`). When
+  `origin/dev` has a new commit it runs `git checkout origin/dev -- server_app rag ingestion processing config_loader.py requirements*.txt Dockerfile.*` and rebuilds/restarts the affected
+  services, so a push goes live at the next 05:00 run (or run the script by hand to deploy at once). Before it does, the script checks
+  those paths: if any has **uncommitted changes** (modified or staged tracked files, or an untracked file that
+  origin also has), it deploys nothing, writes `SKIPPED deploy of <sha> ... Files: ...` to `ops/deploy.log` and
+  does not record the sha, so the next run retries once the work is committed or stashed. Pushes that touch no
+  deployed path, and dirty files outside those paths (`csv_update/`), are not affected; `DEPLOY_FORCE=1` skips the
+  check. Before this guard the checkout overwrote uncommitted edits silently, which lost work twice (edits made
+  after a push, before the 17:00 and 02:00 runs). If a push seems not to have gone live, read `ops/deploy.log`.
+- `./data` is mounted read-only into `agent-api`. It follows the FAISS index as `main.py` updates it
+  (live reload, see [Scheduled ingestion](#scheduled-ingestion-how-new-pdfs-and-emails-reach-the-index)),
+  so new documents need no container restart; only code changes need a rebuild.
+- Inside the `agent-api` container `localhost:11434` is the container itself, not the host's
+  Ollama. Set `agent.router_base_url` to an address the container can reach, or the router,
+  critic and grader will always fall back to MiniMax.
+- Not done: attribution checking in the grounding heuristic (right number, wrong company),
+  unit handling ("1.2 Mrd"), a rule-first router, and skipping the critic/grader when they
+  cannot change the outcome. Date normalization still sorts digits, so `2026-10-08` and
+  `2026-08-10` compare equal.
+- The router is a 4B model: it sometimes answers `both` where `document` would do. This is
+  harmless (both enter through `document`) but costs a critic call.
+
+## Agentic RAG: Reliability, History and Market Data (October 2026, part 2)
+
+A second round of fixes, driven by real dashboard conversations (invented document content,
+errors shown in the chat window, wrong "SpaceX is private" caveats, missing price history and
+news). The detailed write-up with causes, limits and open problems is in
+[`docs/design_issues_and_solutions.md`](docs/design_issues_and_solutions.md); this is the summary.
+
+| Problem found                                                                                                                             | Solution used                                                                                                                                                                                                                    | Where                                                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| A full email could not be read (only 800-char excerpts)                                                                                   | `read_email(subject)` rebuilds it from the indexed chunks                                                                                                                                                                      | `rag/agent_tools.py`, `rag/vector_store.py`                                                        |
+| Long documents were cut silently and the model guessed where                                                                              | `read_file` / `read_email` page their output (`offset`); every result states `chars_returned` / `total_chars` and marks `PARTIAL`                                                                                    | `rag/agent_tools.py`                                                                                 |
+| "Today's PDF" could not be found (PDF chunks have no date)                                                                                | Date is parsed from the file name (`YYYYMMDD` / `DDMMYYYY`), with its origin labelled                                                                                                                                        | `rag/doc_inventory.py`                                                                               |
+| The assistant invented document content (a whole market overview, a non-existent email)                                                   | Working rule: report only what the functions returned, say "not in the document" otherwise; grounding check flags untraceable numbers                                                                                            | `rag/tool_calling_agent.py`, `rag/grounding.py`                                                    |
+| Grounding check flagged correct numbers split by PDF extraction (`25. 164`)                                                             | Evidence is also searched with broken thousands separators joined                                                                                                                                                                | `rag/grounding.py`                                                                                   |
+| A bad answer was fed back as context and as grounding evidence                                                                            | Failed / flagged earlier answers become a placeholder before reuse                                                                                                                                                               | `rag/history.py`, `rag/orchestrator.py`                                                            |
+| Tracebacks appeared in the chat window                                                                                                    | One-line error to the user, traceback to the server log                                                                                                                                                                          | `rag/tool_calling_agent.py`                                                                          |
+| Fixed 4-call limit forced a made-up final answer                                                                                          | Budgets of 4 (DocumentAgent), 6 (MarketAgent) and 8 once a read tool is used; running out returns an `[Incomplete]` reply listing the steps and how much was read; the critic skips it                                         | `rag/tool_calling_agent.py`, `rag/orchestrator.py`                                                 |
+| Model's background knowledge overrode tool data ("SpaceX is private")                                                                     | `get_instrument_profile` returns the exchange listings; rule "function results beat background knowledge"                                                                                                                      | `rag/agent_tools.py`, `rag/market_agent.py`                                                        |
+| No price history, news or sentiment                                                                                                       | EODHD REST endpoints wrapped as tools (see below); the EODHD MCP server was deliberately not connected                                                                                                                           | `ingestion/market_fetcher.py`, `rag/agent_tools.py`                                                |
+| `[Incomplete]` / error text was passed to the MarketAgent as the "resolved identifier"                                                  | `_clean_identifier` accepts only a real ISIN / WKN / ticker                                                                                                                                                                    | `rag/orchestrator.py`                                                                                |
+| A bare name picked the wrong instrument (`SpaceX` -> `SPACEX01.BK`)                                                                   | No guessing: ambiguous names raise `AmbiguousInstrumentError`, then fall back to the ISIN in the user's watchlist                                                                                                              | `ingestion/market_fetcher.py`, `rag/agent_tools.py`                                                |
+| API key could leak through `requests` error messages (the URL contains `api_token`)                                                   | All EODHD calls go through `MarketFetcher._eodhd_get`, which re-raises without the URL                                                                                                                                         | `ingestion/market_fetcher.py`                                                                        |
+| "Today's email" / "the PDF from 2026-10-08" was answered by text similarity only; near-identical newsletters of other days ranked as high | `search_documents` takes `date_from` / `date_to`, filled from the user's question; the search is restricted to chunks dated in that range *before* ranking. No document that day gives an explicit "none, newest is ..." | `rag/date_filter.py`, `rag/vector_store.py`, `rag/agent_tools.py`, `rag/tool_calling_agent.py` |
+| The hourly auto-deploy overwrote uncommitted edits in the deployed paths (twice in one day)                                               | `scripts/deploy_dashboard.sh` skips the run, logs `SKIPPED deploy ...` and retries next time when those paths have uncommitted changes; cron now runs once a day at 05:00                                                    | `scripts/deploy_dashboard.sh`                                                                        |
+| The same stock under different indices looked like duplicate rows                                                                         | `index` and `rank_in_index` are returned with watchlist rows; repeats are documented as by design                                                                                                                            | `server_app/db.py`, `rag/agent_tools.py`, `rag/document_agent.py`                                |
+
+### New MarketAgent tools
+
+| Tool                                 | Returns                                                                                            | EODHD endpoint |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------- |
+| `get_instrument_profile(query)`    | Name, type, primary exchange, currency, ISIN and all other listings (no price)                     | `search`     |
+| `get_price_history(symbol, days)`  | Last N trading days (max 60): OHLC, volume, % change vs the previous close, change over the period | `eod`        |
+| `get_company_news(symbol, limit)`  | Latest articles (max 10): date, title, link, excerpt, sentiment polarity                           | `news`       |
+| `get_news_sentiment(symbol, days)` | Daily article count and normalized sentiment score (max 30 days)                                   | `sentiments` |
+
+`symbol` may be an ISIN, ticker, `SAP.DE`-style symbol or a name. The MarketAgent now has five
+tools (with `get_market_quote`) and 6 tool rounds. Which EODHD data is available depends on the
+subscription; with the key used here `fundamentals`, the earnings / dividends / splits / IPO
+calendars and `macro-indicator` return HTTP 403 and are reported to the user as "not included in
+the current plan". `technical` answered with an empty list and has not been wrapped.
+
+Configuration for these tools: `market.eodhd_api_key` in `config.yaml` (or the `EODHD_API_KEY`
+environment variable, which `docker-compose.yml` passes to the containers) and
+`market.eodhd_timeout_seconds` (default 8). The model that writes the answer after a long read can
+take more than the default `llm.minimax_timeout_seconds` of 30 seconds; raise it (for example
+to 90) if answers about long documents end in a timeout message.
+
+### Document metadata: what is stored and how it is used
+
+Every chunk is stored with its metadata in the FAISS docstore (`store.add` keeps every key except `text`).
+Fields in the live index:
+
+| Source | Fields                                                                          | Notes                                                                     |
+| ------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| PDF    | `source`, `filename`, `source_path`, `page`, `heading`, `has_table` | no date: it is read from the file name (`..._20261008.pdf`) when needed |
+| Email  | `source`, `subject`, `date` (ISO), `heading`, `newsletter_path`       | `newsletter_path` is the `.md` copy on disk                           |
+
+`heading` and `has_table` are written by `rebuild_index.py`; the `main.py` ingest path does not set them.
+The heading breadcrumb is also put at the start of the chunk text (`[Section]\n...`).
+
+| Used for                               | By                                       | How                                                                                                                                                   |
+| -------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Labels and citations                   | `search_documents`, `rag/sources.py` | `[PDF] file Page 2`, `[Email] Subject: ...`, plus the document date                                                                               |
+| Reading a whole document               | `read_file`, `read_email`            | chunks of one `filename` / `subject`+`date`, stitched in page order                                                                             |
+| De-duplication                         | `FAISSVectorStore.add`                 | key = owning document (`filename`, or `subject`+`date`) + text hash; the same text in two *different* documents (a shared disclaimer) is kept |
+| Replacing a changed PDF                | `delete_by_metadata`                   | by `source=pdf` and `source_path`                                                                                                                 |
+| Listing documents by date              | `list_recent_documents`                | chunks grouped by document, sorted by date                                                                                                            |
+| **Restricting a search by date** | `search_documents`                     | see below                                                                                                                                             |
+
+Not used yet: `page`, `heading` and `has_table` do not influence ranking, and `newsletter_path` is not read
+(`read_email` still rebuilds the text from chunks).
+
+### Date-aware document search
+
+When the question asks for *documents* from a date, the search only looks at documents dated then.
+
+- `rag/date_filter.py::parse_document_date_range` needs **both** a document word (email, newsletter, PDF,
+  report, document, file; `邮件`, `报告`, `Bericht`, ...) **and** a date: `today`, `yesterday`, the day before
+  yesterday, `this week`, ISO (`2026-10-08`), `08.10.2026`, `8 Oct 2026`, `October 8`, `8. Oktober`, `10月8日`
+  (also German/Chinese relative words). Two or more explicit dates give the range between them; a date without a
+  year is the most recent such date not in the future. A market question such as "news on SpaceX today" has no
+  document word and is never filtered.
+- A chunk's date is its email `date`, else the date in its PDF file name (`effective_date`); undated chunks never
+  match a date filter.
+- `ToolCallingAgent._execute_tool` reads the range from the user's **original question** and fills
+  `date_from` / `date_to` into the `search_documents` call (the model rewrites the question into keywords and
+  usually drops "today"). If the model sends a call with no `query`, the user's words are used. Dates the
+  model passes itself are kept.
+- `FAISSVectorStore.search_text_with_scores(..., date_range=(start, end))` applies the range to both retrievers
+  *before* ranking: BM25 is built over the matching chunks, and the FAISS search uses `fetch_k` = the whole index
+  because FAISS filters only the `fetch_k` nearest neighbours (a small matching set would otherwise be missed). In a
+  real check, the query "DAX Rücksetzer Wochenmitte Meta Konsolidierung" returned emails of 09-23, 10-07 and
+  10-01 without the filter, and the three chunks of the 10-08 email with it.
+- No document in the range gives `no_documents_in_range` with the newest available date; the agent is told to say so
+  and not to search again without the date. That result is not sent to the relevance grader (which would ask for a
+  retry without the date).
+- "Today" is the server's date (the container uses the host's time zone). Documents have a date, not a time, so
+  a newsletter published on the morning of the 9th about the 8th's trading is dated the 9th.
+
+Not covered: relative ranges other than `this week` (for example "last week"), and filtering by source
+or file name.
+
+### Deploying changes (important)
+
+`scripts/deploy_dashboard.sh` (cron, daily at 05:00) checks out `origin/dev` over `server_app rag ingestion processing ...` and rebuilds the containers. The script skips the run (and
+says so in `ops/deploy.log`) when those paths have uncommitted changes, instead of overwriting them; commit or stash,
+and the next run deploys. Run it by hand (`./scripts/deploy_dashboard.sh`) to deploy at once. See
+`docs/design_issues_and_solutions.md`, section 5, for what this cost once.
+
+## Runtime Notes And Known Errors
+
+### `python main.py` first run downloads embedding model files
+
+If you see files like `modules.json`, `config.json`, `tokenizer.json`, and a large `pytorch_model.bin`, this is expected.
+
+- It is downloading the embedding model configured in `config.yaml` (`rag.embedding_model`, currently `BAAI/bge-m3`).
+- The large model download happens on first run and is then cached locally.
+
+### `Scheduler started...` means startup is complete
+
+After startup tasks run once (local PDF scan, email fetch, market fetch, cleanup), `main.py` enters long-running scheduled mode.
+
+- This is normal behavior; the process should stay running.
+- It logs the schedule it is using, for example
+  `Scheduler started: emails daily at 08:30, 13:30, 18:30, local PDFs every 30 min, ...`.
+- Day to day it should not be started by hand: it runs as a systemd user service, see
+  [Scheduled ingestion](#scheduled-ingestion-how-new-pdfs-and-emails-reach-the-index).
+
+### Local PDF updates are now auto-reindexed
+
+`main.py` now watches a configurable PDF directory and syncs local PDFs into the FAISS index automatically.
+
+Default scan root:
+
+```yaml
+rag:
+  pdf_scan_root: "~/Projects/pdfs"
+  pdf_scan_interval_minutes: 30
+```
+
+Behavior:
+
+- New local PDF file: chunks are added.
+- Existing local PDF file with changed file signature: old chunks for that file are deleted from FAISS, then fresh chunks are added.
+- Unchanged local PDF file: skipped.
+
+This keeps retrieval aligned with the latest local PDF content without requiring manual index rebuilds.
+
+If you want to trigger the sync manually at any time, run:
+
+```sh
+cd /path/to/financial_rag
+source /home/your-user/miniconda3/etc/profile.d/conda.sh
+conda activate rag
+python - <<'PY'
+from main import ingest_local_pdfs
+ingest_local_pdfs()
+PY
+```
+
+### Scheduled ingestion: how new PDFs and emails reach the index
+
+Nothing has to be run by hand. `main.py` is the only process that writes the FAISS index; it runs
+as a systemd **user service** (`financial-rag-ingest`) and the `agent-api` container reloads the
+index by itself when it changes.
+
+| Job            | When                                                                                                                                                    | What it does                                                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local PDF scan | every `rag.pdf_scan_interval_minutes` (30), recursive over `rag.pdf_scan_root`                                                                      | New or changed `*.pdf` (mtime + size) are parsed with docling, chunked, embedded and added; a changed file first has its old chunks deleted |
+| Email fetch    | daily at the local times in `email.check_times` (`08:30`, `13:30`, `18:30`); every `email.check_interval_minutes` if `check_times` is empty | Fetches the newsletters from `email.target_sender`, saves them under `data/newsletters/`, indexes the text                                |
+| Market fetch   | every `market.fetch_interval_minutes` (60)                                                                                                            | Does nothing while `market.symbols` is empty                                                                                                |
+| PDF cleanup    | daily                                                                                                                                                   | Deletes downloaded PDFs older than `email.pdf_retention_days` that are already indexed                                                      |
+
+Every job also runs once when the service starts. Interval jobs count from that start, not from
+the wall clock; only `check_times` are fixed times of day (local time of the machine).
+
+**Mail fetching.** Mail is matched by sender, `forwarded_from_marker` and `max_email_age_days`.
+With `include_seen: true` (the default in `config.yaml.example`) read and unread mail are both
+considered, and a message is skipped when its `Message-ID` is already in `data/processed_emails.txt`.
+That check uses the headers only, so an ingested mail is never downloaded or processed twice. This
+is what makes it safe to read a newsletter on your phone before the fetch runs, and a mail whose
+processing failed is simply retried at the next check. (Before this, only unread mail was fetched
+and it was marked read before processing, so such mails were lost for good.) Fetching uses
+`BODY.PEEK`, so it does not change the read flag; `mark_as_seen` decides that. A refused login such
+as Gmail's `Too many simultaneous connections` is retried (3 attempts, 30 s then 60 s apart).
+
+```yaml
+email:
+  include_seen: true
+  check_times: ["08:30", "13:30", "18:30"]   # HH:MM, local time; omit to use check_interval_minutes
+  check_interval_minutes: 480                # fallback when check_times is empty
+```
+
+A malformed `check_times` entry stops `main.py` at startup instead of silently never fetching.
+
+**Logs.** Each job writes `start`, `ok in Ns` or `FAILED ...: <exception>` to
+`data/logs/scheduler.log` (and to the journal). A failing job is logged and swallowed, so one
+failed run never stops the scheduler. Missed runs are coalesced into one and a job never overlaps
+itself. The jobs run on parallel threads; index writes are serialised by a lock in
+`FAISSVectorStore`.
+
+**Service.** `~/.config/systemd/user/financial-rag-ingest.service`:
+
+```ini
+[Unit]
+Description=financial_rag ingestion scheduler (emails, local PDFs, market data)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/financial_rag
+Environment=FIN_RAG_CONFIG=/home/your-user/Projects/config.yaml
+Environment=PYTHONUNBUFFERED=1
+ExecStart=python3 /path/to/financial_rag/main.py
+Restart=on-failure
+RestartSec=60
+TimeoutStopSec=120
+
+[Install]
+WantedBy=default.target
+```
+
+```sh
+systemctl --user daemon-reload
+systemctl --user enable --now financial-rag-ingest   # once
+loginctl enable-linger "$USER"                       # once: start at boot without logging in
+systemctl --user status financial-rag-ingest
+systemctl --user restart financial-rag-ingest        # after editing config.yaml, or to ingest right now
+journalctl --user -u financial-rag-ingest -f         # live output
+tail -f data/logs/scheduler.log
+```
+
+Do not also start `python main.py` by hand while the service runs: two writers would work on the
+same index files.
+
+**Seeing new documents without restarting containers.** `agent-api` creates its store with
+`FAISSVectorStore(..., auto_reload=True)`. At most every 5 seconds (when a question touches the
+index) it compares the size and mtime of `index.faiss` and `index.pkl` and, if they changed, loads
+the new index and drops the BM25 and de-duplication caches built on the old one. Because the writer
+saves the two files one after the other, a fresh copy is adopted only if the files did not change
+while it loaded and the vector count matches the docstore; otherwise the old copy is kept and the
+next check tries again (`[reload] ...` lines in `docker logs`). The writer (`main.py`) does not
+enable this; it holds the authoritative copy. Only `agent-api` loads the index; the `api` and
+`dashboard` containers do not.
+
+Worst-case delay from dropping a PDF into `rag.pdf_scan_root` to being able to ask about it: one
+scan interval (30 minutes) plus parse time, then a few seconds. For mail: the next `check_times`
+entry. To ingest immediately, restart the service.
+
+Known limits: deleting a PDF from the scan folder does not remove its chunks from the index
+(rebuild the index with `rebuild_index.py` to drop it); only mail matching the configured
+sender and forward marker is ingested.
+
+### Playwright browser missing error
+
+If email browser fallback fails with:
+
+```text
+BrowserType.launch: Executable doesn't exist ... chrome-headless-shell
+Please run: playwright install
+```
+
+install browser binaries in the active Python environment:
+
+```sh
+python -m playwright install chromium
+```
+
+### Docling not found even after install
+
+If logs show:
+
+```text
+[WARNING] docling failed: ModuleNotFoundError: No module named 'docling'
+```
+
+check which interpreter is running `main.py`.
+
+- In this project, `python` may point to base conda (`/home/your-user/miniconda3/bin/python`, Python 3.14), where `docling` is not installed.
+- `docling` is installed in the `rag` env (`python3`, Python 3.11).
+
+Use one of these:
+
+```sh
+conda activate rag
+python main.py
+```
+
+or directly:
+
+```sh
+python3 main.py
+```
+
+### Docling dependency compatibility (validated)
+
+Docling CPU parsing can fail if PyTorch stack and Transformers are out of sync.
+
+Symptoms observed:
+
+- `operator torchvision::nms does not exist`
+- model type `rt_detr_v2` not recognized by old Transformers
+
+Validated fixes in `rag` env:
+
+```sh
+python3 -m pip install --upgrade --force-reinstall --index-url https://download.pytorch.org/whl/cpu torch torchvision
+python3 -m pip install --upgrade "transformers>=4.57.1,<5"
+```
+
+After these updates, `parse_pdf(..., backend="docling")` succeeds and no longer falls back to MinerU/PyMuPDF for the tested file.
+
+### `--agent` TypeError on `force_cloud`
+
+If you hit:
+
+```text
+TypeError: AgentRetriever.query() got an unexpected keyword argument 'force_cloud'
+```
+
+this was caused by passing pipeline-only arguments to agent mode. The dispatcher in `query.py` now calls:
+
+- agent mode: `retriever.query(question, stream=True)`
+- pipeline mode: `retriever.query(question, stream=True, force_cloud=...)`
+
+### Agent prints pseudo tool call but tool gets empty args (`{}`)
+
+If logs show something like:
+
+```text
+[Tool] read_file({})
+```
+
+or
+
+```text
+[Tool] search_documents({})
+```
+
+it means the model emitted pseudo tool syntax and argument parsing was incomplete.
+
+`rag/agent_retriever.py` now parses generic pseudo args such as:
+
+- `--filename "Biotech.csv"`
+- `--query "market analysis"`
+- `--keyword "ETF"`
+
+and maps them to tool inputs correctly.
+
+### Agent answers with raw `<minimax:tool_call>` markup
+
+Fixed: the model used a tool-call format no parser matched and the raw text was returned as the
+answer. The attribute style `<tool name="..." keyword="..."/>` is now parsed, and unreadable
+calls get up to two repair requests and then a forced final answer (see change 7 above).
+
+### Agent cannot find a list such as `top_list_latest`
+
+Fixed: `search_watchlist` only matched instrument names and sector tags, never list or tab names.
+Use `get_watchlist` / `list_watchlists`, which resolve list names fuzzily (see change 5 above).
+The real name of the top list is `top_liste_latest`.
+
+### Tools vs Skills in this project
+
+- Use **tools** for runtime actions (search docs, read files, watchlist lookup, market quote).
+- Use **skills** only for agent instruction/workflow customization.
+- The issues above were runtime tool-call parsing problems, so the fix belongs in tools/agent code, not skills.
+
+### Live Price Lookups In `query.py`
+
+Any price-related input — `/quote`, a bare ISIN/WKN, or a natural-language question like "What is the price of ..." — starts an interactive flow:
+
+1. Choose the asset class: `Equity` / `ETF` / `Fond`.
+2. Enter the ISIN or WKN.
+
+The local `csv_update/EQUITY`, `csv_update/ETF`, or `csv_update/FONDS` watchlist (see [Watchlist Processor](#watchlist-processor)) is checked first by ISIN/WKN — no API call is made if a match is found there. Only if nothing matches locally does it fall back to the live provider chain (Finnhub -> EODHD -> Alpha Vantage -> yfinance). Every result line states its `Data source`, whether that's the local watchlist file or a live provider.
+
+Other query.py commands:
+
+- `/quote_summary` — summarize the session's quote lookups (success/failure counts per symbol).
+- `clear` — clear conversation history.
+- `quit` — exit.
+
+### Downloaded PDF Retention
+
+Email attachments are downloaded to `data/pdfs/` and, once parsed, their text chunks are embedded into `data/faiss_index/` — retrieval only reads the FAISS index, not the original PDF file. `main.py` therefore deletes downloaded PDFs once they are both:
+
+- older than `email.pdf_retention_days` in `config.yaml` (default `15` days), and
+- already recorded in `data/processed_pdfs.txt` (confirms the PDF was successfully indexed).
+
+This runs once at startup and then once a day via the scheduler (`cleanup_old_pdfs` in `main.py`). Adjust the retention window in `config.yaml`:
+
+```yaml
+email:
+  pdf_retention_days: 15
+```
+
+## Watchlist Processor
+
+`csv_analyse_watchlist.py` processes ActiveTrader/watchlist CSV files and writes an enriched `.xlsx` plus a full `.csv`. The XLSX contains both the full `Merged` sheet and a `Top List` sheet.
+
+### What It Does
+
+- Enriches stocks with analyst target prices in `COMMENT2` (a plain number, no currency suffix).
+- Enriches stocks, ETFs, and funds with onvista `Bid` / `Ask` values and `BID_ASK_FETCHED_AT`.
+- Adds a `DEV` column holding the display currency (always `USD` or `EUR`) that `COMMENT2`, `Bid`, and `Ask` are all expressed in.
+- Computes `Kurspotential` and `Kurspotential %` (equity rows only): target price vs. the current Bid/Ask mid, both resolved to the same `DEV` currency.
+- Adds ETF/fund metadata from onvista, including `Laufende Kosten`, `Replikation`, and `Ertragsverwendung`.
+- Appends a two-character technical-analysis signal to `COMMENT3` using MACD and Stochastic Slow.
+- Recomputes return columns from historical close prices:
+  - `% Differenz ein Jahr`
+  - `% Differenz ein Monat`
+  - `% Differenz zum Vortageskurs`
+- Builds a Top List from rows with double buy signals and positive return columns.
+- Optionally resolves ISIN hyperlinks for Top List rows.
+- Fills `COMMENT` subcategory tags from local rules and an optional LLM fallback (unless `--blank-comment`, the default, is active — see [COMMENT Meaning](#comment-meaning)).
+- Keeps ETF/fund `COMMENT` exports to the subcategory only; country prefixes such as `US |` are stripped.
+- Deduplicates input rows by `ISIN` / `WKN`, keeping the first occurrence.
+- Drops the `MNEMONIC:WKN` marker row that ActiveTrader exports carry as line 2 (including files this script writes itself), so it's never mistaken for a real holding on a later run.
+
+### Input Requirements
+
+The input file can use either `;` or `,` as delimiter. The reader auto-detects common encodings (`utf-8-sig`, `utf-8`, `cp1252`, `latin1`) and supports both German comma decimals and normal dot decimals.
+
+The most useful columns are:
+
+- `ISIN`
+- `WKN`
+- `Name`
+- `COMMENT`
+- `COMMENT2`
+- `COMMENT3`
+
+Files must contain at least `WKN`, `ISIN`, and `Name`. Empty placeholder files are skipped in batch mode.
+
+### Common Commands
+
+Run these from the `financial_rag` directory.
+
+Process one file:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv"
+```
+
+Process one file and choose an output directory:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update"
+```
+
+Process a full folder:
+
+```powershell
+python csv_analyse_watchlist.py --batch-folder "C:\Users\your-user\Downloads\active trader ID Listen" --output-dir "C:\Users\your-user\Downloads\active trader ID Listen_copy"
+```
+
+Process a folder with two parallel workers:
+
+```powershell
+python csv_analyse_watchlist.py --batch-folder ".\csv_update\EQUITY" --output-dir ".\csv_update\EQUITY" --skip-isin-links --classification-provider minimax --batch-workers 2
+```
+
+When `--batch-folder` and `--output-dir` point to the same directory, generated `*_top.csv` files from older runs are skipped automatically so they are not processed again.
+
+Run a folder with one independent background process per CSV file (Linux/macOS):
+
+```sh
+./scripts/run_watchlist_parallel.sh "/path/to/financial_rag/csv_update/EQUITY" 8
+```
+
+The first argument is the folder to process; the second is the maximum number of files to run at the same time (default `4`). If no folder is passed, it falls back to `csv_update/EQUITY` (configurable at the top of the script). If a path has spaces, quote it: `"./some folder/path"`.
+
+The script:
+
+- Skips generated `*_top.csv` files and sorts the remaining files by name before dispatch.
+- Resolves `python` to a full path via `command -v python` in the calling shell (so it picks up an activated conda env); falls back to a hardcoded path if that fails. Override explicitly with `PYTHON_BIN=/path/to/python`.
+- Copies each input CSV into `<folder>/_watchlist_logs/_inputs/` before processing, and writes an explicit output path — so a running/edited source file is never read and written at the same time.
+- Writes each job's stdout/stderr to its own file under `<folder>/_watchlist_logs/`.
+- Tracks each job's exit code individually and reports `FAILED: <file>` with pointers to its logs; exits non-zero if anything failed.
+- Prints total runtime at the end.
+
+Env vars (all optional):
+
+| Variable                    | Default       | Purpose                                                                                             |
+| --------------------------- | ------------- | --------------------------------------------------------------------------------------------------- |
+| `PYTHON_BIN`              | auto-detected | Python interpreter to use.                                                                          |
+| `CLASSIFICATION_PROVIDER` | `minimax`   | Passed through as `--classification-provider`.                                                    |
+| `SLEEP_SECONDS`           | `2`         | Poll interval while waiting for a free job slot.                                                    |
+| `SKIP_SUBCATEGORIES`      | `1` (on)    | When `1`, adds `--skip-subcategories`. Set to `0` to re-enable subcategory tagging for a run. |
+| `UPDATE_TYPES`            | (all)         | Comma-separated list passed through as `--update-types`, e.g. `UPDATE_TYPES=equity,etf`.        |
+
+Example — re-enable subcategory tagging and restrict to equities only, for one run:
+
+```sh
+SKIP_SUBCATEGORIES=0 UPDATE_TYPES=equity ./scripts/run_watchlist_parallel.sh "/path/to/financial_rag/csv_update/EQUITY" 8
+```
+
+### run_watchlist_bid_ask_parallel.sh (Linux/macOS)
+
+Bash port of `run_watchlist_bid_ask_parallel.ps1`: same parallel-dispatch/logging/exit-code-tracking design as `run_watchlist_parallel.sh` above, but scoped to `--bid-ask-only` refreshes (no classification, no `--skip-subcategories`).
+
+```sh
+./scripts/run_watchlist_bid_ask_parallel.sh "/path/to/financial_rag/csv_update/ETF" 6
+```
+
+Logs go to `<folder>/_bid_ask_logs/`. Extra env vars: `REQUEST_SLEEP_SECONDS` (default `0.2`, passed as `--sleep`) and `UPDATE_TYPES`. `MAX_JOBS` defaults to `8` here (vs. `4` for the full-enrichment script).
+
+### Scheduled Daily Runs On Linux (cron)
+
+`scripts/run_watchlist_daily_equity.sh` wraps `run_watchlist_parallel.sh "csv_update/EQUITY" 8`, pins `PYTHON_BIN` explicitly to the conda env's interpreter (cron runs with a minimal environment, so auto-detection via `command -v python` can't rely on an activated shell), and logs each run to `csv_update/EQUITY/_cron_logs/<timestamp>.log` (pruned after 30 days).
+
+Add cron entries with `crontab -e`, or non-interactively:
+
+```sh
+(crontab -l 2>/dev/null; \
+ echo "10 8 * * 1-5 /path/to/financial_rag/scripts/run_watchlist_daily_equity.sh"; \
+ echo "40 15 * * 1-5 /path/to/financial_rag/scripts/run_watchlist_daily_equity.sh") | crontab -
+```
+
+This runs weekdays only (`1-5` = Mon-Fri) at 08:10 and 15:40. Check what's scheduled with `crontab -l`; confirm the cron daemon itself is active with `systemctl is-active cron`. A run is simply skipped if the machine is off/asleep at the scheduled time — there's no automatic catch-up.
+
+For easier debugging, use one worker and skip technical analysis:
+
+```powershell
+python csv_analyse_watchlist.py --batch-folder ".\csv_update\EQUITY" --output-dir ".\csv_update\EQUITY" --skip-isin-links --classification-provider minimax --batch-workers 1 --skip-ta
+```
+
+Process ETF watchlists:
+
+```powershell
+python csv_analyse_watchlist.py --batch-folder ".\csv\ETF" --output-dir ".\csv_update\ETF" --skip-isin-links --classification-provider minimax --skip-ta
+```
+
+Only update selected instrument types:
+
+```powershell
+python csv_analyse_watchlist.py --batch-folder "C:\Users\your-user\Downloads\active trader ID Listen" --output-dir "C:\Users\your-user\Downloads\active trader ID Listen_copy" --update-types equity etf fund
+```
+
+Skip technical-analysis signals:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --skip-ta
+```
+
+Only refresh `Bid` / `Ask` from onvista while preserving existing comments, target prices, return columns, and TA signals:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv_update\ETF\HEALTH.csv" --output-dir ".\csv_update\ETF" --bid-ask-only
+```
+
+Run the same Bid/Ask-only refresh over a folder in parallel on Windows:
+
+```powershell
+.\scripts\run_watchlist_bid_ask_parallel.ps1 "C:\path\to\financial_rag\csv_update\ETF" 6
+```
+
+Skip ISIN hyperlink generation:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --skip-isin-links
+```
+
+Show internal detail columns in the export:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --show-detail-columns
+```
+
+Use local symbol overrides:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --use-local-overrides
+```
+
+Promote high-confidence symbol candidates into the local override file:
+
+```powershell
+python csv_analyse_watchlist.py --promote-candidates-to-overrides
+```
+
+Only fill `COMMENT` tags, without market enrichment:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Alle Defense.csv" --tag-only
+python csv_analyse_watchlist.py ".\csv\Alle Defense.csv" --tag-only --tag-output ".\csv\Alle Defense_tagged.csv"
+```
+
+### Important Options
+
+| Option                                | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--output-dir`                      | Directory for generated output files.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `--batch-folder`                    | Process all CSV files in a folder.                                                                                                                                                                                                                                                                                                                                                                                                |
+| `--batch-workers`                   | Number of CSV files to process in parallel. Use`1` for clearer logs.                                                                                                                                                                                                                                                                                                                                                            |
+| `--update-types`                    | Limit enrichment to`equity`, `etf`, `fund`, `index`, `certificate`, `other`, or `all`.                                                                                                                                                                                                                                                                                                                              |
+| `--fund-data-source`                | ETF/fund data source:`yahoo`, `eodhd`, or `eodhd_then_yahoo`.                                                                                                                                                                                                                                                                                                                                                               |
+| `--skip-ta`                         | Skip MACD + Stochastic Slow signal calculation.                                                                                                                                                                                                                                                                                                                                                                                   |
+| `--skip-isin-links`                 | Do not resolve or export ISIN hyperlinks. ISIN values stay as plain text.                                                                                                                                                                                                                                                                                                                                                         |
+| `--skip-subcategories`              | Skip `COMMENT` subcategory tagging and subcategory-based sorting. Preserves the source `COMMENT` text as-is instead of clearing/retagging it.                                                                                                                                                                                                                                                                                 |
+| `--blank-comment`                   | Force `COMMENT` to be empty in the output, regardless of tagging/preservation logic. **This is the default.**                                                                                                                                                                                                                                                                                                             |
+| `--keep-comment`                    | Disable `--blank-comment`: let `COMMENT` be filled/preserved by the normal tagging logic.                                                                                                                                                                                                                                                                                                                                     |
+| `--bid-ask-only`                    | Only refresh `Bid`/`Ask` from onvista; preserves `COMMENT`, `COMMENT2`, and return columns. For equity rows with a numeric `COMMENT2` target, `Kurspotential`, `Kurspotential %` and `COMMENT3` are recomputed from the new Ask. `% Differenz zum Vortageskurs` and `DIFF_BASIS` are recomputed from the new Ask (Bid if Ask is missing), converted into `REF_CURRENCY`, and the stored `REF_PREV_CLOSE`. |
+| `--show-detail-columns`             | Export`DETAIL_SYMBOL` and `DETAIL_SOURCE`.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `--hide-detail-columns`             | Hide detail columns. This is the default.                                                                                                                                                                                                                                                                                                                                                                                         |
+| `--use-local-overrides`             | Use`isin_symbol_overrides.yaml` during symbol resolution.                                                                                                                                                                                                                                                                                                                                                                       |
+| `--ignore-local-overrides`          | Ignore local symbol overrides. This is the default.                                                                                                                                                                                                                                                                                                                                                                               |
+| `--promote-candidates-to-overrides` | Promote trusted entries from`isin_symbol_candidates.yaml` and exit.                                                                                                                                                                                                                                                                                                                                                             |
+| `--comment2-with-source-meta`       | Append analyst count/source abbreviation to`COMMENT2`.                                                                                                                                                                                                                                                                                                                                                                          |
+| `--eodhd-api-key`                   | EODHD API key. If omitted, the script reads`market.eodhd_api_key` from `config.yaml`.                                                                                                                                                                                                                                                                                                                                         |
+| `--classification-provider`         | Override the`COMMENT` tag classifier: `config`, `ollama`, `deepseek`, `minimax`, or `none`.                                                                                                                                                                                                                                                                                                                           |
+| `--classification-model`            | Temporarily override the classifier model.                                                                                                                                                                                                                                                                                                                                                                                        |
+| `--allow-new-tags`                  | Allow the LLM classifier to append new tags to`subcategories.csv`.                                                                                                                                                                                                                                                                                                                                                              |
+| `--tag-only`                        | Only update`COMMENT` tags. No market data, TA, target prices, or deduplication.                                                                                                                                                                                                                                                                                                                                                 |
+| `--tag-output`                      | Output CSV path for`--tag-only`; otherwise the input file is overwritten.                                                                                                                                                                                                                                                                                                                                                       |
+| `--tag-no-llm`                      | Disable cloud LLM fallback in`--tag-only` mode.                                                                                                                                                                                                                                                                                                                                                                                 |
+
+### Data Sources
+
+| Data                                              | Source                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stock target price                                | Yahoo Finance first.                                                                                                                                                                                                                                                                                                                                                                                    |
+| Stock historical prices for return columns and TA | EODHD first, then Yahoo fallback.                                                                                                                                                                                                                                                                                                                                                                       |
+| ETF/fund historical prices                        | Controlled by`--fund-data-source`; default is `eodhd_then_yahoo`.                                                                                                                                                                                                                                                                                                                                   |
+| `Bid` / `Ask`                                 | Parsed from onvista page labels `Geld` / `Brief` (checks every occurrence of the label within a short window, since multi-exchange listing pages repeat these as bare headers). For equity rows, values are cross-checked against Yahoo's `current_price` and discarded (with a note in `ENRICH_NOTE`) if the two differ by more than 5x; ETF/fund rows use the parsed onvista values directly. |
+| ETF/fund static metadata                          | Parsed from onvista pages.                                                                                                                                                                                                                                                                                                                                                                              |
+| ISIN links                                        | Marketscreener detail page, then onvista detail page, then Marketscreener search fallback.                                                                                                                                                                                                                                                                                                              |
+
+Local `isin_symbol_overrides.yaml` is not used by this script unless `--use-local-overrides` is passed (the Top list always uses it, see "Yahoo symbol of a Top list row").
+
+### Instrument-Type Detection
+
+Each row is classified internally as `equity`, `etf`, `fund`, `index`, `certificate`, `other`, or `missing_isin`.
+
+The classifier uses:
+
+- Keywords in `COMMENT`, `Name`, `STOCK_ID`, and `WKN`.
+- OpenFIGI hints, for example `ETP` -> `etf` and `MUTUAL FUND` -> `fund`.
+- Yahoo quote types for later ETF/fund normalization.
+- A resolved equity ticker as the equity fallback.
+
+`INSTRUMENT_TYPE` controls the enrichment path but is hidden from exports by default. Use `--show-detail-columns` for symbol/source diagnostics.
+
+### COMMENT Meaning
+
+`COMMENT` behavior depends on which flags are active:
+
+- **`--blank-comment` (default)**: `COMMENT` is forced empty in the output, overriding whatever the tagging/preservation logic below produced. This is applied as a final step right before writing output.
+- **`--keep-comment` + normal enrichment** (neither `--skip-subcategories` nor `--bid-ask-only`): `COMMENT` is cleared, then refilled by `update_comment_with_subcategory()` — either reusing a recognized tag from the source file, inferring one from the company name/sector keyword lists, or falling back to the configured LLM classifier.
+- **`--keep-comment --skip-subcategories`**: `COMMENT` keeps the source file's original text untouched (not cleared, not retagged).
+- **`--bid-ask-only`**: `COMMENT` is always preserved untouched, regardless of `--blank-comment`/`--skip-subcategories` (that mode only refreshes `Bid`/`Ask`, plus `Kurspotential` for equity rows).
+
+`QUANTITY` (the MACD+Stochastic TA signal code, not a share count) is still written to the CSV/XLSX files and imported into the database, but the Streamlit dashboard no longer shows it in the EQUITY and ETF tables (`desired_order` in `server_app/dashboard.py`). Rebuild the dashboard image to pick up that change: `docker compose up -d --build dashboard`.
+
+On top of whichever of the above applies, equity and "other" rows get a country appended (`<text> | US`, stripping any stale country tag first so reruns don't duplicate it); ETF/fund rows have any country tag stripped instead, since it doesn't cleanly apply to a fund's ISIN domicile.
+
+Note: reprocessing a file this script already wrote once will also strip its own `MNEMONIC:WKN` marker row (see [What It Does](#what-it-does)) rather than tagging/blanking it as if it were a real holding.
+
+### COMMENT2 Meaning
+
+`COMMENT2` is rewritten during enrichment as a **plain number, with no currency suffix** — the currency it's expressed in is recorded separately in the `DEV` column (see [DEV and Kurspotential](#dev-and-kurspotential)):
+
+- Equity rows: analyst target price from Yahoo, converted to match the row's `DEV`/Bid-Ask currency exactly — or a reason such as `no symbol`, `no analyst target`, or `type:...`.
+- ETF/fund rows: onvista `Laufende Kosten` formatted as a percent when a number is available. This one isn't a currency value, so it's unaffected by the currency-matching behavior above.
+- ETF/fund rows may show raw onvista placeholders such as `(Man. Gebühr)` or `-` / `–` when onvista exposes a fee label but no numeric value.
+- Empty `COMMENT2` means no usable value was found or the row did not write a `COMMENT2` value in its enrichment path.
+
+If placeholders are not useful, adjust `format_etf_comment2()` to return an empty string when no number is found.
+
+### DEV and Kurspotential
+
+**Subunit currencies.** Prices quoted in a currency's subunit are converted with the main currency's rate divided by 100: pence (`GBp`/`GBX`, London), South African cents (`ZAc`, Johannesburg) and Israeli agorot (`ILA`, Tel Aviv). onvista writes London quotes as `Geld 8.500,00 GBp`; the lower-case `p` is what marks pence, so the parser keeps it as `GBX` instead of upper-casing it to `GBP` (a factor-100 error that once showed a 85 GBP stock as 8,495 EUR and a +7336 % day change). If Yahoo has no `<CCY>EUR=X` rate for a currency (e.g. ILS), the inverse `EUR<CCY>=X` pair is used.
+
+Prices below 0.1 are written with up to four decimals (`0,005 CAD`) instead of two, so penny stocks do not round to `0,01`.
+
+`DEV` is the last column in the export and always holds `USD` or `EUR` — whatever the original quote currency, anything other than USD/EUR is converted to EUR (via a live FX rate, cached per run). `COMMENT2`, `Bid`, and `Ask` are all converted to match this same currency, so they're always directly comparable within a row.
+
+For equity rows only, two more columns are computed from this shared currency.
+ETF/fund rows do not have an analyst target price in this workflow, so their
+`Kurspotential` fields remain blank.
+
+The analyst target price is read from Yahoo Finance (`targetMeanPrice`) and
+converted to the row's display currency. The current price is based on the
+Onvista quote values:
+
+- If both `Bid` and `Ask` are available, their arithmetic mean is used.
+- If only one is available, that value is used.
+- If neither is available, `Kurspotential` cannot be calculated and remains blank.
+
+Both values are therefore expressed in the same currency before subtraction or
+division:
+
+```text
+Kurspotential   = target price (COMMENT2) − current price (Bid/Ask mid)
+Kurspotential % = (target price / current price − 1) × 100
+```
+
+For example, with a target price of `120 EUR`, a `Bid` of `100 EUR`, and an
+`Ask` of `104 EUR`, the current price is `(100 + 104) / 2 = 102 EUR`. The
+result is `Kurspotential = 18 EUR` and `Kurspotential % = 17.65%`.
+
+`Kurspotential %` is a ratio, so it is the same value regardless of which
+currency it was computed in. Both columns are stored as plain numbers with two
+decimals (no `%` sign on `Kurspotential %`). They remain blank when the target
+price is missing or when no usable `Bid`/`Ask` price is available. A row
+without a target price (`COMMENT2` is `no analyst target`, `no symbol`, `fetch failed`, `type:...`
+or empty, or the target was ignored as implausible) has `Kurspotential`, `Kurspotential %` and
+`COMMENT3` cleared on both a full run and a `--bid-ask-only` refresh, so a value from an earlier
+target never stays next to "no analyst target".
+
+### Return Columns
+
+The three `% Differenz ...` columns are computed locally. They are not API-provided fields.
+
+The script downloads up to `RETURN_LOOKBACK_DAYS = 400` days of historical daily
+close prices. The historical-price source depends on the instrument and the
+`--fund-data-source` option:
+
+- Equity rows prefer EODHD and fall back to Yahoo Finance.
+- ETF/fund rows follow `--fund-data-source`; the default is EODHD first, then
+  Yahoo Finance.
+
+Only `% Differenz zum Vortageskurs` follows the live quote:
+
+- `% Differenz zum Vortageskurs`: the row's **Ask** (the **Bid** if the Ask is missing) vs the last historical close dated **before today**. Intraday bars of today never count. `DIFF_BASIS` says what was used: `Ask`, `Bid`, or `Close` when neither exists (then the old meaning applies: latest close vs the close before it). A quote whose scale is 20x or more away from the latest close (a scraping slip, a currency mismatch) is ignored and the row uses `Close`.
+- `% Differenz ein Monat`: latest historical close vs the close on or before 30 days ago.
+- `% Differenz ein Jahr`: latest historical close vs the close on or before 365 days ago.
+
+```text
+percent_change = (current_price / reference_close - 1) * 100
+```
+
+The Vortageskurs reference close is written to `REF_PREV_CLOSE` and the
+currency it is expressed in to `REF_CURRENCY` (both hidden in the XLSX). Equity
+references are in EUR; ETF/fund references are in the row's `DEV` at the time of
+the full run, the same convention `COMMENT2` follows. The Ask is always converted
+into `REF_CURRENCY` before the two are compared, so a USD quote against a EUR
+reference is never taken at face value (that mistake showed Oceaneering at
++25.5 % instead of about +4 %: every USD stock was inflated by roughly the
+EUR/USD rate). The currency is stored rather than derived because a
+`--bid-ask-only` run can derive neither: `INSTRUMENT_TYPE` is not persisted, so
+it classifies a plain stock as `other`, and `DEV` is overwritten with the quote
+currency on every refresh. These columns are what lets the 6-minute `--bid-ask-only` job recompute
+`% Differenz zum Vortageskurs` from a fresh Ask without refetching history (see
+below). Monat and Jahr only change with a full run.
+
+Reference prices are checked for obvious historical data errors. The script
+examines a window of up to 10 days around the selected reference date. If the
+selected value differs from the local median by a factor of 5 or more, the
+local median is used instead. Missing history, a missing reference close, or a
+zero reference close leaves the corresponding return field blank.
+
+For example, if the latest close is `120` and the close one year earlier is
+`100`, `% Differenz ein Jahr` is `(120 / 100 - 1) * 100 = 20%`. Positive values
+indicate an increase relative to the reference close; negative values indicate
+a decrease.
+
+EODHD uses `adjusted_close`; Yahoo uses `Close` with `auto_adjust=True`.
+
+**`--bid-ask-only` refresh.** After fetching a new Ask (or Bid), the job
+recomputes `% Differenz zum Vortageskurs` from the stored `REF_PREV_CLOSE` and
+updates `DIFF_BASIS`, like it already does for `Kurspotential`. A row is left
+untouched when onvista returned no quote, when the row has no `REF_PREV_CLOSE`
+yet (rows only get it from the next full run, or when added after the last
+one), or when the quote does not fit the reference's scale. A row that has a
+`REF_PREV_CLOSE` but no `REF_CURRENCY` (written before that column existed) is
+read as EUR if its ISIN has a symbol in the shared target cache (the ISINs the
+full run treats as equities) and as `DEV` otherwise, until the next full run
+fills `REF_CURRENCY`.
+
+These three columns (and `Kurspotential %`) display as plain numbers with 2 decimals — no `%` sign — in both the CSV and XLSX output.
+
+### Technical-Analysis Signal
+
+The script downloads roughly 183 days of daily OHLC data and computes:
+
+- MACD `(12, 26, 9)`
+- Stochastic Slow `(14, 3, 3)`
+
+It appends a two-character signal to `COMMENT3`:
+
+```text
+1st character = latest MACD crossover signal
+2nd character = latest Stochastic Slow crossover signal
+
+! = buy crossover  -> displayed as 1
+? = sell crossover -> displayed as 2
+- = no crossover in the lookback window (displayed as -)
+```
+
+Examples (raw signal -> displayed `COMMENT3`):
+
+| Signal | Displayed | Meaning                               |
+| ------ | --------- | ------------------------------------- |
+| `!!` | `1  1`  | MACD buy + Stochastic buy.            |
+| `!?` | `1  2`  | MACD buy + Stochastic sell.           |
+| `?!` | `2  1`  | MACD sell + Stochastic buy.           |
+| `??` | `2  2`  | MACD sell + Stochastic sell.          |
+| `--` | `-  -`  | No signal found for either indicator. |
+
+`_apply_ta_signal()` appends to whatever's already in `COMMENT3` rather than overwriting it outright — this only behaves like an overwrite because `COMMENT3` is always cleared fresh at the start of every non-`--bid-ask-only` run (independent of `--skip-subcategories`/`--blank-comment`, which only affect `COMMENT`). Without that clearing, reprocessing the same file repeatedly would make the signal grow (e.g. `1  2  1  2`) instead of staying at two characters.
+
+### Top List
+
+A row enters the Top List when:
+
+- `COMMENT3` contains a double buy signal after whitespace is ignored.
+- `% Differenz ein Jahr` is positive.
+- `% Differenz ein Monat` is positive.
+- `% Differenz zum Vortageskurs` is positive.
+
+Only Top List rows with `INSTRUMENT_TYPE` in `equity`, `etf`, or `fund` receive ISIN hyperlinks. With `--skip-isin-links`, the Top List is still generated, but ISIN values stay as plain text.
+
+### Output Behavior
+
+- The default output is `<input_name>_merged.xlsx`.
+- The script also writes `<input_name>_merged.csv`.
+- The XLSX contains a `Merged` sheet and a `Top List` sheet. No separate `_top.csv` is generated by current versions.
+- Batch mode skips legacy `*_top.csv` files if they are still present in the input folder.
+- If an output file is open in Excel, the script skips that file instead of forcing an overwrite.
+- `INSTRUMENT_TYPE` is used internally and is not exported by default.
+- `DETAIL_SYMBOL` and `DETAIL_SOURCE` are hidden by default; use `--show-detail-columns` to export them.
+- ETF/fund rows export `COMMENT` as the subcategory only. Any leading country label, for example `US | Global Equity`, is written as `Global Equity`.
+- XLSX exports store numeric-looking `COMMENT2`, `Bid`, and `Ask` values as real Excel numbers while preserving suffixes such as `EUR` through number formats.
+- CSV exports keep the text representation. ISIN hyperlinks are written as Excel `HYPERLINK(...)` formulas unless `--skip-isin-links` is used.
+
+### Subcategory Loading
+
+`subcategories.csv` is loaded once at startup and used for rule matching, sorting, and optional LLM fallback classification.
+
+Normal enrichment runs do not create new subcategory tags unless `--allow-new-tags` is passed. This prevents repeated runs from steadily expanding `subcategories.csv`.
+
+When `classify_to_subcategories.py` writes `subcategories.csv`, it now cleans the table automatically:
+
+- trims `Sector`, `Tag`, and `Description`;
+- groups rows with the same `Sector` together;
+- removes duplicate `Tag` values within the same `Sector`, ignoring case and surrounding whitespace;
+- keeps duplicate tags in different sectors separate;
+- keeps the longer description when two duplicate sector/tag rows have different descriptions.
+
+LLM provider settings are read from `config.yaml`:
+
+```yaml
+llm:
+  classification_provider: "minimax"  # minimax, deepseek, ollama, or none
+  minimax_api_key: "..."
+  minimax_base_url: "https://api.minimaxi.com/v1"
+  minimax_model: "MiniMax-M2.7-highspeed"
+  deepseek_api_key: "..."
+  deepseek_base_url: "https://api.deepseek.com/v1"
+  deepseek_model: "deepseek-v4-flash"
+  ollama_model: "qwen2.5:3b"
+```
+
+You can override the classifier from the terminal:
+
+```powershell
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --classification-provider ollama
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --classification-provider ollama --classification-model qwen2.5:3b
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --classification-provider minimax
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --classification-provider deepseek
+python csv_analyse_watchlist.py ".\csv\Europa Branchen.csv" --output-dir ".\csv_update" --classification-provider none
+```
+
+### Fixes: reference currency, TMP refresh, Kurspotential (October 2026)
+
+Found when Oceaneering (US6752321025) showed `+25.5 %` in the Energy list instead of about `+4 %`.
+Every USD stock in the EQUITY lists was affected, not only Energy (836 of 2,200 rows were off by
+roughly the EUR/USD rate), and the Top List had a separate currency error.
+
+| Problem found                                                                                 | Cause                                                                                                                                                                                 | Fix                                                                                                                                                                                                                                                             | Where                                                                                             |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `% Differenz zum Vortageskurs` of USD stocks inflated by about 12 points                    | `INSTRUMENT_TYPE` is not written to the files, so `--bid-ask-only` classified every plain stock as `other` and compared the USD Ask with the EUR `REF_PREV_CLOSE` unconverted | The reference currency is stored in `REF_CURRENCY`; the Ask is converted into it. Rows without it are read as EUR when the ISIN has a symbol in the target cache                                                                                              | `csv_analyse_watchlist.py` (`_refresh_differences_from_quote`, `_is_equity_row`)            |
+| Top List showed -10 % on a +1 % day                                                           | The history currency was assumed to be the Ask's currency (onvista quoted the EUR listing of a US stock, the history was USD)                                                         | Taken from the symbol (`.US`/bare ticker USD, `.DE` etc. EUR, `.L` GBp, else Yahoo `fast_info`); blank when unknown                                                                                                                                     | `fetch_finanzen_topflop.py` (`yahoo_history_currency`, `listing_currency`)                  |
+| `COMMENT2` (TMP) and `Kurspotential` stayed at the full run's value while the price moved | The same misclassification made `--bid-ask-only` skip them for all stocks                                                                                                           | Stocks are recognised through the target cache; `COMMENT2` is converted when `DEV` changes currency between refreshes                                                                                                                                       | `csv_analyse_watchlist.py` (`process_bid_ask_only_dataframe`, `_convert_comment2_currency`) |
+| `Kurspotential` shown next to `no analyst target` (157 rows in the Energy list)           | Neither run ever cleared it                                                                                                                                                           | Cleared with `Kurspotential %` and `COMMENT3` whenever there is no target price                                                                                                                                                                             | `csv_analyse_watchlist.py` (`_clear_kurspotential`)                                           |
+| Dashboard/database called the target price `comment2`                                       | Name inherited from the CSV                                                                                                                                                           | Postgres column `app.watchlist_rows.comment2` renamed `tmp`; `ensure_schema()` migrates existing installs (drops and recreates `app.tableau_watchlist_latest`). CSV headers keep `COMMENT2`                                                           | `server_app/db.py`, `api.py`, `import_watchlists.py`, `dashboard.py`                      |
+| Oceaneering at +40 % (Bid 27,8 / Ask 55,8 while it traded at 40)                              | onvista shows a quote with no real book behind it before the US open; `--bid-ask-only` trusted it (only the full run checks against Yahoo)                                          | `fetch_onvista_fields` drops Bid and Ask when Ask/Bid is above 1,5 (`ONVISTA_MAX_SPREAD_RATIO`; prices under 1 are exempt because of the tick size) and reports `implausible spread`; the refresh keeps the last values, the Top List falls back to Yahoo | `csv_analyse_watchlist.py` (`_is_onvista_spread_implausible`)                                 |
+
+Known and left as is: `REF_PREV_CLOSE` is only refreshed by a full run, so it can lag a day (the Oceaneering
+reference was the 22nd's close on the 26th) until the next 08:10 / 15:40 run; `COMMENT2` is written with a comma
+by a refresh while the last full run left a dot in some files.
+
+## fetch_finanzen_topflop.py
+
+`fetch_finanzen_topflop.py` fetches current Top tables from finanzen.net and enriches them with 3-month performance plus Yahoo Finance `targetMeanPrice` data. For selected US indices (`S&P 400` and `S&P 600`) the script uses iShares holdings plus EODHD/Yahoo data when finanzen.net does not expose a useful Top table.
+
+- DAX
+- MDAX
+- TecDAX
+- SDAX
+- Dow Jones
+- NASDAQ 100
+- S&P 500
+- S&P 400
+- S&P 600
+- EURO STOXX 50
+- SMI
+- Nikkei 225
+
+It writes one XLSX file with one sheet per index. Each sheet uses this column order:
+
+```text
+FetchedAt | Index | Rank | Name | ISIN | ChangeAbs | ChangePct | Time | Date | Change3MPct | Last | TMP | Pot | Pot %
+```
+
+`TMP` is Yahoo Finance `targetMeanPrice`. `Pot` and `Pot %` are calculated as:
+
+```text
+Pot   = TMP - Last
+Pot % = (TMP / Last - 1) * 100
+```
+
+In the XLSX export, `ChangeAbs`, `ChangePct`, `Change3MPct`, `Pot`, and `Pot %` are formatted with two decimals and red negative numbers.
+
+### Common Commands
+
+Fetch all supported indices:
+
+```powershell
+python fetch_finanzen_topflop.py
+```
+
+Choose an output file:
+
+```powershell
+python fetch_finanzen_topflop.py --output ".\finanzen_topflop.xlsx"
+```
+
+Fetch only selected indices:
+
+```powershell
+python fetch_finanzen_topflop.py --indices DAX TecDAX "NASDAQ 100" "S&P 500"
+```
+
+List supported index names:
+
+```powershell
+python fetch_finanzen_topflop.py --list-indices
+```
+
+Also write a combined CSV next to the XLSX:
+
+```powershell
+python fetch_finanzen_topflop.py --csv
+```
+
+### Day Change Check Columns And The Nikkei Rule
+
+Two columns at the end of `top_liste_latest.csv` (Top list only, not the INDEX files) make the recomputed `% Differenz zum Vortageskurs` auditable:
+
+| Column        | Content                                                                                                                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Source %`  | The day change as the ranking source reported it: finanzen.net's `+/- %`, or EODHD's `change_p` for S&P 400 / S&P 600. Read before the column is recomputed.                                 |
+| `Diff Flag` | `!` when the recomputed value is more than `DIFF_FLAG_PP` (3.0) percentage points away from `Source %`; `?` when the source has a value and the recomputation has none; empty otherwise. |
+
+A flag means "look at this row", not "wrong": it is raised by a stale finanzen.net row (the mixed-date EURO STOXX 50 table), a pre-market US quote, a thin Ask, or a bad reference price. Rows that the ranking source reported at a different time than onvista's Ask can differ by a point or two without any error.
+
+**Nikkei 225** is computed differently. Tokyo closes at about 07:00 German time, but onvista quotes the German listing of those stocks, which keeps trading afterwards and has a spread of 1-2 %. Ask against the Tokyo close put the whole index about 2 pp above the finanzen.net page (Advantest +6.3 % above the Tokyo close). For indices in `SESSION_CLOSE_INDICES` the day change is therefore the latest close against the one before it from the same price history, in the listing's own currency (no conversion), and `Diff Basis` says `Close`. Without a history it falls back to `Source %` (`Diff Basis` = `Page`). Bid and Ask are still shown for these rows. Monat and Jahr are unchanged.
+
+### Rows Per Index And Data Sources
+
+`TOP_N` in `fetch_finanzen_topflop.py` (currently `15`) is the number of rows kept per index. finanzen.net's Top pages list only 10-25 rows, so smaller indices yield fewer (SMI 10).
+
+S&P 400 and S&P 600 cost one EODHD call per constituent (~1,000 per run, against a 100,000/day limit). They are therefore only refetched while the US market is open (NYSE hours and holidays, see `us_market.py`); otherwise the last rows are kept (cached under `csv_update/_history_cache/index_frames/`).
+
+| Field                                | Source                                                  |
+| ------------------------------------ | ------------------------------------------------------- |
+| Rank, Name, ISIN, day change         | finanzen.net `index/<name>/topflop` page (HTML table) |
+| Constituents of S&P 400 / S&P 600    | iShares holdings (IJH, IJR)                             |
+| Quotes and day change of those three | EODHD, with Yahoo Finance as fallback                   |
+| Bid, Ask, currency                   | onvista, looked up per ISIN                             |
+| TMP, Pot, Pot %                      | Yahoo Finance target price                              |
+| 1-month / 1-year change              | EODHD or Yahoo history                                  |
+
+`Time` / `Date` come from finanzen.net; `Bid Time` / `Ask Time` are the local time of the onvista lookup. A full run takes about 10 minutes.
+
+### How The Rank Within An Index Is Computed
+
+`Rank` is decided by one number only: the day change, highest first. It is a snapshot of the moment of the fetch; nothing accumulates between runs, and the next run (every 20 minutes) ranks again from scratch.
+
+- **DAX, MDAX, TecDAX, SDAX, Dow Jones, NASDAQ 100, S&P 500, EURO STOXX 50, SMI, Nikkei 225:** the first non-empty table on `finanzen.net/index/<name>/topflop` is the Top table. Its `+/- %` column is split into absolute and percent change (`1,41 +4,88` is +1,41 and +4,88 %); the percent value is the sort key. Rows are sorted descending, rows without a value last, the first `TOP_N` (15) are kept and `Rank` is their position 1..15. The page lists about 20 rows, so the rest is cut off.
+- **S&P 400, S&P 600:** there is no usable finanzen.net page, so the constituents come from the iShares holdings (IJH, IJR) and each gets an EODHD quote (Yahoo as fallback). The change is the quote's `change_p`, or `(last - previous close) / previous close` when it is missing. Same descending sort, same `TOP_N` cut.
+- A stock that is a member of two indices appears once in each, with an independent `Rank`.
+
+The sort uses the change **as finanzen.net/EODHD report it at that moment**. `% Differenz zum Vortageskurs` in the file is recomputed afterwards (Ask against the previous close from the history, see "History price cache") and the rows are deliberately **not** re-sorted by it. The column and `Rank` can therefore disagree slightly: a row ranked 5th may show a small negative change if the Ask moved since the page was read or the two previous-close references differ. A large negative value in a Top list has two possible causes: a wrong reference price (see the history cache below), or a finanzen.net page that still shows the previous session. The page's `Zeit Datum` column says which. The pages are live for most indices (checked 2026-10-28 15:10: DAX, MDAX, TecDAX, SDAX, SMI, Dow Jones, S&P 500 all dated 28.10. within minutes). Two cases are not:
+
+- Before the US open (15:30 German time) the Dow Jones, NASDAQ 100 and S&P 500 tables show the previous US session (NASDAQ 100 rows dated 28.10. 01:00), while the onvista Ask is a pre-market quote from a German exchange. A stock that rose yesterday can show a small negative change until the US open.
+- The EURO STOXX 50 table mixes dates: 14 of 23 rows still carried 27.10. (Adyen, EssilorLuxottica and Santander at about 17:55) and 9 carried 28.10. The ranking therefore compares yesterday's and today's changes, and Adyen (+1,94 % yesterday, rank 6) showed -13 % against yesterday's close. The cause on the finanzen.net side was not investigated.
+
+### Column Reference: Sources And Formulas
+
+Every column of `top_liste_latest.csv`, where it comes from and how it is computed. The code is in `fetch_finanzen_topflop.py`.
+
+**The list itself**
+
+| Column             | Source / formula                                                                                                                                                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Index`          | The index that was fetched: DAX, MDAX, TecDAX, SDAX, Dow Jones, NASDAQ 100, S&P 500, S&P 400, S&P 600, EURO STOXX 50, SMI, Nikkei 225.                                                                                                                                                                           |
+| `Name`, `ISIN` | For most indices the finanzen.net `index/<name>/topflop` page. S&P 400/600 have no usable page: the constituents come from the iShares holdings (IJH, IJR) and the ISIN from the EODHD map.                                                                                                                    |
+| `Rank`           | Decided by one number only: the day change as the ranking source reports it, highest first, the first 15 (`TOP_N`) kept. finanzen.net: the page's `+/- %` column. S&P 400/600: EODHD's `change_p`, or `(last - previous close) / previous close` when it is missing. Every run ranks again from scratch. |
+| `Source %`       | That day change as the ranking source reported it, read before `% Differenz zum Vortageskurs` is recomputed, kept for auditing.                                                                                                                                                                                |
+
+`Rank` is fixed before `% Differenz zum Vortageskurs` is recomputed, and the rows are **not** re-sorted by the recomputed value, so the two can differ slightly.
+
+**Quotes**
+
+| Column                     | Source / formula                                                                                                                                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Bid`, `Ask`           | onvista, looked up per ISIN (the onvista address is cached). A quote with an implausible spread is dropped.                                                                                                                                 |
+| `Bid Time`, `Ask Time` | The local time of the onvista lookup, not the exchange's quote time.                                                                                                                                                                        |
+| No quote                   | After a German stock's close onvista drops its Geld/Brief lines. The last two-sided quote (at most 4 days old) is then kept, still carrying its own time. An Ask without a Bid is not trusted.                                              |
+| `DEV`                    | The onvista quote currency. USD and EUR are kept; any other currency (CHF, JPY, GBX, ...) is converted to EUR at the day's rate. `Bid`, `Ask` and `TMP` are all expressed in this currency, rounded to two decimals after conversion. |
+
+**Target price and potential**
+
+| Column    | Source / formula                                                                                                                                                                                                                                                                                        |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TMP`   | The analysts' mean target price. Read from the shared cache that `refresh_targets.py` fills at 10:00 and 16:30 (Yahoo's `targetMeanPrice`); only an ISIN missing from the cache is looked up live on Yahoo. An implausible target is cross-checked against ChartMill. Finally converted to `DEV`. |
+| `Pot`   | `TMP - Ask`, both in EUR, rounded to two decimals.                                                                                                                                                                                                                                                    |
+| `Pot %` | `(TMP / Ask - 1) * 100`, both in EUR. With no Ask the list's `Last` is used instead.                                                                                                                                                                                                                |
+
+**The three changes**
+
+| Column                           | Formula                                                                                                                                                                                                                                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `% Differenz zum Vortageskurs` | `(current price in EUR / previous close in EUR - 1) * 100`. The current price is, in this order, `Ask`, `Bid`, the list's `Last`, converted to EUR at today's rate. The previous close is the latest close in the price history that is not later than "now minus one day", converted to EUR. |
+| `% Differenz ein Monat`        | `(latest finished close / close 30 days earlier - 1) * 100`, both in EUR. The latest finished close is the last history row dated before today (Nikkei 225: today's row, Tokyo has closed by then).                                                                                                 |
+| `% Differenz ein Jahr`         | The same, against the close 365 days earlier.                                                                                                                                                                                                                                                         |
+| `Diff Basis`                   | Which price `% Differenz zum Vortageskurs` was measured from: `Ask`, `Bid` or `Last`; `Close` or `Page` for Nikkei 225.                                                                                                                                                                   |
+| `Diff Flag`                    | `!` when the recomputed day change is more than 3 percentage points (`DIFF_FLAG_PP`) away from `Source %`; `?` when the source has a value and the recomputation has none; empty otherwise.                                                                                                   |
+
+- Only the day change follows the live quote. Monat and Jahr always use the latest finished close in the history, never the Ask.
+- Price history comes from EODHD first, with Yahoo as fallback, is cached per day, and is converted to EUR with the daily FX series.
+- **Nikkei 225** is the exception: Tokyo closes at about 07:00 German time and onvista quotes the German listing, which keeps trading and has a wide spread. Its day change is therefore the latest close against the one before it, in the listing's own currency (no conversion), and `Diff Basis` says `Close`. Without a history it falls back to `Source %` (`Diff Basis` = `Page`).
+- `!` in `Diff Flag` means "look at this row", not "wrong". Typical causes: a stale finanzen.net row (the EURO STOXX 50 table mixes dates), a pre-market US quote, a thin Ask, or a bad reference price.
+
+**What `refresh_toplist_bid_ask.py` changes**
+
+The script rewrites only `Bid`, `Bid Time`, `Ask`, `Ask Time` and `DEV` (only when it was empty), and recomputes everything that depends on the Ask: `Pot`, `Pot %`, `% Differenz zum Vortageskurs`, `Diff Basis` (set to `Ask`) and `Diff Flag`. `Rank`, `Monat`, `Jahr`, `TMP` and `Source %` stay as the last full run left them. The previous close it uses comes from `csv_update/_prev_close_cache.json`, which each full run writes (the exact inverse of the formula above: `previous close = price in EUR / (1 + change / 100)`). An entry is valid only on the day it was written; until the first full run of the day has written it, the day change is left untouched.
+
+### Update Frequency Per Column
+
+All times are German local time, weekdays only.
+
+**The two jobs**
+
+| Job                                        | Schedule                                                                                           | Notes                                                                               |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Full fetch (`fetch_finanzen_topflop.py`) | 09:33 and 09:53, then `:13 :33 :53` of every hour until 22:xx (the last run ends at about 23:03) | About 10 minutes per run; a start is skipped while the previous run is still going. |
+| `refresh_toplist_bid_ask.py`             | `:07 :17 :27 :37 :47 :57`, 09:07 to 22:57                                                        | Waits a random 0-19 seconds before starting; a run takes about 1-3 minutes.         |
+
+**How often each column changes**
+
+| Column                                                          | Changes                                                                                     | Why                                                                                                                                                                                                                     |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Rank`, `Name`, `ISIN`, `Source %`                      | Every 20 minutes (full fetch)                                                               | Every run reads the pages again and re-ranks; the refresh script does not touch them.                                                                                                                                   |
+| `Bid`, `Ask`, `Bid Time`, `Ask Time`                    | **Every 10 minutes** (refresh script); the full fetch reads them once per run as well | After a German stock's close onvista has no quote; the last two-sided quote (at most 4 days old) is kept with its old time.                                                                                             |
+| `DEV`                                                         | Every 10 minutes, but only filled when it was empty                                         | The currency rarely changes.                                                                                                                                                                                            |
+| `Pot`, `Pot %`                                              | **Every 10 minutes**                                                                  | Recomputed from the new Ask.                                                                                                                                                                                            |
+| `% Differenz zum Vortageskurs`, `Diff Basis`, `Diff Flag` | **Every 10 minutes**                                                                  | Recomputed from the new Ask, provided today's previous-close cache exists (after the first full fetch of the day).                                                                                                      |
+| `TMP`                                                         | The value changes twice a day, at 10:00 and 16:30                                           | Read from the target cache every run; only an ISIN missing from it is looked up live on Yahoo.                                                                                                                          |
+| `% Differenz ein Monat`, `% Differenz ein Jahr`             | Effectively once a day                                                                      | The price history is cached per day and reused; it is refetched after 2 hours only if it still lacks the previous session's close. Every full run recomputes the columns, but the input does not change during the day. |
+| Previous-close cache (`csv_update/_prev_close_cache.json`)    | Written by every full fetch, valid on that day only                                         | Expires on its own; until the first full fetch of a new day has written it, `% Differenz zum Vortageskurs` stays as it is.                                                                                            |
+
+**Other sources**
+
+- **FX rates:** daily series, so they change once a day.
+- **S&P 400 / S&P 600:** about 1,000 EODHD calls per run, so they are refetched only while the US market is open; afterwards the last rows are kept (cached per index, at most 5 days).
+- **iShares constituents' ISIN map:** cached for 24 hours.
+- **INDEX lists** (separate files, not the Top list): refetched hourly at `:09`.
+
+**To the database and the dashboard**
+
+- The full fetch writes `top_liste_latest.csv` and imports it into PostgreSQL after every finished index.
+- The refresh script runs with `--pg` and imports once after each run.
+- All lists are additionally imported at `:05 :20 :35 :50`.
+- The dashboard re-reads the database every 30 seconds.
+
+From a changed onvista quote to the number on screen therefore takes at most about 10 minutes (the refresh interval) plus a few tens of seconds (import and dashboard refresh).
+
+**Two caveats**
+
+- The ranking source itself can be stale, regardless of how often the job runs: before the US open (15:30) the three US indices show the previous session, and the EURO STOXX 50 table mixes dates.
+- **Today's unfinished bar is ignored for Monat and Jahr.** Yahoo's price history ends with a row for today while the market is open (checked 2026-10-29: `yahoo_SZG.DE.csv`, written 11:09, ended with a `2026-10-29` row of 47.82), and the per-day history cache would have frozen it. `calculate_history_period_change` therefore takes "the latest close" as the last row dated before today (`keep_today_bar=False`); only Nikkei 225, whose exchange has closed by the time of the fetch, keeps today's row. Effect on Salzgitter that day: Monat -13.26 % instead of -5.21 %, Jahr +50.01 % instead of +63.93 %. Consequently Monat and Jahr show the previous trading day's close, also after the close, until the next day. `% Differenz zum Vortageskurs` is not affected: its reference is the latest row not later than "now minus one day", which is yesterday's close. The EODHD `/eod` endpoint never had the problem (checked 2026-10-29 13:48 with SZG.XETRA, SAP.XETRA and AAPL.US: the last row was 2026-10-28), but only the US indices carry an `EodhdSymbol`: `add_eodhd_symbols_for_us_finanzen_index` maps ISINs through EODHD's US ISIN map, and S&P 400/600 take their tickers from the iShares holdings. The other indices (DAX, MDAX, TecDAX, SDAX, EURO STOXX 50, SMI, Nikkei 225) have only a `YahooSymbol`, so `calculate_period_change` goes straight to Yahoo for them.
+
+### Scheduled Updates On Linux (cron)
+
+The server crontab (German local time, weekdays only) runs the fetch every 20 minutes and imports the result into PostgreSQL right after it succeeds:
+
+| Job                                                                                       | Schedule                                                        | Script                                                                             |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Fetch + import                                                                            | 09:33 and 09:53, then `:13 :33 :53` of every hour 10:00-22:59 | `scripts/run_finanzen_topflop_update.sh && scripts/update_watchlists_to_pg.sh`   |
+| Regular import of all lists                                                               | `:05 :20 :35 :50` 08:00-22:59, and 23:05                      | `scripts/update_watchlists_to_pg.sh`                                             |
+| All INDEX lists (DAX, TecDAX, MDAX, SDAX, EURO STOXX 50, Hang Seng, Dow Jones, Nasdaq100) | `:09` of every hour 09:00-22:59                               | `scripts/run_index_update.sh` (takes about five minutes; see `fetch_dax40.py`) |
+| Target price (TMP) cache                                                                  | 10:00 and 16:30                                                 | `scripts/run_target_refresh.sh` (see "Target price (TMP) refresh")               |
+
+```text
+33,53 9 * * 1-5 /usr/bin/flock -n /tmp/topflop_update.lock sh -c 'LIVE_PUBLISH=1 LIVE_PG=1 <env> scripts/run_finanzen_topflop_update.sh && /usr/bin/flock /tmp/pg_import.lock scripts/update_watchlists_to_pg.sh'
+13,33,53 10-22 * * 1-5 (same command)
+```
+
+- **Live publishing** (`LIVE_PUBLISH=1 LIVE_PG=1` in the cron lines): after every finished index `fetch_finanzen_topflop.py` writes the list so far to `csv_update/TOP_LIST/top_liste_latest.csv` (new rows for the indices done, the previous run's rows for the others, in the usual index order; replaced atomically) and imports that file into PostgreSQL. DAX and the other early indices show up a few minutes into a run instead of when the last index (about ten minutes) is done. The import takes `/tmp/pg_import.lock` for about a second, the same lock as `update_watchlists_to_pg.sh`; the final import after the run stays and finds nothing left to change. A failed live write only prints a warning, the run goes on. Without the two variables (the Docker `topflop` job) the file and the database are written once at the end, as before. Rows of one list can therefore be up to one run old next to each other; every row's `Bid Time` / `Ask Time` says when it was read.
+- `flock -n /tmp/topflop_update.lock` skips a start while the previous fetch is still running, so runs never overlap; a run that takes longer than 20 minutes skips the next slot (the fetch takes about 10 minutes, so a slow one will do this). Both import entries share `/tmp/pg_import.lock`, so two imports never write the database at once.
+- The minutes `:13 :33 :53` are chosen so that no fetch starts in the same minute as another job (daily equity/ETF watchlist runs, the 6-minute bid/ask jobs, the imports, the daily TOP_LIST enrichment). The first run lands at about 09:43 and the last at about 23:03; the file does not change outside that window, and not at weekends.
+- The dashboard re-reads the database every `DASHBOARD_REFRESH_SECONDS` (default 30, set in `docker-compose.yml`; the `st.cache_data` TTL uses the same value). From the end of a fetch to the new numbers on screen takes the import (a few seconds) plus at most that interval. After changing it: `docker compose up -d --no-deps dashboard`.
+- `run_watchlist_daily_topflop.sh` (11:05 and 14:05) enriches `top_liste_latest.csv` with classifications and tags. It was written for a fetch that finished within five minutes. The slots `10:53` and `13:53` finish at about 11:03 and 14:03, so the 11:05 and 14:05 enrichment reads that fresh result; if a fetch runs late it reads the previous one. The market data is not affected.
+
+### Target price (TMP) refresh
+
+The analyst target price (`TMP` in the Top list and INDEX lists, `COMMENT2` in the
+EQUITY watchlists, which the dashboard also shows as TMP) is refreshed **twice a
+day, at 10:00 and 16:30** (Mon-Fri), in one place, so a stock shows the same TMP
+in every list:
+
+```text
+0 10 * * 1-5 /path/to/financial_rag/scripts/run_target_refresh.sh
+30 16 * * 1-5 /path/to/financial_rag/scripts/run_target_refresh.sh
+```
+
+`refresh_targets.py` (started by `scripts/run_target_refresh.sh`) collects the
+ISINs of `csv_update/EQUITY`, `csv_update/INDEX` and `TOP_LIST/top_liste_latest.csv`
+(ETF lists carry no target), looks each one up on Yahoo (4 worker processes, the
+Yahoo symbol is remembered per ISIN) and writes `csv_update/_target_cache.json`
+atomically. A failed lookup keeps the previous entry. It takes a few minutes, so
+the new values show up shortly after 10:00 and 16:30, not at the exact minute.
+
+Everything else only **reads** the cache (`target_cache.py`):
+
+- `fetch_finanzen_topflop.py` (every 20 min) / `fetch_dax40.py` (hourly) use it for `TMP` and compute `Pot` / `Pot %` from it and the fresh Ask. An ISIN missing from the cache is looked up live as before.
+- `csv_analyse_watchlist.py --bid-ask-only` (every 6 min) writes the cached target into `COMMENT2` of equity rows, then recomputes `Kurspotential`. A cached target that looks implausible against the Ask is skipped (the row may be using the ChartMill fallback the full run chose). "Equity row" here means a row whose name does not say ETF/fund/certificate/index and whose ISIN has a symbol in the cache, because `INSTRUMENT_TYPE` is not persisted and a refresh would otherwise classify every plain stock as `other` and skip it (the reason `Kurspotential` used to stay at the full run's value while the price moved). `COMMENT2` is kept in the currency the exported `DEV` will have, which is USD or EUR (the export turns `Bid`, `Ask` and `DEV` into those), not in the currency onvista quoted this time. A stock onvista quotes in CHF or pence (Belimo, Segro) therefore keeps its target in EUR: a refresh that switches the row between USD and EUR converts a plain-number `COMMENT2` along with it, while a CHF/pence quote does not change it (`_comment2_display_currencies`). Before 2026-11-11 the target of such rows was written in CHF/pence and shown as EUR next to an Ask that had been converted; the next refresh rewrites it from the cache. `Kurspotential` is computed after the Ask has been brought into the currency of `COMMENT2` by the rate that wrote it, so `Kurspotential %` equals `TMP` / `Ask` of the same row.
+- The full equity run (08:10 and 15:40) overrides the target fields of its live Yahoo lookup with the cached ones.
+
+Cache entries older than 4 days are ignored (the refresh has been failing), and
+the readers fall back to their own live lookup.
+
+### Target price dialog
+
+Clicking a `TMP` cell in a dashboard table opens the **Target price** dialog: two cards, one above
+the other, in the style of Yahoo Finance's analysis page, then the pages the numbers come from.
+
+- **Analyst Price Targets**: an axis from the lowest to the highest analyst target, a box with the average above it and, when it can be placed, a box with the current price below it. The box is labelled with the quote it is, `Current (Ask)`: the row's Ask, or its Bid or Last when the row has no Ask.
+- **Analyst Recommendations**: one stacked bar per month (Strong Buy on top, then Buy, Hold, Sell, Strong Sell) with the total above each bar and the count in each segment.
+- **Links**: Yahoo Finance's quote page `finance.yahoo.com/quote/<symbol>/` (the "1y Target Est" line is `targetMeanPrice`, the value in the table) and ChartMill's analyst-ratings page, plus the symbol and when the cached target was last refreshed. The `/analysis/` page is not used: its HTML carries no target numbers (the quote page does), so it showed nothing.
+
+Where the data comes from:
+
+| Part                                  | Source                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Low / Average / High and the currency | The row's entry in `csv_update/_target_cache.json` (`target_low`, `target_mean`, `target_high`, `currency`, `symbol`), the cache `refresh_targets.py` fills at 10:00 and 16:30. Served by `GET /target-source` (`server_app/target_links.py`, which reads the JSON directly because the api image only contains `server_app/`). Without a cache entry the symbol comes from the ISIN-to-symbol map the price history uses.                                                                                                                                                                                                                                                                  |
+| Current price                         | The row itself (Ask, then Bid, then Last), in the row's `DEV`. Yahoo states a target in the currency of the primary listing (USD, JPY, HKD, ... about 57% of the rows with a target on 2026-11-09), so the dashboard passes `DEV` as `to_currency` and `GET /target-source` returns the three targets converted into it as `display` (`server_app/fx.py`: Yahoo's `EURUSD=X`-style pairs through yfinance, the inverse pair as fallback, pence/cents/agorot divided by 100, rates kept in memory for an hour). The axis is then in `DEV`, labelled e.g. `EUR (converted from USD)`. Without a rate the current price is left out and the dialog says so, so the markers never mix currencies. |
+| Recommendations                       | Fetched live from Yahoo (yfinance `recommendations`) when the dialog opens, and kept in memory for an hour (`server_app/recommendations.py`). The twice-daily refresh is unchanged, so this adds one Yahoo request per click and nothing to the batch traffic. A failed request shows "No data" and is not cached, so the next click tries again.                                                                                                                                                                                                                                                                                                                                                           |
+
+Notes:
+
+- **ChartMill is a fallback, not a recorded source.** The cache does not remember when `fetch_finanzen_topflop.py` replaced an implausible Yahoo target by ChartMill's (see the `TMP` column description), so both links are listed and the Yahoo one is marked as the primary.
+- **A row without a target** gets a note instead of the chart. Yahoo only publishes targets for a stock's primary listing, so an ISIN that maps to a German listing of a foreign stock (`EX9.DE` for Exelixis, `ISI.DE` for Ionis; the primary listings `EXEL` and `IONS` have targets) or to a mistyped symbol (`RR-.L` instead of `RR.L`, `688.HK` instead of `0688.HK`) has none. On 2026-11-04, 304 of the 1759 cache entries had no `target_mean`. The fix is in the ISIN-to-symbol mapping (`isin_symbol_overrides.yaml`), not in the dialog.
+- **The count of analysts is not shown.** Yahoo's `numberOfAnalystOpinions` and the total of the recommendation counts are separate figures and differ for some stocks (NKE: 37 and 43 on 2026-11-08), so the dialog shows only the bars' own totals.
+- **Rendering.** The charts are inline SVG built by `server_app/target_chart.py` and shown with `components.html` (an iframe). The first version used `st.html` and the dashboard displayed no chart, so it is not used here.
+
+Files: `server_app/target_chart.py` (charts and the card page), `server_app/target_links.py`, `server_app/recommendations.py`, `server_app/fx.py`, the `/target-source` endpoint in `server_app/api.py` and `show_target_source` in `server_app/dashboard.py`. After changing any of them rebuild both images: `docker compose up -d --build api dashboard`.
+
+### History price cache
+
+The 1-day, 1-month and 1-year changes of the Top list and INDEX lists need daily
+closes for about 700 symbols. Fetching them every 15 minutes exceeded Yahoo's
+rate limit and EODHD's quota (`Too Many Requests`, `402 Payment Required`), which
+left the three `% Differenz` columns empty for whole lists. `fetch_finanzen_topflop.py`
+therefore keeps each symbol's history in `csv_update/_history_cache/` (one small
+CSV per source and symbol):
+
+- A history fetched today is reused for the rest of the day, so every symbol is requested at most once per day and source instead of ~40 times.
+- A cached history must contain the close of the previous weekday (Monday looks for Friday). Yahoo sometimes returns a series without it; on 2026-10-28 the `.DE` histories fetched at 09:09 ended on 10-26, so the 1-day change was measured against a two-day-old close and stocks the finanzen.net page showed at +1 % (BMW) appeared at -0,2 %. A cache that lacks that close and is older than `HISTORY_CACHE_RECHECK` (2 hours) is refetched. The wait is deliberate: on a market holiday the close never appears, and without it every run would refetch ~700 symbols.
+- If a fresh fetch fails (rate limit, 402), the last cached history (up to 7 days old) is used instead of leaving the columns empty.
+- Month and year changes use the latest close in that history, so they move once a day; only the 1-day change follows the Ask.
+
+### Bid/Ask guards
+
+On 2026-10-28 at 17:53, after the Xetra close, many German stocks had no Bid and a wrong Ask in the Top
+list (E.ON 6,0, Siemens 74,0 at about 269, Infineon 0,0), and the same happened in the EQUITY lists. It was
+not rate limiting: onvista's main quote block loses its `Geld ... EUR` / `Brief ... EUR` lines for a while
+after a German close, and the parser went on to the knock-out certificate table further down and read the
+digits of the product codes (`MK6Z1H` gave 6, `MN74SQ` gave 74) as the Ask. The same run-after-the-close
+dip showed on 10-26 and 10-27 (Bid for 39/75 and 43/75 rows of the German indices). Four guards (the fourth was
+added on 2026-10-29 and covers the Top list only):
+
+1. **The parser reads only a price that directly follows the label** (`_extract_onvista_price_and_currency_near_label`
+   in `csv_analyse_watchlist.py`): `Geld 269,65 EUR` is a quote, `Brief Kurs Hebel (Brief) Spread ... MK6Z1H` is not.
+   A page without a quote block gives no Bid/Ask. It was a look-ahead of 40 characters for any number.
+2. **`--bid-ask-only` drops a Bid or Ask that is no price next to the stored previous close**
+   (`_is_garbage_quote_side` in `csv_analyse_watchlist.py`), a side at a time, and keeps the row's last value;
+   the reason goes into `ENRICH_NOTE`. A side is dropped when it is <= 0, or when it is 3x or a third of
+   `REF_PREV_CLOSE` (`QUOTE_VS_CLOSE_MAX_RATIO`) **and** it is a whole number or the other side of the same quote
+   is where the close says it should be. Far from the close alone is not enough, because the stored close is
+   sometimes wrong (three US stocks had `REF_PREV_CLOSE` 0.366929) and a real quote must not be refused for that,
+   or the row's price would freeze. Whole numbers are what the digits of a product code, a time (`17:49`) or a
+   volume look like. The reference is the close, never the Ask a bad run left in the row, so a good quote overwrites
+   a bad stored one. Rows without a `REF_PREV_CLOSE` yet are not checked.
+3. **The Top list and INDEX lists keep the last two-sided quote** (`quote_cache.py`, `csv_update/_quote_cache.json`).
+   Every fetch that has both a Bid and an Ask remembers it per ISIN; when a later fetch has no two-sided quote
+   (no quote block, or an Ask without a Bid), the remembered Bid, Ask and currency are used, with the `Bid Time` /
+   `Ask Time` they were read at, so the age shows. After the close the lists keep the closing quote instead of
+   going blank, and the day change is computed from it. An entry older than 4 days is ignored; entries nobody
+   refreshed for 14 days are dropped. With nothing remembered the row stays as fetched. The Top list and the INDEX job
+   both write the file, so a save merges with the file on disk (newest entry per ISIN wins).
+4. **The Top list ignores a crossed quote** (`is_crossed` in `fetch_finanzen_topflop.py`). A real order book never has
+   a Bid above the Ask, so a quote with Bid > Ask x 1.02 is treated like "no quote": the full fetch
+   (`add_onvista_bid_ask`) and `refresh_toplist_bid_ask.py` both skip it, the row keeps its last two-sided quote
+   (guard 3) and the full fetch logs `Crossed quote for <ISIN> ...`. The 2 % slack covers rounding between venues.
+   Origin: at 17:47:52 on 2026-10-29 onvista returned Bid 11,88 / Ask 10,46 for Medios (Yahoo close 10,72) and
+   the 10-minute refresh wrote it into the Top list. The Ask equalled the previous close (10,46), so `% Differenz zum Vortageskurs` became 0 and `Pot %` jumped to 93,59 % (about 86 % with the real quotes). The existing
+   spread check (`ONVISTA_MAX_SPREAD_RATIO` = 1.5) let it through because the two sides differ by only 1.14x.
+   The EQUITY, ETF, BUYLIST, DEPOTS and INDEX jobs do not have this check; no scan has shown whether they
+   need it.
+
+The old parser's garbage also sat in the lists: stored values that guard 2 would have refused stay until a real
+quote replaces them, and the commodity ETCs had whole-number Bid = Ask pairs (750/750 for a gold ETC at 70) for
+longer than that evening. `scripts/clear_bad_quotes.py` clears them once (below).
+
+Not covered: a real quote that is wrong by less than 3x, and an onvista layout change (guard 1 would then give
+no quote, and guard 3 would show the last one with its old time).
+
+### Yahoo symbol of a Top list row
+
+`fetch_finanzen_topflop.py` maps each ISIN to a Yahoo symbol with `isin_symbol_candidates.yaml` (written by
+OpenFIGI) and then `isin_symbol_overrides.yaml`, which wins. The Top list always reads the overrides file; the
+EQUITY/ETF scripts read it only with `--use-local-overrides`. The symbol decides the price history behind `% Differenz zum Vortageskurs` (reference close), `% Differenz ein Monat` / `ein Jahr`, and the fallback for `TMP`.
+
+OpenFIGI picked the Swiss listing for two German ISINs: `DE0007500001` (thyssenkrupp) became `TKA.SW` and
+`DE0007164600` (SAP) became `SAP.SW`. The CHF history gave a wrong reference close, so thyssenkrupp showed -12,71 %
+instead of about +2,6 % (Yahoo and EODHD agree on the real close of 12,19). Both now sit in
+`isin_symbol_overrides.yaml` as `TKA.DE` and `SAP.DE`:
+
+```yaml
+DE0007500001:
+  symbol: TKA.DE
+  name: thyssenkrupp
+  source: LOCAL_OVERRIDE
+```
+
+The full fetch prints `[symbol] WARNING <ISIN> maps to <symbol>, not a German listing` for any `DE` ISIN whose symbol
+does not end in `.DE` or `.F`. After correcting a symbol, delete that ISIN's entries in `csv_update/_prev_close_cache.json`
+(`references`) and `csv_update/_target_cache.json` (`targets`) and its `csv_update/_history_cache/yahoo_<old symbol>.csv`;
+the next full fetch rebuilds them. A `!` in `Diff Flag` is the usual hint: on 2026-10-29 all three flagged rows (thyssenkrupp,
+SAP, Medios) had a wrong symbol, a bad quote or a bad `Source %`. SAP keeps the flag after the fix, because finanzen.net's own
+previous close for it (201,65) disagrees with Xetra's (211,20, Yahoo and EODHD), so `Source %` is the wrong side there.
+
+### onvista requests: address cache and backoff
+
+onvista is the only source of Bid/Ask for the EQUITY, ETF, BUYLIST and DEPOTS lists, the Top list and most
+INDEX lists (DAX/TecDAX Bid/Ask come from one finanzen.net table per index). About 2,070 distinct ISINs are
+refreshed all day by jobs that run 7 to 13 minutes each, so an EQUITY refresh really comes round about every
+18 minutes, not every 6 (the trigger fires, finds the previous run still going, and skips). Two changes cut and
+guard that traffic:
+
+1. **Address cache** (`onvista_urls.py`, `csv_update/_onvista_url_cache.json`). A refresh used to find the
+   instrument's page first: one search request for a stock, up to two direct tries plus a search for an ETF (an
+   ETC fails both direct tries first, five requests with the page read), then the page itself. The page address
+   practically never changes, so it is remembered per ISIN and a refresh reads the page only. Measured on 8
+   ISINs (4 stocks, 4 ETF/ETC): 22 requests with an empty cache, 8 with a warm one, same quotes. Only an address
+   whose page was read and showed the ISIN is stored. onvista answers an unknown address with its search page
+   (status 200, not 404), so a cached address that stops showing its ISIN is dropped and looked up again, once.
+   Entries older than 30 days are looked up again. Delete the file to start over.
+2. **Backoff and pause** (`onvista_http.py`, `csv_update/_onvista_cooldown.json`). Every onvista request goes
+   through `onvista_http.get`. onvista is behind Vercel, which limits a client with 429 (or 403, 503, a challenge
+   page with an `x-vercel-mitigated` header). Before, such an answer was parsed like a page, found no Geld/Brief and
+   ended as a silent blank while the next job went on asking. Now a limited answer is retried twice (after
+   `Retry-After`, at most 60 s, else 5 s and 10 s); if it stays limited onvista is **paused for 5 minutes, then 10, 20, up
+   to 30** for every further strike, and the pause is written to the file so the EQUITY, ETF, Top list and INDEX jobs
+   all stop at once. During a pause a lookup fails immediately, the run finishes quickly with each row's last
+   value (the Top list keeps its last two-sided quote, see "Bid/Ask guards"), and `ENRICH_NOTE` says
+   `onvista paused until 18:40 (HTTP 429 earlier)` instead of `no bid/ask`. A successful request after the pause
+   clears the strikes. The first limit in a process prints a `Warning: onvista limited the requests ...` line.
+
+Every process prints two summary lines when it ends, in the job logs:
+`onvista: 2344 requests, 0 retried, 0 limited, 0 skipped during a pause` and
+`onvista url cache: 1150 of 1172 lookups answered from it, 22 stored, 0 stale`. A non-zero `limited` or `skipped`
+means onvista pushed back that run; `grep -l "limited the requests" csv_update/*/_bid_ask_cron_logs/*.log` finds them.
+Not changed: how often the lists refresh, and the Yahoo and EODHD calls (history and targets are cached per day).
+
+#### One-time cleanup: `scripts/clear_bad_quotes.py`
+
+```bash
+python scripts/clear_bad_quotes.py                 # dry run: lists what it would clear, writes nothing
+python scripts/clear_bad_quotes.py --apply         # clears it (add --import to push to PostgreSQL now)
+```
+
+Scans the EQUITY, ETF, BUYLIST and DEPOTS CSVs with the same rule as guard 2 and empties a garbage Bid or Ask
+with its time; a bad Ask also empties what was computed from it (`% Differenz zum Vortageskurs`, `DIFF_BASIS`,
+and for stocks `Kurspotential`, `Kurspotential %`, `COMMENT3`). The next `--bid-ask-only` run fills them. Rows
+that are only far from the previous close (a consistent Bid/Ask pair, a doubtful reference) are listed as `left`
+and not changed, and so are rows without `REF_PREV_CLOSE`, `REF_CURRENCY` or `DEV`. `--apply` copies every
+changed file to `csv_update/_cleanup_backup_<time>/` first, holds the locks of the bid/ask cron jobs while it
+writes (those jobs skip a run meanwhile), and edits only the affected fields of the affected lines. The `.xlsx`
+copies next to the CSVs are not touched. Top list and INDEX lists need no cleanup, their jobs rewrite them.
+
+### Scheduled Updates On Windows
+
+Use `scripts/run_finanzen_topflop_update.ps1` for unattended runs. It writes timestamped files and also updates fixed "latest" files:
+
+```text
+csv_update\TOP_LIST\top_liste_yyyyMMdd_HHmm.xlsx
+csv_update\TOP_LIST\top_liste_yyyyMMdd_HHmm.csv
+csv_update\TOP_LIST\top_liste_latest.xlsx
+csv_update\TOP_LIST\top_liste_latest.csv
+csv_update\TOP_LIST\logs\top_liste_yyyyMMdd_HHmm.log
+```
+
+Manual test run from the `financial_rag` directory:
+
+```powershell
+.\scripts\run_finanzen_topflop_update.ps1
+```
+
+Use a custom Python executable or output folder if needed:
+
+```powershell
+.\scripts\run_finanzen_topflop_update.ps1 -Python "C:\path\to\python.exe" -OutputDir "C:\path\to\financial_rag\csv_update\TOP_LIST"
+```
+
+To run only selected indices:
+
+```powershell
+.\scripts\run_finanzen_topflop_update.ps1 -Indices DAX, "NASDAQ 100", "S&P 500"
+```
+
+To schedule the update four times per day in German local time, create a Windows Task Scheduler task. In Task Scheduler:
+
+1. Open `Task Scheduler` / `Aufgabenplanung`.
+2. Create a task, for example `Financial RAG Top List Update`.
+3. Add four daily triggers: `08:15`, `11:00`, `14:00`, and `15:45`.
+4. Add this action:
+
+```text
+Program/script:
+powershell.exe
+
+Arguments:
+-ExecutionPolicy Bypass -File "C:\path\to\financial_rag\scripts\run_finanzen_topflop_update.ps1"
+```
+
+The task follows the Windows system timezone. If the PC is set to Germany/Berlin time, the triggers run at German local time. Enable `Wake the computer to run this task` if the PC may be sleeping.
+
+### Docker Top List Job
+
+For a reproducible environment or a future always-on server, use the Docker Compose `topflop` job service. It is behind the `jobs` profile, so it does not start with the normal long-running services.
+
+Build the image:
+
+```powershell
+docker compose --profile jobs build topflop
+```
+
+Run one update:
+
+```powershell
+docker compose --profile jobs run --rm topflop
+```
+
+The container writes the same files as the PowerShell runner:
+
+```text
+csv_update\TOP_LIST\top_liste_yyyyMMdd_HHmm.xlsx
+csv_update\TOP_LIST\top_liste_yyyyMMdd_HHmm.csv
+csv_update\TOP_LIST\top_liste_latest.xlsx
+csv_update\TOP_LIST\top_liste_latest.csv
+csv_update\TOP_LIST\logs\top_liste_yyyyMMdd_HHmm.log
+```
+
+Run only selected indices by appending them after the service name:
+
+```powershell
+docker compose --profile jobs run --rm topflop DAX "NASDAQ 100" "S&P 500"
+```
+
+On a Linux server, schedule four daily runs with cron:
+
+```cron
+15 8  * * * cd /path/to/MA_copy/financial_rag && docker compose --profile jobs run --rm topflop
+0  11 * * * cd /path/to/MA_copy/financial_rag && docker compose --profile jobs run --rm topflop
+0  14 * * * cd /path/to/MA_copy/financial_rag && docker compose --profile jobs run --rm topflop
+45 15 * * * cd /path/to/MA_copy/financial_rag && docker compose --profile jobs run --rm topflop
+```
+
+Set the server timezone to `Europe/Berlin`, or keep `TZ=Europe/Berlin` in `.env`, so the timestamp and cron schedule match German local time.
+
+### Ubuntu Desktop Mini Server
+
+For a small always-on mini PC, Ubuntu Desktop LTS is a practical middle ground: it keeps a normal graphical desktop for occasional local maintenance, but can still be managed like a server through SSH, Docker, and cron.
+
+Recommended stack:
+
+```text
+Ubuntu Desktop LTS
+OpenSSH Server
+Docker Engine + Docker Compose plugin
+cron
+```
+
+Install and enable SSH:
+
+```bash
+sudo apt update
+sudo apt install openssh-server
+sudo systemctl enable --now ssh
+systemctl status ssh
+```
+
+Find the server IP:
+
+```bash
+hostname -I
+```
+
+Connect from another machine:
+
+```bash
+ssh your_username@SERVER_IP
+```
+
+Optional firewall setup:
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw enable
+```
+
+After Docker Engine is installed, add your user to the Docker group and log in again:
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+Then run the Top List job from SSH:
+
+```bash
+cd /path/to/MA_copy/financial_rag
+docker compose --profile jobs build topflop
+docker compose --profile jobs run --rm topflop
+```
+
+This setup is preferred over a long-term Windows-only server when the goal is an always-on, reproducible Docker host. Windows Task Scheduler is still useful for quick local automation, but Linux plus Docker/cron is cleaner for unattended server use.
+
+The source websites may block plain Python requests. The script uses browser-like request headers and can use `curl_cffi` browser impersonation when installed.
+
+## fetch_dax40.py (INDEX tab)
+
+`fetch_dax40.py` builds the lists of the dashboard's `INDEX` tab: one CSV per index under `csv_update/INDEX/`. The file name is the list name (`server_app.import_watchlists` derives `watchlist_name` from it), and `scripts/update_watchlists_to_pg.sh` imports the whole `csv_update` tree, so new files show up in the dashboard after the next import.
+
+| List          | File                  | Rows | Quote source                                                           |
+| ------------- | --------------------- | ---- | ---------------------------------------------------------------------- |
+| DAX           | `DAX40.csv`         | 40   | onvista, Yahoo fallback (finanzen.net real-time page until 2026-11-02) |
+| TecDAX        | `TecDAX.csv`        | 30   | onvista, Yahoo fallback (finanzen.net real-time page until 2026-11-02) |
+| MDAX          | `MDAX.csv`          | 50   | onvista, Yahoo fallback                                                |
+| SDAX          | `SDAX.csv`          | 70   | onvista, Yahoo fallback                                                |
+| EURO STOXX 50 | `EURO STOXX 50.csv` | 50   | onvista, Yahoo fallback                                                |
+| Hang Seng     | `Hang Seng.csv`     | 49   | onvista, Yahoo fallback                                                |
+| Dow Jones     | `Dow Jones.csv`     | 30   | onvista, Yahoo fallback                                                |
+| Nasdaq100     | `Nasdaq100.csv`     | 101  | onvista, Yahoo fallback                                                |
+
+Columns are the same as for the Top List (`Index | Rank | Name | ISIN | Bid | Bid Time | Ask | Ask Time | DEV | % Differenz ... | Pot | Pot % | TMP | Diff Basis`). `Rank` is the order on finanzen.net, not a performance rank. `% Differenz zum Vortageskurs` is measured from the Ask (the Bid if the Ask is missing, the finanzen.net last price if both are); `Diff Basis` says which (`Ask`, `Bid` or `Last`). `% Differenz ein Monat` and `ein Jahr` are latest historical close vs the close 30/365 days ago. Every run of this list refetches the Ask and recomputes everything, so no stored references are needed here. The history a change is measured against is in the currency of its own listing, taken from the symbol (EODHD `.US` and bare Yahoo tickers are USD, `.DE`/`.PA`/... EUR, `.L` GBp, otherwise Yahoo's `fast_info`), then `TMP_CURRENCY`. It is never assumed to be the Ask's currency: onvista often quotes the German EUR listing of a US stock, and assuming EUR for its USD history once showed Oceaneering at −10 % on a +1 % day. With no known history currency the change stays blank.
+
+### Common Commands
+
+```bash
+# Default: DAX and TecDAX
+python fetch_dax40.py
+
+# Choose indices (names as in the table above)
+python fetch_dax40.py --indices MDAX SDAX "EURO STOXX 50" "Hang Seng" "Dow Jones" Nasdaq100
+
+# Write somewhere else, e.g. for a test run
+python fetch_dax40.py --indices "Dow Jones" --output-dir /tmp/index_test
+```
+
+`--output` and `--tecdax-output` still override the path for DAX and TecDAX. A failing index does not stop the others; the script exits non-zero and names the failed ones. A full run of the six indices other than DAX and TecDAX takes roughly five minutes (one onvista/Yahoo lookup per constituent, about 0.8 s each); DAX and TecDAX add 70 lookups, about another minute.
+
+### How it works
+
+1. **Constituents:** `https://www.finanzen.net/index/<slug>/werte`. This page is paginated, so the script follows `?p=2`, `?p=3`, ... until a page adds no new ISIN (SDAX and Nasdaq 100 need a second page; Hang Seng has only one). The row count is checked against the expected size (`constituent_count`, or `min_count` for Nasdaq 100 and Hang Seng, whose size finanzen.net does not report reliably).
+2. **Bid/Ask:** every index uses `add_onvista_bid_ask` by ISIN. An `INDEX_SOURCES` entry can still name a finanzen.net real-time quote page as `quote_url` and then takes Bid/Ask from there, but none does now (see "Known limits").
+3. **Yahoo fallback:** an onvista quote is replaced by Yahoo's latest price when Bid or Ask is missing (onvista often shows only one side, e.g. outside trading hours) or its currency is not a real code (the scraped field sometimes yields junk such as `VJB`). Yahoo gives no bid/ask here, so Bid and Ask both get the last price and `Bid Time`/`Ask Time` end with `(Yahoo)`. Use that marker to tell these rows from real bid/ask pairs.
+4. **Everything else** (1d/1m/1y changes, Yahoo target price `TMP`, `Pot`, `Pot %`, currency normalization to EUR/USD) reuses the helpers from `fetch_finanzen_topflop.py`.
+
+To add an index, add an entry to `INDEX_SOURCES` in `fetch_dax40.py` (`source_url`, `constituent_count` or `min_count`, `output`). The slug is the one used in the finanzen.net URL, e.g. `euro_stoxx_50` with underscores, not hyphens.
+
+### Scheduled updates
+
+`scripts/run_index_update.sh` refreshes all eight INDEX lists (DAX and TecDAX included) and is meant to run hourly on weekdays (every 15 minutes pushed Yahoo and EODHD over their limits), offset from the other jobs (a run still going makes the next trigger skip):
+
+```text
+9 9-22 * * 1-5 /path/to/financial_rag/scripts/run_index_update.sh
+```
+
+Logs go to `csv_update/INDEX/_cron_logs/`. The CSVs are written through a temp file and renamed, so the Postgres import never sees a half-written list.
+
+### Known limits
+
+- **finanzen.net's real-time quote pages sit behind an Akamai bot challenge at times** (`bm-verify` redirect, "sicherheitspruefung-10-sekunden"). The answer is HTTP 200 with no table, so pandas' lxml parser finds nothing and falls back to html5lib, which is not installed: the log says `Missing optional dependency 'html5lib'`, which hides the real cause, and installing html5lib would not help. DAX and TecDAX read those pages until 2026-11-02 17:09, when the hourly run started failing; both CSVs were 9 days old on 2026-11-11. They now take Bid/Ask from onvista like the other indices (no `quote_url` in `INDEX_SOURCES`), checked on 2026-11-11 against live sources: all 70 constituents had a quote and the DAX Asks matched the Top list's within 0.4 %. The script does not try to get around the challenge. If a `quote_url` is added again, expect this failure when the page is challenged.
+- **Hang Seng is incomplete.** finanzen.net lists 49 constituents and no second page, which is fewer than the real index.
+- **Gaps remain where no Yahoo symbol is known.** `TMP`, `Pot` and the 1d/1m/1y changes are empty for those rows (e.g. Alphabet C), and a few constituents may have no quote at all (the script prints their names).
+- **Prices are not a snapshot of one moment.** Each row is fetched in turn, and onvista, Yahoo and finanzen.net quote at different times.
+- **Constituent count.** `fetch_dax40.py` refuses to write a list with fewer constituents than `constituent_count` / `min_count` (a cut-off page), but only warns when there are more and names the ISINs missing from the previous file. Before 2026-10-28 any difference aborted the index: tk accelis, spun off from thyssenkrupp, made MDAX 51 and MDAX.csv stopped updating from 2026-10-27 22:09. DAX and TecDAX also compare the quote table's length with `constituent_count`, so they still stop on an extra constituent.
+- The Yahoo fallback reads `fast_info["lastPrice"]`. With yfinance 1.5.2 `fast_info.get("last_price")` returns `None`; `fetch_yahoo_quote` in `fetch_finanzen_topflop.py` still uses that form and is therefore silently empty.
+- All eight lists are refreshed by `scripts/run_index_update.sh` (about six minutes per run, hourly, see below). Each index CSV is imported into PostgreSQL right after it is written (`fetch_dax40.py --live-pg`, on by default in the script, `LIVE_PG=0` turns it off; same `/tmp/pg_import.lock` and `import_live_csv` as the Top list), so DAX is in the dashboard minutes into the run instead of at the next `:05/:20/:35/:50` import. A failed live import only prints a warning; the scheduled import catches up. `scripts/run_finanzen_topflop_update.sh` no longer updates DAX/TecDAX unless `UPDATE_DAX_TECDAX=1` is set (the docker-compose `topflop` job sets it). Without that cron line they only change when the script is run by hand.
+
+## classify_to_subcategories.py
+
+`classify_to_subcategories.py` extracts candidate tags from an annotated watchlist CSV and appends normalized `Sector`, `Tag`, and `Description` rows to `subcategories.csv`.
+
+Every write automatically groups rows by sector and removes duplicate tags within the same sector. This makes repeated classification runs less fragile when the LLM returns an already-known tag with different casing or spacing.
+
+### Typical Commands
+
+```powershell
+python classify_to_subcategories.py --csv_in ".\csv\Alle Defense.csv" --csv_update ".\subcategories.csv" --sector "Defense"
+python classify_to_subcategories.py --csv_in ".\csv\ALLE AIR & SPACE.csv" --csv_update ".\subcategories.csv" --sector "AIR & SPACE"
+python classify_to_subcategories.py --csv_in ".\csv\ETF\Com Edel.csv" --csv_update ".\subcategories.csv" --sector "Com Edel"
+python classify_to_subcategories.py --csv_in ".\csv\ETF\welt.csv" --csv_update ".\subcategories.csv" --sector "welt"
+```
+
+Use quotes when paths or sector names contain spaces or `&`.
+
+### Options
+
+| Option                            | Purpose                                                                      |
+| --------------------------------- | ---------------------------------------------------------------------------- |
+| `--csv_in`                      | Required input CSV.                                                          |
+| `--csv_update`                  | Required existing`subcategories.csv`.                                      |
+| `--sector`                      | Required sector name, such as`Power`, `Robotic`, or `Health`.          |
+| `--output`                      | Optional output CSV. If omitted,`--csv_update` is updated in place.        |
+| `--backend`                     | `minimax`, `deepseek`, `ollama`, or `rules`. Default is `minimax`. |
+| `--model`                       | Ollama model name for`--backend ollama`.                                   |
+| `--ollama-url`                  | Ollama service URL, default`http://localhost:11434`.                       |
+| `--minimax-key`                 | MiniMax API key; defaults to`config.yaml`.                                 |
+| `--minimax-model`               | MiniMax model; defaults to`config.yaml`.                                   |
+| `--minimax-base-url`            | MiniMax API base URL; defaults to`config.yaml`.                            |
+| `--deepseek-key`                | DeepSeek API key; defaults to`config.yaml`.                                |
+| `--deepseek-model`              | DeepSeek model; defaults to`config.yaml`.                                  |
+| `--deepseek-base-url`           | DeepSeek API base URL; defaults to`config.yaml`.                           |
+| `--max-tags`                    | Maximum number of tags sent to the LLM.                                      |
+| `--skip-empty-company-taxonomy` | Skip repair of empty or unmatched companies.                                 |
+| `--max-empty-companies`         | Maximum empty/unmatched companies sent to the LLM.                           |
+| `--empty-batch-size`            | Batch size for empty/unmatched company taxonomy repair.                      |
+| `--dry-run`                     | Print results without writing.                                               |
+
+### Backends
+
+- `ollama`: local model, useful for offline runs.
+- `minimax`: online MiniMax API, configured through `config.yaml` unless overridden. This is the default.
+- `deepseek`: online DeepSeek API, configured through `config.yaml` unless overridden.
+- `rules`: no LLM; uses unique `COMMENT` values as candidate tags for manual review.
+
+When `--backend minimax` is used, the script automatically falls back to DeepSeek if MiniMax is unavailable, returns invalid JSON, or has no configured key. The same fallback is used for the empty/unmatched company repair step.
+
+## xlsx_to_csv.py
+
+`xlsx_to_csv.py` converts XLSX files to CSV. One XLSX file is passed at a time, so use PowerShell `Get-ChildItem` for batch conversion.
+
+Convert every XLSX in a folder from any terminal location:
+
+```powershell
+Get-ChildItem "C:\path\to\financial_rag\csv\EQUITY\*.xlsx" | ForEach-Object { python "C:\path\to\financial_rag\xlsx_to_csv.py" $_.FullName }
+```
+
+If the terminal is already inside the folder that contains the XLSX files:
+
+```powershell
+Get-ChildItem *.xlsx | ForEach-Object { python ..\..\xlsx_to_csv.py $_.FullName }
+```
+
+Export all worksheets as separate CSV files:
+
+```powershell
+Get-ChildItem "C:\path\to\financial_rag\csv\EQUITY\*.xlsx" | ForEach-Object { python "C:\path\to\financial_rag\xlsx_to_csv.py" $_.FullName --all-sheets }
+```
+
+## rebuild_subcategories.py
+
+`rebuild_subcategories.py` rebuilds `subcategories.csv` from either finished XLSX files or merged CSV files.
+
+### Modes
+
+| Mode                   | Trigger         | Input                               | Use Case                                            |
+| ---------------------- | --------------- | ----------------------------------- | --------------------------------------------------- |
+| XLSX extraction        | `--from-xlsx` | Finished XLSX files with`COMMENT` | Rebuild tags from manual labels.                    |
+| MiniMax classification | default         | `*_merged.csv`                    | Classify companies into existing or generated tags. |
+
+### Common Commands
+
+Rebuild from finished XLSX files:
+
+```powershell
+python -X utf8 rebuild_subcategories.py --from-xlsx --xlsx-dir "C:\Users\your-user\Downloads"
+python -X utf8 rebuild_subcategories.py --from-xlsx --xlsx-dir "C:\Users\your-user\Downloads" --sector Power
+python -X utf8 rebuild_subcategories.py --from-xlsx --xlsx-dir "C:\Users\your-user\Downloads" --dry-run
+```
+
+Run MiniMax classification:
+
+```powershell
+python -X utf8 rebuild_subcategories.py --no-upload
+python -X utf8 rebuild_subcategories.py --sector Health --no-upload
+python -X utf8 rebuild_subcategories.py --sector Tech --no-upload
+python -X utf8 rebuild_subcategories.py --sector Power --no-upload
+python -X utf8 rebuild_subcategories.py --sector Robotic --no-upload
+```
+
+Upload the rebuilt result to Google Sheets:
+
+```powershell
+python -X utf8 rebuild_subcategories.py
+```
+
+### Options
+
+| Option          | Purpose                                                       |
+| --------------- | ------------------------------------------------------------- |
+| `--from-xlsx` | Rebuild from finished XLSX files.                             |
+| `--xlsx-dir`  | Directory containing XLSX files for`--from-xlsx`.           |
+| `--csv-dir`   | Directory containing merged CSV files; default`csv_update`. |
+| `--sector`    | Process only one sector.                                      |
+| `--dry-run`   | Preview without writing or uploading.                         |
+| `--no-upload` | Skip Google Sheets upload.                                    |
+
+### Configuration
+
+```yaml
+llm:
+  minimax_api_key: "..."
+  minimax_base_url: "https://api.minimaxi.com/v1"
+  minimax_model: "MiniMax-M2.7-highspeed"
+  ollama_model: "qwen2.5:3b"
+
+market:
+  subcategories_csv_url: "https://docs.google.com/spreadsheets/d/.../edit"
+```
+
+Google OAuth tokens are stored under `%APPDATA%\gspread\authorized_user.json` after first authorization. Client credentials can be placed at `%APPDATA%\gspread\credentials.json`.
+
+### Notes
+
+- `subcategories.csv` is rewritten in full. Rows are cleaned, grouped by sector, and deduplicated by tag within each sector before writing. Use `--dry-run` first if you want to inspect the result.
+- Sectors not selected by `--sector` are kept unchanged.
+- MiniMax failures can fall back to local Ollama where configured.
+- Some model outputs may contain reasoning text; the scripts strip it where possible.
+
+On Windows, `run_watchlist_parallel.ps1` and `run_watchlist_bid_ask_parallel.ps1` are the PowerShell equivalents of the two `.sh` scripts documented under [Watchlist Processor](#watchlist-processor) — same parallel-dispatch design (`MaxJobs`, per-file logs, exit-code tracking), invoked as `.\scripts\run_watchlist_parallel.ps1 "<folder>" <MaxJobs>`. Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once first if script execution is blocked.
+
+## Tableau Dashboard (Ubuntu + PostgreSQL)
+
+This section documents the setup for connecting Tableau Desktop (Windows) to
+the PostgreSQL database on the Ubuntu machine and keeping the EQUITY data
+automatically in sync.
+
+### Architecture
+
+```
+csv_update/EQUITY/*.csv
+        │  (updated 08:10 weekdays by run_watchlist_daily_equity.sh)
+        ▼
+scripts/update_equity_to_pg.sh   (cron 08:30 Mon–Fri)
+        │
+        ▼
+PostgreSQL 16 on Ubuntu  ──────────────────────  Tableau Desktop (Windows)
+  database : financial_rag                          server  : 192.168.1.10
+  user     : financial_user                         port    : 5432
+  schema   : app                                    view    : app.tableau_watchlist_latest
+```
+
+### Prerequisites
+
+Install PostgreSQL 16 on Ubuntu (one-time):
+
+```sh
+sudo apt update
+sudo apt install -y postgresql postgresql-contrib
+sudo systemctl enable postgresql
+```
+
+Create the database and user (one-time, run as root/sudo). Replace `<POSTGRES_PASSWORD from .env>`
+with the value of `POSTGRES_PASSWORD` in your `.env`; never commit the real password:
+
+```sh
+sudo -u postgres psql <<'SQL'
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'financial_user') THEN
+    CREATE ROLE financial_user LOGIN PASSWORD '<POSTGRES_PASSWORD from .env>';
+  ELSE
+    ALTER ROLE financial_user WITH PASSWORD '<POSTGRES_PASSWORD from .env>';
+  END IF;
+END
+$$;
+SELECT 'CREATE DATABASE financial_rag OWNER financial_user'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'financial_rag')\gexec
+SQL
+```
+
+### Known Issue — Docker occupies 127.0.0.1:5432
+
+When Docker Compose is running, its postgres container proxy binds
+`127.0.0.1:5432`, which prevents the system PostgreSQL from binding to
+`0.0.0.0:5432`. The system service falls back to `[::]:5432` (IPv6 only),
+which Tableau Desktop (IPv4) cannot reach.
+
+**Fix:** bind the system PostgreSQL directly to the LAN IP instead of `*`:
+
+```sh
+# Find your LAN IP first:
+ip addr show wlp194s0 | grep 'inet '
+
+# Replace listen_addresses in the PostgreSQL config (adjust version if needed):
+sudo sed -i "s/^listen_addresses = .*/listen_addresses = '192.168.1.10'/" \
+    /etc/postgresql/16/main/postgresql.conf
+
+sudo systemctl restart postgresql
+
+# Verify:
+sudo ss -tlnp | grep 5432
+# Expected: 192.168.1.10:5432  users:(("postgres",...))
+```
+
+If the LAN IP changes (DHCP), repeat the sed command and restart.
+
+### Remote access (pg_hba.conf)
+
+Allow the LAN subnet to authenticate with md5 (one-time):
+
+```sh
+echo 'host all all 192.168.1.0/24 md5' | \
+    sudo tee -a /etc/postgresql/16/main/pg_hba.conf
+sudo systemctl restart postgresql
+```
+
+### Import EQUITY data manually
+
+`POSTGRES_PASSWORD` is read from the project's `.env` automatically (`server_app/settings.py`), so it is not passed on the command line.
+
+```sh
+cd ~/Projects/financial_rag
+conda activate rag
+POSTGRES_HOST=192.168.1.10 POSTGRES_PORT=5432 \
+POSTGRES_DB=financial_rag POSTGRES_USER=financial_user \
+python -m server_app.import_watchlists --root csv_update/EQUITY
+```
+
+### Automatic daily import (cron)
+
+`scripts/update_equity_to_pg.sh` wraps the import above with logging.
+It is registered in crontab to run at **08:30 Mon–Fri**, after the watchlist
+CSV update that runs at 08:10:
+
+```
+30 8 * * 1-5 /path/to/financial_rag/scripts/update_equity_to_pg.sh
+```
+
+To register it yourself:
+
+```sh
+(crontab -l 2>/dev/null; \
+ echo "30 8 * * 1-5 /path/to/financial_rag/scripts/update_equity_to_pg.sh") \
+| crontab -
+```
+
+Logs are written to `csv_update/EQUITY/_cron_logs/pg_import_<timestamp>.log`.
+
+### Verify the Tableau view
+
+```sh
+conda activate rag
+POSTGRES_HOST=192.168.1.10 POSTGRES_PORT=5432 \
+POSTGRES_DB=financial_rag POSTGRES_USER=financial_user \
+python scripts/verify_tableau_view.py
+```
+
+Expected output: `tableau_view_rows=10` followed by sample rows.
+
+### Tableau Desktop connection
+
+| Field    | Value                    |
+| -------- | ------------------------ |
+| Server   | 192.168.1.10             |
+| Port     | 5432                     |
+| Database | financial_rag            |
+| Username | financial_user           |
+| Password |                          |
+| Schema   | app                      |
+| View     | tableau_watchlist_latest |
+
+### Recommended fields for a dashboard
+
+**Dimensions** (drag to Rows / Color / Filter):
+`watchlist_name`, `asset_group`, `name`, `isin`, `wkn`, `comment` (sector),
+`price_date`
+
+**Measures** (drag to Columns / Size / tooltip):
+`return_1d`, `return_1m`, `return_1y`
+
+Suggested sheets:
+
+1. **Return ranking** — horizontal bar chart, `name` on Rows, `return_1d` on Columns, sorted descending.
+2. **Sector distribution** — pie chart, `comment` on Color, `name` (Count) on Size.
+3. **Full data table** — text table with `watchlist_name`, `name`, `return_1d`, `return_1m`, `return_1y`.
+
+Combine the three sheets on a Dashboard and set sheet 1 as a filter source
+(click the sheet → funnel icon → *Use as Filter*) so selecting a bar
+cross-filters the other views.

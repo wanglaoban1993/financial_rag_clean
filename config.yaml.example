@@ -1,0 +1,208 @@
+email:
+  imap_server: "imap.gmail.com"
+  port: 993
+  username: "your-email@gmail.com"
+  password: "your-gmail-app-password"
+  target_sender: "sender-to-watch@example.com"
+  # forwarder@example.com manually forwards several kinds of mail; only keep the
+  # ones whose body still shows this original UBS sender (forwarded header/footer).
+  forwarded_from_marker: "ubs-keyinvest-de@mailing.ubs.com"
+  # Only fetch emails received within this many days. 0 disables the cutoff (fetch all matching mail).
+  max_email_age_days: 15
+  include_seen: true   # safe: already-ingested Message-IDs are skipped from headers alone
+  mark_as_seen: true
+  check_interval_minutes: 480   # used only when check_times is empty
+  # Fixed local times (HH:MM) to check mail every day; takes precedence over the interval above.
+  check_times: ["08:30", "13:30", "18:30"]
+  # UBS DailyTrader: collect the pages under "Aktuelle Themen des Tages" and save one Markdown bundle per email.
+  newsletter_output_dir: "data/newsletters"
+  # Keep false: topic pages are the canonical content; PDFs are no longer downloaded.
+  download_linked_pdfs: false
+  browser_fallback_enabled: true
+  browser_timeout_ms: 45000
+  # Downloaded PDFs older than this are deleted once already indexed into FAISS
+  # (data/faiss_index), since retrieval no longer needs the source file.
+  pdf_retention_days: 15
+
+market:
+  symbols:
+    # - "AAPL"
+    # - "0700.HK"   # Hong Kong stocks
+    # - "000001.SS" # A-shares
+  # Optional taxonomy source for csv_analyse_watchlist.py.
+  # Supports a Google Sheets share/edit URL or a direct CSV export/download URL.
+  # Example: "https://docs.google.com/spreadsheets/d/<sheet-id>/edit#gid=0"
+  subcategories_csv_url: ""
+  fetch_interval_minutes: 60
+  # /quote cache window in seconds; repeated same query within this period uses local cache.
+  quote_cache_ttl_seconds: 20
+  # Soft client-side rate limit for Yahoo requests to reduce 429 responses.
+  quote_max_requests_per_minute: 20
+  # Exponential backoff retry attempts when Yahoo returns rate-limit errors.
+  quote_retry_max_attempts: 3
+  # Base delay (seconds) for exponential backoff: 1, 2, 4 ... (+ jitter).
+  quote_retry_base_delay_seconds: 1.0
+  # Print retry/throttle details to terminal for debugging rate limits.
+  quote_retry_verbose: true
+  # Finnhub API key (primary quote source). Get free key at https://finnhub.io
+  # Leave empty to use yfinance only.
+  finnhub_api_key: ""
+  # Alpha Vantage API key (2nd fallback source after Finnhub).
+  # Get free key at https://www.alphavantage.co/support/#api-key
+  alpha_vantage_api_key: ""
+  # Leeway resolver (priority for ISIN/WKN -> tradable ticker mapping).
+  # Set both fields to enable. Example base URL: https://api.leeway.tech/v1
+  leeway_api_key: ""
+  leeway_base_url: "https://api.leeway.tech"
+  leeway_timeout_seconds: 8
+  # If true, every query token tries Leeway first.
+  leeway_resolve_all: true
+  # OpenFIGI API key (optional, free tier works without key at lower rate limits).
+  # Used to resolve WKN and ISIN -> ticker. Get key at https://www.openfigi.com/api
+  openfigi_api_key: ""
+  # EODHD API key — better European/XETRA coverage than Finnhub.
+  # Used as 2nd fallback: Finnhub -> EODHD -> Alpha Vantage -> yfinance
+  eodhd_api_key: ""
+  eodhd_timeout_seconds: 8
+  marketscreener_account: ""
+  marketscreener_password: ""
+
+
+rag:
+  embedding_model: "BAAI/bge-m3"  # multilingual, strong in both Chinese and English, supports long texts
+  chunk_size: 512
+  chunk_overlap: 64
+  top_k: 5
+  # Output language configuration.
+  # Supported values: "zh" (Chinese), "en" (English), "de" (German)
+  # Single language:   response_languages: ["zh"]
+  # Multi-language:    response_languages: ["zh", "de"]
+  # All three:         response_languages: ["zh", "en", "de"]
+  response_languages:
+    - "de"
+
+llm:
+  model_path: ""  # currently not used in the code
+  use_ollama: true   # use local Ollama service
+  ollama_model: "qwen2.5:3b"  # local installed model; alternatives: qwen2.5:3b, qwen3:8b, qwen3.5:latest
+  classification_provider: "minimax"  # csv_analyse_watchlist.py fallback classifier: "minimax" or "deepseek"
+  ollama_base_url: "http://localhost:11434"
+
+  # --- Cloud routing (MiniMax via OpenAI-compatible API) ---
+  # Leave minimax_api_key empty to disable cloud routing entirely (pure local mode).
+  minimax_api_key: ""
+  minimax_base_url: "https://api.minimaxi.com/v1"
+  minimax_model: "MiniMax-M2.7-highspeed"   # "MiniMax-M3"
+  # Per-request timeout / retry budget for the MiniMax client. This client is
+  # also the last-resort fallback when the local Ollama router/critic times
+  # out (rag/orchestrator.py), so without a timeout here a stalled MiniMax
+  # response has no backstop at all and blocks the whole CLI indefinitely.
+  minimax_timeout_seconds: 30
+  minimax_max_retries: 1
+
+  # DeepSeek — used by csv_analyse_watchlist.py Phase 2 subcategory classification
+  deepseek_api_key: ""          # fill in your key from https://platform.deepseek.com
+  deepseek_base_url: "https://api.deepseek.com/v1"
+  deepseek_model: "deepseek-v4-flash"   # deepseek-v4-flash if available # "deepseek-v4-pro", "deepseek-v4-flash"
+
+
+  routing:
+    # Layer-1: queries containing these keywords skip Qwen and go straight to the cloud model.
+    # Multilingual (Chinese + English + German) so all query languages are covered.
+    # Layer-2: if best retrieval relevance score is below threshold, escalate to the cloud model.
+    relevance_threshold: 0.25
+    # If true, market quote questions are always answered locally (no cloud escalation).
+    force_local_for_market: true
+    # Max seconds to wait for local Ollama before falling back to the cloud model.
+    # Set to 0 to disable timeout guard entirely. Default was 180.
+    local_timeout_seconds: 60
+    # If true and timeout fires, automatically retry with the cloud model.
+    local_timeout_fallback_to_cloud: true
+    # Route stats logging (JSONL): one event per query.
+    enable_route_stats: true
+    route_stats_log_path: "data/route_stats.jsonl"
+    # Print one in-console summary every N queries; set 0 to disable summary print.
+    route_stats_print_every: 20
+    cloud_keywords:
+      # Chinese
+      - "建议"
+      - "推荐"
+      - "预测"
+      - "风险评估"
+      - "对比分析"
+      - "值不值"
+      - "该买"
+      - "该卖"
+      - "适合"
+      - "值得"
+      - "分析"
+      - "评估"
+      - "判断"
+      - "好不好"
+      # English
+      - "investment"
+      - "outlook"
+      - "strategy"
+      - "analyze"
+      - "compare"
+      - "forecast"
+      - "recommend"
+      - "predict"
+      - "should i"
+      - "worth"
+      - "buy or sell"
+      - "good idea"
+      - "risk"
+      - "is it good"
+      - "worth buying"
+      - "worth investing"
+      - "advice"
+      - "advise"
+      - "portfolio"
+      - "allocation"
+      - "diversify"
+      - "diversification"
+      - "valuation"
+      - "undervalued"
+      - "overvalued"
+      - "opportunity"
+      - "evaluate"
+      - "suitable"
+      - "appropriate"
+      - "entry point"
+      - "target price"
+      - "upside"
+      - "downside"
+      - "hedge"
+      - "hedging"
+      # German
+      - "empfehlen"
+      - "empfehlung"
+      - "prognose"
+      - "prognostizieren"
+      - "risikobewertung"
+      - "vergleich"
+      - "vergleichen"
+      - "analyse"
+      - "analysiere"
+      - "kaufen"
+      - "verkaufen"
+      - "lohnt"
+      - "risiko"
+      - "sinnvoll"
+      - "anlage"
+      - "anlegen"
+      - "bewertung"
+      - "absicherung"
+      - "diversifizierung"
+      - "geeignet"
+      - "rentabel"
+      - "rendite"
+      - "ertrag"
+      - "einschätzen"
+      - "einschätzung"
+      - "kursziel"
+      - "überbewertet"
+      - "unterbewertet"
+      - "einstiegspunkt"
+      - "chancen"

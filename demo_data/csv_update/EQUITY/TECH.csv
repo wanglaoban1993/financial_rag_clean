@@ -1,0 +1,7 @@
+WKN;STOCK_ID;QUANTITY;COMMENT;COMMENT2;COMMENT3;ISIN;Name;Bid;Ask;% Differenz ein Jahr;% Differenz ein Monat;% Differenz zum Vortageskurs;Kursdatum;
+865985;AAPL.US;0;Tech;Sample watchlist entry;;US0378331005;Apple Inc.;227,10;227,35;18,40;3,20;0,85;2026-07-22;
+870747;MSFT.US;0;Tech;Sample watchlist entry;!;US5949181045;Microsoft Corp.;445,60;445,90;22,10;4,10;1,20;2026-07-22;
+918422;NVDA.US;0;Tech;Sample watchlist entry;;US67066G1040;NVIDIA Corp.;138,20;138,55;95,30;12,40;2,75;2026-07-22;
+909238;ASML.NL;0;Tech;Sample watchlist entry;;NL0010273215;ASML Holding NV;720,40;721,10;-5,60;2,10;-1,10;2026-07-22;
+716460;SAP.DE;0;Tech;Sample watchlist entry;;DE0007164600;SAP SE;231,80;232,05;14,20;1,90;0,40;2026-07-22;
+906866;TSM.US;0;Tech;Sample watchlist entry;?;US8740391003;Taiwan Semiconductor MFG;198,50;198,90;41,60;6,30;-0,55;2026-07-22;

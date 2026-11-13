@@ -1,0 +1,34 @@
+# python==3.11.15
+# Torch is intentionally not pinned here.
+# Install via scripts/install_requirements.sh to auto-select GPU/CPU wheel.
+apscheduler
+pyyaml
+requests
+curl_cffi>=0.15.0
+playwright>=1.54.0
+pandas>=2.2.3,<3.0.0
+lxml>=5.0.0
+pandas-ta-classic>=0.3.54
+plotly>=6.1.1
+numpy>=2.0.0,<2.3.0
+pymupdf==1.27.2.2
+pymupdf4llm==1.27.2.2
+langchain==0.3.28
+langchain-community==0.3.27
+# BM25 keyword half of hybrid search (rag/vector_store.py); langchain-community imports it lazily
+rank_bm25>=0.2.2,<0.3
+langchain-core==0.3.83
+langchain-huggingface==0.3.1
+langchain-ollama==0.2.3
+langchain-openai==0.3.35
+openai>=2.0.0
+sentence-transformers==5.2.0
+# sentence-transformers has no upper bound on transformers, so a fresh image build pulled 5.x,
+# whose removed helpers break the Jina reranker's remote code (rag/vector_store.py). Match the 4.x
+# line this project was developed against.
+transformers>=4.57,<5
+# Required by the Jina reranker's remote modeling code.
+einops>=0.8,<0.9
+faiss-cpu==1.13.2
+finnhub-python>=0.2.0
+yfinance>=0.2.50

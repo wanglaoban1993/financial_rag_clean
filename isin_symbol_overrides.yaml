@@ -1,0 +1,10 @@
+# Manual ISIN -> Yahoo symbol corrections. These win over isin_symbol_candidates.yaml,
+# which OpenFIGI rewrites and which picked Swiss listings for some German ISINs.
+DE0007500001:
+  symbol: TKA.DE
+  name: thyssenkrupp
+  source: LOCAL_OVERRIDE
+DE0007164600:
+  symbol: SAP.DE
+  name: SAP
+  source: LOCAL_OVERRIDE

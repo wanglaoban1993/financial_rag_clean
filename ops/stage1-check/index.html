@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Financial RAG · Stage 1</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f7f9;
+        --surface: #ffffff;
+        --surface-soft: #eef3f6;
+        --ink: #172026;
+        --muted: #5f6f7b;
+        --line: #d7dee5;
+        --accent: #0f766e;
+        --accent-dark: #115e59;
+        --good: #15803d;
+        --warn: #b45309;
+        --shadow: 0 18px 50px rgba(23, 32, 38, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      .page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.84);
+        backdrop-filter: blur(12px);
+      }
+
+      .nav {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 0 auto;
+        min-height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: var(--accent);
+        color: white;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .brand strong {
+        display: block;
+        font-size: 15px;
+        line-height: 1.15;
+      }
+
+      .brand span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid #b7d7cf;
+        border-radius: 999px;
+        background: #edf8f5;
+        color: var(--accent-dark);
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--good);
+      }
+
+      main {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 72px 0 56px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+        gap: 36px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 16px;
+        color: var(--accent-dark);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 720px;
+        font-size: clamp(42px, 6vw, 72px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .intro {
+        max-width: 650px;
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .button {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        background: var(--surface);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .button.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .terminal {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #101820;
+        color: #d9f2ed;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .terminal-bar {
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 0 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: #17242d;
+      }
+
+      .traffic {
+        display: flex;
+        gap: 7px;
+      }
+
+      .traffic span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #6b7c86;
+      }
+
+      .terminal-title {
+        color: #a7bbc3;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .terminal-body {
+        padding: 18px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 130px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 14px;
+      }
+
+      .row:last-child {
+        border-bottom: 0;
+      }
+
+      .label {
+        color: #8fa8b2;
+      }
+
+      .value {
+        color: #f4fbfa;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .state {
+        color: #94f0bc;
+        font-weight: 800;
+      }
+
+      .state.warn {
+        color: #f7c873;
+      }
+
+      .section {
+        margin-top: 56px;
+        padding-top: 36px;
+        border-top: 1px solid var(--line);
+      }
+
+      .section h2 {
+        margin: 0 0 18px;
+        font-size: 24px;
+        letter-spacing: 0;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        min-height: 152px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 16px;
+        letter-spacing: 0;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        background: #ffffff;
+      }
+
+      .footer-inner {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 0 auto;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: 13px;
+      }
+
+      code {
+        padding: 2px 6px;
+        border-radius: 5px;
+        background: var(--surface-soft);
+        color: var(--ink);
+      }
+
+      @media (max-width: 880px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        main {
+          padding-top: 48px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav,
+        .footer-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          justify-content: center;
+          padding: 14px 0;
+        }
+
+        h1 {
+          font-size: 42px;
+        }
+
+        .intro {
+          font-size: 16px;
+        }
+
+        .row {
+          grid-template-columns: 1fr;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <nav class="nav" aria-label="Status">
+          <div class="brand">
+            <div class="mark" aria-hidden="true">F</div>
+            <div>
+              <strong>Financial RAG</strong>
+              <span>Private market intelligence workspace</span>
+            </div>
+          </div>
+          <div class="pill"><span class="dot" aria-hidden="true"></span>Access Protected</div>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">Stage 1 · External Checkpoint</p>
+            <h1 id="page-title">Secure origin is online.</h1>
+            <p class="intro">
+              This public hostname verifies the Cloudflare Access and Tunnel path for the
+              Financial RAG stack. Application services stay behind protected routes until
+              they are explicitly published.
+            </p>
+            <div class="actions">
+              <a class="button primary" href="https://dash.cloudflare.com/" rel="noreferrer">Cloudflare Console</a>
+              <a class="button" href="https://developers.cloudflare.com/cloudflare-one/" rel="noreferrer">Zero Trust Docs</a>
+            </div>
+          </div>
+
+          <aside class="terminal" aria-label="Service status">
+            <div class="terminal-bar">
+              <div class="traffic" aria-hidden="true"><span></span><span></span><span></span></div>
+              <div class="terminal-title">stage1-check</div>
+            </div>
+            <div class="terminal-body">
+              <div class="row">
+                <div class="label">Hostname</div>
+                <div class="value">stage1.financial-rag.org</div>
+                <div class="state">OK</div>
+              </div>
+              <div class="row">
+                <div class="label">Origin</div>
+                <div class="value">http://stage1-check:80</div>
+                <div class="state">OK</div>
+              </div>
+              <div class="row">
+                <div class="label">Database</div>
+                <div class="value">private network only</div>
+                <div class="state warn">Hidden</div>
+              </div>
+              <div class="row">
+                <div class="label">Dashboard</div>
+                <div class="value">route separately when ready</div>
+                <div class="state warn">Pending</div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section" aria-labelledby="routing-title">
+          <h2 id="routing-title">Routing Plan</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>Stage Check</h3>
+              <p>
+                Keep this hostname as a lightweight uptime and Access validation page.
+                It should stay simple, fast, and safe to expose.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Dashboard</h3>
+              <p>
+                Publish the Streamlit workspace on a separate Access-protected hostname,
+                for example <code>dashboard.financial-rag.org</code>.
+              </p>
+            </article>
+            <article class="card">
+              <h3>API</h3>
+              <p>
+                Route FastAPI separately if needed. PostgreSQL, model services, and
+                internal workers should remain private.
+              </p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="footer-inner">
+          <span>Financial RAG Stage 1</span>
+          <span>Docker Compose · Nginx · Cloudflare Tunnel</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

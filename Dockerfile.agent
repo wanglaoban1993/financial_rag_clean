@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY requirements.txt requirements.agent.txt ./
+# Install CPU-only torch first. The plain PyPI wheel that sentence-transformers
+# would otherwise pull in (torch>=1.11.0) bundles CUDA/cuDNN/NCCL/Triton — several
+# GB of GPU deps this CPU-only container never uses. Satisfying the constraint
+# here means pip won't reach for the CUDA build afterward.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir -r requirements.agent.txt
+
+COPY config_loader.py .
+COPY rag ./rag
+COPY ingestion ./ingestion
+COPY processing ./processing
+COPY server_app ./server_app
+
+EXPOSE 8100

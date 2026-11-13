@@ -1,0 +1,9 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+streamlit>=1.49.0
+psycopg[binary]>=3.2.0
+pandas>=2.2.3,<3.0.0
+requests>=2.32.0
+pyyaml>=6.0
+yfinance>=0.2.50
+beautifulsoup4>=4.12.0

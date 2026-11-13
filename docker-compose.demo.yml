@@ -1,0 +1,37 @@
+# Override file for the public HR/portfolio demo deployment.
+#
+# Runs the same images/services as docker-compose.yml, but:
+#   - points at demo_data/ (synthetic watchlist + sample docs) instead of your
+#     real csv_update/ and data/ — the two stacks never touch the same data
+#   - uses a separate Postgres database (financial_rag_demo by default)
+#   - runs cloudflared unconditionally (base file gates it behind --profile tunnel)
+#
+# Run alongside your personal stack on the same machine with a separate
+# project name so containers/networks/volumes don't collide:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.demo.yml \
+#     -p financial-rag-demo --env-file .env.demo up -d --build
+#
+# Copy .env.demo.example to .env.demo and fill in your own values first.
+
+services:
+  api:
+    volumes:
+      - ./demo_data/csv_update:/app/csv_update:ro
+
+  agent-api:
+    environment:
+      DEMO_DAILY_MESSAGE_LIMIT: ${DEMO_DAILY_MESSAGE_LIMIT:-200}
+      FIN_RAG_CONFIG: /run/config/financial_rag_config.yaml
+    volumes:
+      - ${FIN_RAG_CONFIG:?set FIN_RAG_CONFIG in .env.demo to the host config.yaml path}:/run/config/financial_rag_config.yaml:ro
+      - ./demo_data/faiss_index:/app/data/faiss_index:ro
+      - ./demo_data/csv_update:/app/csv_update:ro
+      - hf_cache:/hf-cache
+
+  dashboard:
+    environment:
+      DEMO_SESSION_MESSAGE_LIMIT: ${DEMO_SESSION_MESSAGE_LIMIT:-15}
+
+  cloudflared:
+    profiles: []

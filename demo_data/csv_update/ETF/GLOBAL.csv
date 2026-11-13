@@ -1,0 +1,7 @@
+WKN;STOCK_ID;QUANTITY;COMMENT;COMMENT2;COMMENT3;ISIN;Name;Bid;Ask;% Differenz ein Jahr;% Differenz ein Monat;% Differenz zum Vortageskurs;Kursdatum;
+A1JX52;IWDA.L;0;Global;Sample watchlist entry;;IE00B4L5Y983;iShares Core MSCI World UCITS ETF;98,40;98,55;16,80;2,60;0,50;2026-07-22;
+A1JX51;VUSA.L;0;Global;Sample watchlist entry;;IE00B3XXRP09;Vanguard S&P 500 UCITS ETF;98,10;98,25;19,40;3,10;0,70;2026-07-22;
+A12CX1;EUNL.DE;0;Global;Sample watchlist entry;!;IE00B4L5Y983;iShares Core MSCI World UCITS ETF (EUR);94,20;94,35;15,90;2,40;0,45;2026-07-22;
+A0YEDG;EEM.US;0;Emerging Markets;Sample watchlist entry;;US4642872422;iShares MSCI Emerging Markets ETF;42,30;42,45;3,10;-0,80;-0,20;2026-07-22;
+A1103F;EXS1.DE;0;Germany;Sample watchlist entry;;LU0274211217;Xtrackers DAX UCITS ETF;168,50;168,80;20,10;3,90;0,60;2026-07-22;
+A0LEW8;GLD.US;0;Commodities;Sample watchlist entry;;US78463V1070;SPDR Gold Shares;218,60;218,90;25,40;4,20;0,35;2026-07-22;

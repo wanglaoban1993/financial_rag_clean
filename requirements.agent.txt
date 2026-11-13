@@ -1,0 +1,8 @@
+# Agent API service: full agentic RAG stack (embeddings, FAISS, LangChain, market data)
+# plus the web layer needed to serve it. Kept separate from requirements.server.txt so
+# the lightweight Postgres-facing `api` service doesn't pull in these heavy ML deps.
+-r requirements.txt
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+psycopg[binary]>=3.2.0
+langgraph==0.6.11

@@ -1,0 +1,7 @@
+WKN;STOCK_ID;QUANTITY;COMMENT;COMMENT2;COMMENT3;ISIN;Name;Bid;Ask;% Differenz ein Jahr;% Differenz ein Monat;% Differenz zum Vortageskurs;Kursdatum;
+A2JG9Z;NOVOB.DK;0;Health;Sample watchlist entry;;DK0060534915;Novo Nordisk A/S;72,40;72,60;-12,30;-2,10;0,30;2026-07-22;
+853260;JNJ.US;0;Health;Sample watchlist entry;;US4781601046;Johnson & Johnson;168,90;169,20;9,10;1,40;0,15;2026-07-22;
+851311;RO.CH;0;Health;Sample watchlist entry;!;CH0012032048;Roche Holding AG;265,30;265,80;6,70;0,90;-0,25;2026-07-22;
+A2PPBB;LLY.US;0;Health;Sample watchlist entry;;US5324571083;Eli Lilly and Co.;845,10;846,00;28,90;5,60;1,90;2026-07-22;
+852009;PFE.US;0;Health;Sample watchlist entry;?;US7170811035;Pfizer Inc.;24,80;24,95;-8,40;-1,20;-0,60;2026-07-22;
+904278;NOVN.CH;0;Health;Sample watchlist entry;;CH0012005267;Novartis AG;98,60;98,90;11,20;2,30;0,45;2026-07-22;

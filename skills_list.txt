@@ -1,0 +1,50 @@
+{
+  "name": "resolve_and_snapshot_stock",
+  "description": "Resolve a company name or partial ticker, then fetch live price, fundamentals, and technical indicators.",
+  "inputs": {
+    "query": {
+      "type": "string",
+      "description": "Company name, partial ticker, or ISIN"
+    }
+  },
+  "steps": [
+    {
+      "id": "resolve",
+      "tool": "resolve_ticker",
+      "input": {
+        "query": "{query}"
+      }
+    },
+    {
+      "id": "live",
+      "tool": "get_live_price_data",
+      "input": {
+        "ticker": "{{resolve.symbol}}"
+      }
+    },
+    {
+      "id": "fundamentals",
+      "tool": "get_fundamentals_data",
+      "input": {
+        "ticker": "{{resolve.symbol}}"
+      }
+    },
+    {
+      "id": "technicals",
+      "tool": "get_technical_indicators",
+      "input": {
+        "ticker": "{{resolve.symbol}}"
+      }
+    },
+    {
+      "id": "summary",
+      "model": "gpt-4o-mini",
+      "input": {
+        "live": "{{live}}",
+        "fundamentals": "{{fundamentals}}",
+        "technicals": "{{technicals}}"
+      },
+      "instruction": "Summarize the stock snapshot with key metrics, trends, and notable signals."
+    }
+  ]
+}

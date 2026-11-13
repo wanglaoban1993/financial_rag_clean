@@ -1,0 +1,1117 @@
+Sector,Tag,Description
+Health,Pharma,"Pharmaceutical companies such as Bayer, Bristol-Myers Squibb, Eli Lilly, Merck, Novartis, Novo Nordisk, and Pfizer develop and market branded and generic drugs across a wide range of therapeutic areas. Key holdings: ABBOTT LABS, BAYER AG NA O.N., BIONTECH SE SPON. ADRS 1, BRISTOL-MYERS SQUIBBDL-10, CARDINAL HEALTH INC., CATALYST PHARM.INC.DL-001, CORCEPT THERAPEUTICS INC., CRINETICS PHARM. DL-,001, ELI LILLY, GLAXOSMITHKLINE CAP.13/43."
+Health,Biotech,"Biotechnology firms like BioNTech, Amgen, Biogen, MorphoSys, and Evotec focus on innovative biologics, gene-editing platforms, and advanced therapeutic development. Key holdings: ABBVIE INC.        DL-,01, ADMA BIOLOGICS   DL-,0001, AMGEN INC.       DL-,0001, ARCTURUS THER.HLD.DL-,001, AXSOME THERAPEUT. DL-0001, BIOGEN INC. DL -,0005, BIOMARIN PHAR.    DL-,001, CRISPR THERAPEUT. SF -,03, CYTOKINETICS INC. DL-,001, EMERGENT BIOSOLNS DL-,001."
+Health,Med Tech,"Medical-technology manufacturers including Abbott, Boston Scientific, Danaher, Edwards Lifesciences, GE HealthCare, and Terumo produce medical devices, imaging equipment, and surgical tools. Key holdings: ALIGN TECHNOLOGY DL-,0001, BAXTER INTL          DL 1, BECTON, DICKINSON    DL 1, BOSTON SCIENTIFIC  DL-,01, DANAHER CORP.      DL-,01, DRAEGERWERK VZO O.N., EDWARDS LIFESCIENCES, ESSILORLUXO. INH. EO -,18, GE HEALTHC.TECH.INC. -,01, GLAUKOS CORP.     DL-,001."
+Health,Gene Edit,"Gene-editing companies such as CRISPR Therapeutics, Beam Therapeutics, Editas Medicine, Illumina, and Intellia specialize in CRISPR-based therapies and genomic tools. Key holdings: ALLOGENE THERAP.  DL-,001, BEAM THERAPEUTICS  DL-,01, EDITAS MEDICINE  DL-,0001, INTELLIA THERAPEU  DL-,01, IONIS PHARMACEUT.  DL-001, SAREPTA THERAP.  DL-,0001, UNIQURE N.V.      EO -,05, VERTEX PHARMAC.    DL-,01, VERVE GROUP SE A."
+Health,Health Serv,"Healthcare-service providers including Cardinal Health, McKesson, UnitedHealth Group, CVS Health, and Fresenius deliver integrated care, insurance, and pharmacy-benefit management. Key holdings: ADAPTHEALTH CORP.DL-,0001, BRIGHT. H. SVCS.O.N., CVS HEALTH CORP.   DL-,01, ENCOMP.HEALT.CORP. DL-,01, ETORO GROUP LTD., FRESENIUS SE+CO.KGAA O.N., MEDIFAST          DL-,001, OSCAR HEALTH CL.A -,00001, UNITEDHEALTH GROUP DL-,01."
+Health,Diagnostics,"Diagnostic and lab-testing companies like Qiagen, Thermo Fisher Scientific, Fulgent Genetics, and Neogenomics offer molecular tests, genetic screening, and diagnostic imaging solutions. Key holdings: AGILENT TECHS INC. DL-,01, FULGENT GENETICS DL-,0001, LANTHEUS HLDGS     DL-,01, METTLER-TOLEDO INTL, SEMLER SCIENTIFIC DL-,001, ASEP MEDICAL HOLDINGS INC, AVANTOR INC.       DL-,01, NEOGENOMICSINC.  DL-,001."
+Health,Med Digital,"Digital-health and medical-IT platforms such as Teladoc Health, Veeva Systems, Doximity, and Tempus AI provide telehealth services, clinical-data analytics, and drug-discovery software solutions. Key holdings: DOXIMITY INC     DL-,001, LONZA GROUP AG NA    SF 1, MEDPACE HOLDINGS   DL-,01, REZOLVE AI PLC   LS-,0001, SCHRODINGER INC.DL -,01."
+Health,Specialty,"Specialty pharmaceutical firms like Catalyst Pharma focus on orphan‑disease treatments and niche therapeutics, often addressing rare conditions with limited competition. Key holdings: INSULET CORP.    DL -,001, PENUMBRA INC., TARSUS PHARMAC.  DL-,0001, TRANSMEDICS GROUP, UTD THERAP. (DEL.) DL-,01, ASP ISOTOPES INC.DL-,01."
+Health,Health IT Hardware,Key holdings: SUPER MICRO O.N.
+Health,Restaurant Technology,"Key holdings: TOAST INC.CL.A DL-,000001."
+Health,Tech Hardware,Key holdings: SUPER MICRO O.N..
+Health,Software / Payments,"Key holdings: TOAST INC.CL.A DL-,000001."
+Health,Lab Supplies,"Key holdings: AVANTOR INC.       DL-,01."
+Health,Computer Hardware,Key holdings: SUPER MICRO O.N..
+Health,Restaurant Software,"Key holdings: TOAST INC.CL.A DL-,000001."
+Health,Life Sciences Tools,"Key holdings: TWIST BIOSCIENCEDL-,00001."
+Power,Hydrogen White,"Clean white hydrogen production through electrolysis and related technologies, with key players including Plug Power, ITM Power, Nel ASA, Thyssenkrupp Nucera, Linde, and Protium Clean Energy pioneering green hydrogen solutions for industrial and energy applications. Key holdings: HYDROGEN PRO ASA NK -,02, ITM POWER PLC      LS-,05, LINDE PLC        EO -,001, PROTIUM CLEAN ENERGY CORP, PUREWAVE HYDROGEN O.N., THYSSENKRUPP NUCERA O.N.."
+Power,Fuel Cells BSZ,"Fuel cell technology companies developing proton exchange membrane (PEM) and hydrogen fuel cell solutions, featuring Ballard Power Systems, Plug Power, FuelCell Energy, PowerCell Sweden, SFC Energy, and Bloom Energy serving transportation, stationary, and portable power markets. Key holdings: BALLARD PWR SYS, FUELCELL ENERGY  NEW O.N., NEL ASA            NK-,20, PLUG POWER INC. DL-,01, POWERCELL SWEDEN  SK-,022, SFC ENERGY AG."
+Power,Solar EU,"European solar companies and projects encompassing panel manufacturing, installation, and solar tracking systems, with key players including Sungrow Power Supply and NextPower serving European residential, commercial, and utility-scale solar markets. Key holdings: CANADIAN SOLAR INC., ENPHASE ENERGY INC.DL-,01, FIRST SOLAR INC. D -,001, LONGI GREEN ENERG.T.A YC1, SMA SOLAR TECHNOL.AG, SOLARBANK CORP., SOLAREDGE TECHN. DL-,0001, SUNGROW POWER SUPPLY AYC1."
+Power,Solar US,"US-focused solar installers, developers, and manufacturers serving residential, commercial, and utility-scale markets, featuring First Solar, Sunrun, SunPower, Array Technologies, Canadian Solar, and Solarbank providing end-to-end solar solutions. Key holdings: ARRAY TECHNOLOGIES -,001, SUNPOWER CORP.    DL -,01, SUNRUN INC.      DL-,0001."
+Power,Solar CHI,"Chinese solar manufacturers producing solar panels, modules, inverters, and polysilicon for global markets, with Longi Green Energy and Daqo New Energy as key representative producers serving worldwide solar installations."
+Power,Offshore Wind,"Offshore wind developers, operators, and infrastructure providers including Ørsted A/S, the global leader in offshore wind development with extensive project portfolios in European and North American waters. Key holdings: ORSTED A/S          DK 10."
+Power,Wind Turbines,"Wind turbine manufacturers and component suppliers including Vestas Wind Systems, Nordex SE, GE Vernova, and Vortex Energy producing turbines, drivetrains, and related components for onshore and offshore wind energy generation worldwide. Key holdings: GE VERNOVA INC., NORDEX SE O.N., VESTAS WIND ADR 1/3/DK 1."
+Power,Power Utilities US,"US electric and gas utilities serving residential, commercial, and industrial customers, including Duke Energy, NextEra Energy, Constellation Energy, Exelon, DTE Energy, PPL Corp, and NRG Energy providing generation, transmission, and distribution services. Key holdings: ALLIANT ENERGY     DL-,01, AMER. EL. PWR     DL 6,50, CMS ENERGY CORP.   DL-,01, DTE EN. CO., DUKE EN.CORP.    DL -,001, EVERSOURCE ENERGY    DL 5, EXELON CORP., NEXTERA ENERGY INC.DL-,01, NRG ENERGY INC.    DL-,01, NUSCALE POWER COR."
+Power,Power Utilities EU,"European utilities and network operators serving electricity and gas distribution markets, including Enel, Iberdrola, E.ON, EDP, and National Grid providing generation, distribution, renewable energy services, and transmission infrastructure across European markets. Key holdings: E.ON SE NA O.N., ENEL S.P.A.          EO 1, IBERDROLA INH.    EO -,75, NATIONAL GRID PLC, OGE EN. CORP.     DL -,01, EDP S.A.             EO 1."
+Power,Power Utilities Pipes,"Utility companies with significant pipeline and gas distribution infrastructure, including OGE Energy, Atmos Energy, and Prysmian Group specializing in natural gas infrastructure and energy transmission cables supporting distribution networks. Key holdings: ATMOS EN. CORP., CHINA HONGQIAO GROUP LTD."
+Power,Nuclear Utilities,"Nuclear power generators and utilities with nuclear generation capacity, including NuScale Power developing small modular reactor (SMR) technology and Mitsubishi Heavy Industries serving next-generation nuclear power generation."
+Power,Power Electronics,"Power conversion, management, and control electronics companies including Eaton, Schneider Electric, Enphase Energy, SolarEdge, Power Integrations, Vicor, GE Vernova, and Advanced Energy Industries serving industrial, renewable energy, and data center applications. Key holdings: EATON CORP.PLC    DL -,01, HONEYWELL INTL        DL1, HUBBELL INC.       DL-,01, NVENT ELECTRIC PLC DL-,01, POWELL IND. INC.  DL -,01, REXEL S.A.     INH. EO 5, SCHNEIDER ELEC. INH. EO 4, VICOR CORP.        DL-,01, FLEX LTD.."
+Power,Grid Infrastructure,"Grid modernization, power systems, and infrastructure construction companies including Powell Industries and Grid Dynamics providing power delivery equipment, grid automation, and transmission infrastructure solutions for utility-scale grid enhancement and expansion. Key holdings: GRID DYNAMICS A  DL-,0001, HITACHI LTD, IES HLDGS INC.     DL-,01, MITSUBISHI HEAVY, PRYSMIAN S.P.A.   EO 0,10, QUANTA SVCS     DL-,00001, SIEMENS AG  NA O.N., UNUSUAL MACHS INC. DL-,01."
+Power,Energy Storage BESS,"Battery energy storage systems (BESS), lithium batteries, and grid-scale storage solutions including Tesla, CATL (Contemporary Amperex Technology), Panasonic Holdings, and Flex serving utility-scale, commercial, and residential energy storage needs. Key holdings: 2G ENERGY AG, ADVANCED EN. INDS DL-,001, BLOOM ENERGY A   DL-,0001, CONSTELLATION ENERGY, DAQO NEW ENERGY CRP.ADR 5, DOMINION ENERGY INC., ENERSYS            DL-,01, ENPHASE ENERGY INC.DL-,01, EXPAND ENERGY      DL-,01, ORIGIN ENERGY LTD.."
+Power,Cooling Infrastructure,"Data center and industrial cooling solutions providing thermal management systems, with Vertiv Holdings as a leading provider of cooling infrastructure for data centers and critical facilities. Key holdings: VERTIV HOL.CL A DL-,0001."
+Power,HVAC Climate,"Climate control, heating, ventilation, and air conditioning systems for commercial and residential buildings, with Trane Technologies and Johnson Controls International serving as major global providers of HVAC solutions, building automation, and energy-efficient climate control systems. Key holdings: TRANE TECHNOLOG. PLC DL 1."
+Power,Building Technology,"Building automation, energy management, and integrated building solutions for facilities management, with Honeywell International serving as a key provider of smart building technologies, building management systems, and energy optimization solutions. Key holdings: JOHNSON CONTR.INTL.DL-,01."
+Power,Generators Pumps,"Power generation equipment, generators, and pump systems including Cummins, GE Vernova, 2G Energy, and Unusual Machines with cogeneration units serving backup power, distributed generation, and industrial applications. Key holdings: CUMMINS INC.      DL 2,50."
+Power,Energy Infrastructure,"Energy infrastructure construction, EPC (engineering, procurement, and construction), and project development including Siemens Energy, Ameresco, Argan, NextPower, and 2G Energy alongside natural resource companies such as Anglo American, Freeport-McMoRan, and Glencore supporting energy project development and raw materials supply. Key holdings: AMERESCO INC.CL.A DL-0001, ANGLO AMERICAN DL-,623855, ARGAN INC.         DL-,15, FREEPORT-MCMORAN INC., GLENCORE PLC      DL -,01."
+Power,Utilities Yield,"Yield-focused utility investments including dividend-paying utilities such as Vistra Corp, Iberdrola, and Constellation Energy with specified yield targets. Key holdings: VISTRA CORP.       DL-,01."
+Power,Drone Defense Tech,"Defense and security technology including drone systems, AI-enabled military software, and autonomous platforms, with Ondas Holdings developing drone and defense technology solutions for government and commercial security applications. Key holdings: CONT.AMPEREX TECH. H HD 1, ONDAS INC.       DL-,0001."
+Power,Energy Mgmt Software,"Energy management software, analytics platforms, and consulting services including Schneider Electric, Grid Dynamics, and Willdan Group providing software solutions for energy optimization, demand response, utility analytics, and smart grid management. Key holdings: NEXTPOWER INC.  A  -,0001, WILLDAN GROUP INC. DL-,01."
+Power,Utilities Services,"Utility support services, measurement analysis, and auxiliary equipment providers including Rexel, IES Holdings, Quanta Services, and Willdan Group offering specialized services for utility operations, infrastructure maintenance, and energy consulting. Key holdings: EMERSON EL.       DL -,50."
+Power,Power Sector Diversified,"Diversified power sector holdings and sector-wide investment themes including major industrial conglomerates and diversified energy companies such as GE Vernova, Siemens AG, Hitachi, Goodman Group, Hexagon, Expand Energy, and Origin Energy with significant power and energy-related operations across multiple segments. Key holdings: GOODMAN GROUP UNITS, HEXAGON COMP       NK-,10."
+Power,Energy Materials,"Key holdings: SOLSTICE ADV.MTLS DL-,001."
+Power,EV Charging Infrastructure,Key holdings: CHARGEPOINT HLDGS O.N. Key holdings: CHARGEPOINT HLDGS O.N..
+Power,Power Utilities Asia,Key holdings: TENAGA NASIONAL ADR/4. Key holdings: TENAGA NASIONAL ADR/4.
+Power,NaT,Key holdings: NaT.
+Power,Natural Gas Production,Key holdings: EQT CORP..
+Power,Construction Materials,"Key holdings: MARTIN MAR. MAT.   DL-,01."
+Power,Advanced Materials,"Key holdings: SOLSTICE ADV.MTLS DL-,001."
+Power,Power Automation,Key holdings: VALMET OYJ.
+Power,Critical Metals Mining,"Key holdings: ZIJIN MINING GRP H YC-,10."
+Robotic,Industrial Robotics,"Traditional industrial robots and factory automation systems for manufacturing operations including welding, assembly, and production line automation by ABB, Fanuc, Yaskawa, Siemens, Honeywell, and Teradyne. Key holdings: ABB LTD. NA     SF 0,12, CNH INDUSTRIAL    EO -,01, FANUC CORP., HITACHI LTD, HORIZON ROBOTICS CL.B, KRAKEN ROBOTICS INC., MIDEA GROUP CO. LTD H YC1, RICHTECH ROBOTICS CL.B, SERVE ROBOTICS INC.  O.N., SIEMENS AG  NA O.N.."
+Robotic,Humanoid Robots,"Humanoid and bipedal robots designed for human-like applications in assistive roles, entertainment, and research environments, including systems from Realbotix, UBTECH, Rainbow Robotics, and Samsung. Key holdings: REALBOTIX CORP., UBTECH ROBOT.CORP. H YC 1."
+Robotic,Service Robots,"Commercial service and delivery robots for hospitality, cleaning, and customer service automation including Richtech Robotics, Serve Robotics, and Xiaomi systems."
+Robotic,Autonomous Driving,"Self-driving technology and autonomous vehicles for passenger and logistics transportation from Tesla, Baidu, Mobileye, Alphabet, XPeng, and Hyundai. Key holdings: ALPHABET INC.CL.A DL-,001, BAIDU A ADR DL-,000000625, HYUNDAI MOT.0,5N.VTG GDRS, MOBILEYE GLO.INC. DL-,01, TESLA INC. DL -,001, XPENG INC. SP.ADS/2 CL.A."
+Robotic,LiDAR Sensing,"LiDAR and 3D sensing technologies for autonomous navigation, environmental mapping, obstacle detection, and precision mapping from Hesai Group, Ouster, and RoboSense. Key holdings: HESAI GROUP SP.ADR/1 CL.B, OUSTER INC.      DL-,0001, VISHAY PRECISION G.DL-,10."
+Robotic,Robotics Sensors,"Precision sensors for industrial automation, machine perception, and asset tracking in robotic applications from Keyence, Zebra Tech, Cognex, STMicroelectronics, and Analog Devices. Key holdings: ANALOG DEVICES INC.DL-166, COGNEX CORP.      DL-,002, KEYENCE CORP., STMICROELECTRONICS, ALLEGRO MICROSYS.  DL-,01."
+Robotic,Actuators Motion,"Motion control and actuator components for robotics including systems from Schaeffler, Nexteer, Novanta, and Jiangsu Hengli Hydraulic. Key holdings: JIANGSU HENGLI HYDR.A YC1, NEXTEER AUTOMOT.GR.HD-,10, NOVANTA INC., SCHAEFFLER AG NA O.N.."
+Robotic,IoT Industrial,"Industrial IoT platforms and Industry 4.0 solutions for connected manufacturing, fleet management, and operational data analytics from Rockwell, Emerson, Cisco, Samsara, and Infineon. Key holdings: CISCO SYSTEMS    DL-,001, EMERSON EL.       DL -,50, HONEYWELL INTL        DL1, INTL BUS. MACH.    DL-,20, KONTRON AG, PAGERDUTY INC. DL-,000005, PTC INC.          DL -,01, ROCKWELL AU.         DL 1, SAMSARA INC. A   DL-,0001, SKYWORKS SOL.      DL-,25."
+Robotic,Robotics AI,"AI and deep learning solutions for robotics including machine vision, edge AI, and intelligent automation from NVIDIA, UiPath, IBM, Horizon Robotics, and Tencent. Key holdings: NVIDIA CORP., ROBOSENSE TECH.HD HD-,01, TENCENT HLDGS   HD-,00002, UIPATH INC.   A DL-,00001."
+Robotic,CAD Engineering SW,"Computer-aided design and engineering software for product design, simulation, and 3D modeling in robotics development from PTC, Autodesk, Nemetschek, and Adobe. Key holdings: ADOBE INC., AUTODESK INC., CENIT AG O.N., NEMETSCHEK SE O.N.."
+Robotic,Robotics Platforms,"Robotics development platforms and ecosystems including Skyworks solutions for embedded systems, semiconductor components, and processing platforms enabling robotics computation."
+Robotic,Logistics Automation,"Warehouse and logistics automation for material handling, inventory management, and supply chain optimization including Kion, Symbotic, XPO, Ryder, and Corpay systems. Key holdings: CORPAY INC., JUNGHEINRICH AG O.N.VZO, KION GROUP AG, RADIANT LOGISTICS DL-,001, RYDER SYST.        DL-,50, SYMBOTIC INC. CL.A   O.N., XPO INC.         DL -,001, ZEBRA TECH. A      DL-,01."
+Robotic,Smart Glasses,"Smart eyewear and AR glasses for enterprise augmented reality, hands-free computing, and wearable display technologies from EssilorLuxottica. Key holdings: ESSILORLUXO. INH. EO -,18, XIAOMI CORP. CL.B, XIAOMI CORP. UNSP.ADR/ 5."
+Robotic,Agritech,"Agricultural technology and precision farming for autonomous tractors, precision planting, crop monitoring, and smart agricultural automation from CNH Industrial, AGCO, Deere, and Alibaba. Key holdings: AGCO CORP.         DL-,01, ALIBABA GR.HLDG SP.ADR 8, DEERE CO.            DL 1."
+Robotic,Medical Robotics,"Medical technology and healthcare automation including surgical robotics and healthcare solutions from Intuitive Surgical, Johnson & Johnson, and Stryker. Key holdings: INTUITIVE SURGIC. DL-,001, JOHNSON + JOHNSON    DL 1, STRYKER CORP.      DL-,10."
+Robotic,Drones,"Autonomous drones and aerial vehicles including EHang passenger and cargo drone systems. Key holdings: EHANG HLDGS(SP.ADR)1/2, ONDAS INC.       DL-,0001."
+Robotic,Robotics Supply Chain,"Component suppliers and electronic manufacturing services for robotics including sensors, semiconductors, and supply chain solutions from Jabil supporting robotics production. Key holdings: JABIL DL-,001, RAINBOW ROBOTICS  SW 500, SAMSUNG EL./25 GDRS NV PF, SEMTECH CORP.      DL-,01."
+Robotic,Ocean Robotics,"Marine and ocean robotics including underwater sonar, subsea imaging, autonomous underwater vehicles, and ocean data collection systems from Kraken Robotics."
+Robotic,Energy Management,"Energy efficiency and management solutions for industrial power generation, grid management, and sustainable energy infrastructure from Schneider Electric, Siemens Energy, and GE Vernova. Key holdings: GE VERNOVA INC., INFINEON TECHNOLOGIES AG, SCHNEIDER ELEC. INH. EO 4, SIEMENS ENERGY AG NA O.N.."
+Robotic,Boston Dynamics,"Advanced humanoid and mobile robots including Boston Dynamics Atlas and robotic platforms, with SoftBank Group as a key stakeholder in the humanoid robotics space. Key holdings: HYUNDAI MOT.0,5N.VTG GDRS, SOFTBANK GROUP CORP.."
+Robotic,Battery & Energy Storage,Key holdings: CONT.AMPEREX TECH. H HD 1.
+Robotic,Test & Measurement,"Key holdings: KEYSIGHT TECHS     DL-,01."
+Robotic,Data Storage,"Key holdings: SEAGATE TEC.HLD.DL-,00001, WESTN DIGITAL      DL-,01, SANDISK CORP.     DL -,01."
+Robotic,NaT,Key holdings: NaT.
+Robotic,Telecom Software,"Key holdings: AMDOCS LTD.        LS-,01."
+Robotic,Battery Technology,Key holdings: CONT.AMPEREX TECH. H HD 1.
+Robotic,Industrial IT,Key holdings: FUJITSU LTD.
+Robotic,Structured Product,Key holdings: JPCUNITR NR USD.
+Robotic,Thermal Management,Key holdings: ZHEJIANG SAN.I. H HD1.
+Robotic,Robotics Investment,Key holdings: JPCUNITR NR USD.
+Tech,Chip Design,"Fabless semiconductor designers producing GPUs, CPUs, ASICs, and SoCs for computing, mobile, and AI applications. Key players include NVIDIA, Apple, Broadcom, ARM Holdings, Marvell, MediaTek, Microchip Technology, and Nordic Semiconductor. Key holdings: ADVANCED MIC.DEV. DL-,01, APPLE INC., ARM HLDGS ADR DL-,001, BROADCOM INC.     DL-,001, CADENCE DESIGN SYS DL-,01, INFINEON TECHNOLOGIES AG, MARVELL TECHNOLOGY INC., MEDIATEK INC., MICROCHIP TECH.   DL-,001, NORDIC SEMICONDUCT. NK-01. Key holdings: ADVANCED MIC.DEV.  DL-,01, ANALOG DEVICES INC.DL-166, APPLE INC., ARM HLDGS ADR DL-,001, ASM INTL N.V. NY/1 EO-,04, AXCELIS TECHS     DL-,001, BROADCOM INC.     DL-,001, CADENCE DESIGN SYS DL-,01, CAMTEK LTD., CIRRUS LOGIC INC.."
+Tech,Chip Equip,"Companies manufacturing semiconductor equipment, materials, wafers, and packaging solutions for chip fabrication. Leading firms include ASML, Lam Research, KLA, Tokyo Electron, ASM International, Axcelis, Onto Innovation, FormFactor, and PVA Tepla. Key holdings: ASM INTL N.V. NY/1 EO-,04, AXCELIS TECHS     DL-,001, CAMTEK LTD., ONTO INNOVATION, APPLIED MATERIALS INC., ASML HOLDING EO -,09, FORMFACTOR INC. DL-,001, KLA CORP. DL -,001, LAM RESEARCH CORP. NEW, PVA TEPLA AG O.N. Key holdings: ACM RESEARCH CL.A -,0001, AEHR TEST SYSTEMS  DL-,01, AIXTRON SE, AMKOR TECHN.      DL-,001, APPLIED MATERIALS INC., ASML HOLDING    EO -,09, CARL ZEISS MEDITEC AG, COHERENT CORP., COHU INC.            DL 1, DELTA EL.TH.PCL-FGN-BA ,1."
+Tech,Foundry,"Contract chip manufacturers providing wafer fabrication services for fabless semiconductor companies. Major foundries include Taiwan Semiconductor Manufacturing (TSMC) and Amkor Technology for packaging and test services. Key holdings: AMKOR TECHN. DL-,001, TAIWAN SEMICON.MANU.ADR/5. Key holdings: TAIWAN SEMICON.MANU.ADR/5."
+Tech,Data Center,"Providers of data center facilities, servers, storage, power systems, and cooling solutions for cloud computing and enterprise infrastructure. Key players include Equinix, Digital Realty, Dell Technologies, Super Micro Computer, Western Digital, and Penguin Solutions. Key holdings: NVIDIA CORP.      DL-,001, DIGITAL REALTY TR. DL-,01, EQUINIX INC. DL-,001, HEWLETT PACKARD ENT., SUPER MICRO O.N., NEBIUS GROUP CL.A  DL-,01, PENGUIN SOLUTIONS, LENOVO GROUP, SEAGATE TEC.HLD.DL-,00001, TECHNOTRANS SE NA O.N. Key holdings: ALTAIR ENGINEERING INC., ASTERA LABS INC.  O.N., ASUSTEK CO.GDR 2010REGS/5, DELL TECHS INC. C  DL-,01, DIGITAL REALTY TR. DL-,01, EQUINIX INC.      DL-,001, HEWLETT PACKARD ENT., HON HAI PR.IND.SP.GDR S/1, LENOVO GROUP, LG ELECT.(NEW)GDR144A 1/2."
+Tech,Network,"Networking hardware, optical components, and telecom infrastructure companies enabling enterprise and service provider connectivity. Major firms include Cisco, Arista Networks, Juniper Networks, Ciena, F5, Lumentum, Aviat Networks, Viavi Solutions, and Corning. Key holdings: IMPINJ INC. DL-,001, ARISTA NET.INC. NEW O.N., AVIAT NETWORKS INC., CIENA CORP. NEW    DL-,01, CISCO SYSTEMS, F5 O.N., JUNIPER NETWORKS DL-,01, NOKIA OYJ EO-,06, VIAVI SOLUTIONS   DL-,001, APPLIED OPTOELECT.DL-,001. Key holdings: AMPHENOL CORP.  A DL-,001, ARISTA NET.INC. NEW O.N., AVIAT NETWORKS INC., BEL FUSE INC. B    DL-,10, CIENA CORP. NEW    DL-,01, CISCO SYSTEMS    DL-,001, CREDO TEC.GRP.HLD.-,00005, ERICSSON B (FRIA), EXTREME NETWORKS  DL-,001, F5 O.N.."
+Tech,Infra Build,"Physical infrastructure providers specializing in cables, fiber optics, cooling systems, electrical components, and construction services for technology installations. Leading companies include Nvent Electric, Legrand, Nexans, NKT, Prysmian, Encore Wire, AECOM, and Hewlett Packard Enterprise. Key holdings: NVENT ELECTRIC PLC DL-,01, CF INDS HLDGS      DL-,01, ENCORE WIRE CORP., IES HLDGS INC., LEGRAND S.A.    INH. EO 4, NEXANS INH. EO 1, NKT A/S NAM. DK 20, AECOM             DL -,01, ACUITY DL-,01, ASSA-ABLOY AB B    SK-,33. Key holdings: ACUITY             DL-,01, APPLIED OPTOELECT.DL-,001, ASSA-ABLOY AB B    SK-,33, CF INDS HLDGS      DL-,01, CORNING INC.      DL -,50, ENCORE WIRE CORP.  DL-,01, IES HLDGS INC.     DL-,01, IRCE S.P.A.       EO 0,52, LEGRAND S.A.    INH. EO 4, MASTEC INC.        DL-,10."
+Tech,5G,"Companies developing 5G chipsets, telecom systems, and wireless network infrastructure for next-generation mobile connectivity. Key players include Ericsson and Nokia. Key holdings: ERICSSON B (FRIA). Key holdings: ADVANCED MIC.DEV.  DL-,01, APPLIED MATERIALS INC., BROADCOM INC.     DL-,001, QORVO INC.DL -,0001."
+Tech,Cloud,"Cloud platforms and infrastructure providers offering computing, storage, and software-as-a-service solutions for businesses. Major firms include Amazon Web Services, Microsoft Azure, Google Cloud, Akamai, Dropbox, Twilio, and Nutanix. Key holdings: AKAMAI TECH.       DL-,01, AMAZON.COM INC.    DL-,01, BOX INC. A DL-,0001, DIGITALOCEAN HLD., DROPBOX INC CL. A, NUTANIX INC. A, TWILIO INC., SHOPIFY A SUB.VTG, APPFOLIO INC. A  DL-,0001, RINGCENTRAL A DL-,0001. Key holdings: AKAMAI TECH.       DL-,01, ALPHABET INC.CL.A DL-,001, AMAZON.COM INC.    DL-,01, APPLE INC., ARLO TECHS INC.   DL-,001, BAIDU INC. O.N., BOX INC. A       DL-,0001, CLOUDFLARE INC. A DL-,001, DIGITALOCEAN HLD.-,000025, DROPBOX INC CL. A."
+Tech,Ent Software,"Enterprise software and SaaS platforms covering ERP, HR, CRM, and workflow automation tools for business operations. Leading companies include Oracle, Microsoft, SAP, Salesforce, ServiceNow, Workday, Adobe, and Cadence Design Systems. Key holdings: ADOBE INC., PROGRESS SOFTWARE DL-,01, MICROSOFT    DL-,00000625, ORACLE CORP.       DL-,01, ASANA INC. CL.A O.N., ATOSS SOFTWARE SE INH O.N, SAP SE O.N., SERVICENOW INC. DL-,001, WORKDAY INC.CL.A DL-,001, UIPATH INC. A DL-,00001. Key holdings: ADOBE INC., APPFOLIO INC. A  DL-,0001, ASANA INC. CL.A O.N., ATLASSIAN CORP. CL.A, ATOSS SOFTWARE SE INH O.N, AUTODESK INC., FIGMA INC. A O.N., GITLAB CL.A   DL-,0000025, MONDAY.COM LTD, NEMETSCHEK SE O.N.."
+Tech,IT Services,"IT consulting, managed services, and system integration companies helping enterprises transform their technology operations. Key players include Accenture, Capgemini, Cognizant, EPAM Systems, Adesso, Bechtle, and Cancom. Key holdings: DELL TECHS INC. C DL-,01, EPAM SYSTEMS INC. DL-,001, INTL BUS. MACH. DL-,20, ACCENTURE A DL-,0000225, ADESSO SE  INH O.N., ALL FOR ONE GROUP NA O.N., BECHTLE AG O.N., CANCOM SE O.N., CAPGEMINI SE INH. EO 8, COGNIZANT TECH. SOL.A. Key holdings: ACCENTURE A   DL-,0000225, ADESSO SE  INH O.N., AECOM             DL -,01, ALL FOR ONE GROUP NA O.N., AMDOCS LTD.        LS-,01, BECHTLE AG O.N., CACI INTL INC. A    DL-,1, CANCOM SE O.N., CAPGEMINI SE INH. EO 8, COGNIZANT TECH. SOL.A."
+Tech,CRM/Mktg,"CRM software, digital marketing platforms, and advertising technology solutions for customer engagement and campaign management. Major firms include Salesforce, HubSpot, Veeva Systems, Pegasystems, Perion Network, and The Trade Desk. Key holdings: PERION NETWORK LTD., FIVE9 INC. DL-,01, SALESFORCE INC.   DL-,001, HUBSPOT INC.      DL-,001, PEGASYSTEMS        DL-,01, STAGWELL INC.  A, ZETA GLOBAL HLD.A DL-,001, LIVEPERSON INC., VEEVA SYSTEMS A DL-,00001. Key holdings: HUBSPOT INC.      DL-,001, PEGASYSTEMS        DL-,01, PERFECT CORP. CL.A, SALESFORCE INC.   DL-,001, STAGWELL INC.  A, TASKUS INC. CL.A  DL-,01, THE TRA.DESK A DL-,000001, ZETA GLOBAL HLD.A DL-,001."
+Tech,Cybersec,"Cybersecurity companies providing zero trust, endpoint protection, network security, and threat intelligence solutions. Leading firms include CrowdStrike, Palo Alto Networks, Fortinet, Okta, Check Point, Sophos, and Qualys. Key holdings: CHECK POINT SOFTW. TECHS, CROWDSTRIKE HLD. DL-,0005, CYBERARK S. 25/30 CV ZO, FORTINET INC.     DL-,001, GEN DIGITAL INC.   DL-,01, OKTA INC. CL.A O.N., PALO ALTO NETWKS DL-,0001, QUALYS INC. DL -,001, RAPID7 INC. DL -,01, SENTINELONE INC.A -,0001. Key holdings: AKAMAI TECH.       DL-,01, AXON ENTERPRISE DL-,00001, CHECK POINT SOFTW. TECHS, CISCO SYSTEMS    DL-,001, CLOUDFLARE INC. A DL-,001, COMMVAULT SYS INC  DL-,01, CROWDSTRIKE HLD. DL-,0005, CYBEATS TECHNOLOGIES CORP, CYBERARK S. 25/30 CV ZO, CYBERARK SOFTWARE  IS-,01."
+Tech,Data & AI,"Companies in this sector provide data analytics, artificial intelligence, and business intelligence solutions for enterprise insights and automation. Key players include Snowflake, Dynatrace, C3.ai, SoundHound AI, and Baidu. Key holdings: ALTAIR ENGINEERING INC., ALPHABET INC.CL.A DL-,001, BAIDU INC. O.N., DATADOG INC., META PLATF.  A DL-,000006, SNOWFLAKE INC. DL-,0001, DOMO INC. CL.B DL-,001, DYNATRACE INC.    DL-,001, BIGBEAR.AI HOLD. DL-,0001, C3 AI INC. CL.A DL -,001. Key holdings: BIGBEAR.AI HOLD. DL-,0001, C3 AI INC. CL.A  DL -,001, ELASTIC N.V., GENERATIVE AI SOL, LEMONADE INC.  DL-,00001, LIVEPERSON INC.    DL-,01, META PLATF.  A DL-,000006, MONGODB INC. CL.A, PALANTIR TECHNOLOGIES INC, PENGUIN SOLUTIONS  DL-,03."
+Tech,Quantum,"This sector focuses on quantum computing hardware and software, developing next-generation computational technologies. Notable firms include IonQ, D-Wave Quantum, Rigetti Computing, and ArQit Quantum. Key holdings: ARQIT QUANTUM INC., D-WAVE QUANTUM   DL-,0001, ETF S.SO.-DEFIANCE QUANT., QUANTUM COMPUT.INC. DL-01, IONQ INC. CL.A   DL-,0001, RIGETTI COMPUTNG. Key holdings: ARQIT QUANTUM INC., D-WAVE QUANTUM   DL-,0001, ETF S.SO.-DEFIANCE QUANT., IONQ INC. CL.A   DL-,0001, QUANTUM COMPUT.INC. DL-01, RIGETTI COMPUTNG DL-,0001."
+Tech,Fintech,"Fintech companies offer financial technology and software for digital payments, banking, and investment services. Leading firms include Visa, Intuit, and Sage. Key holdings: THE TRA.DESK A DL-,000001, LEMONADE INC., ALKAMI TECHN.     DL-,001, VISA INC. CL. A DL -,0001, SLM CORP., SS+C TECHNOL.HLDGS DL-,01. Key holdings: ALKAMI TECHN.     DL-,001, CCC INT.SOL.HLDG.DL-,0001, GFT TECHNOLOGIES SE, INTUIT INC.        DL-,01, SHOPIFY A SUB.VTG, SS+C TECHNOL.HLDGS DL-,01, VISA INC. CL. A DL -,0001."
+Tech,EdTech,"Education technology companies provide e-learning platforms, online courses, and digital learning solutions. Key players include Duolingo, Chegg, Pearson, and Stride. Key holdings: CHEGG INC. DL -,001, DUOLINGO INC. A DL-,0001, GRAND CANYON EDUCAT. INC., LAUREATE EDUCATION, NEW ORIENTAL EDU.+TECH.G., PEARSON PLC, SANOMA OYJ, SCHOLASTIC CORP., STRATEGIC EDUCAT., STRIDE INC. Key holdings: CHEGG INC.       DL -,001, COURSERA INC.  DL -,00001, COVISTA INC.       DL-,01, DUOLINGO INC. A  DL-,0001, GRAND CANYON EDUCAT. INC., LAUREATE EDUCATION, NEW ORIENTAL EDU.+TECH.G., PEARSON PLC        LS-,25, SANOMA OYJ, SCHOLASTIC CORP.   DL-,01."
+Tech,Auto Tech,"Auto tech companies specialize in electric vehicles, autonomous driving systems, and related technologies. Major firms include Tesla, Rivian, BYD, and Pony AI. Key holdings: PONY AI INC. SP.ADR/1, CCC INT.SOL.HLDG.DL-,0001, BYD CO. LTD H YC 1, MOBILEYE GLO.INC. DL-,01, NIO INC. CL. A DL -,00025, RIVIAN AUTOMOT.A DL-,0001, TESLA INC. DL -,001, CERENCE INC. DL-,001, CONTINENTAL AG O.N., ENERGIZER HLDG.NEW DL-,01. Key holdings: ALLEGRO.EU  ZY -,01, BYD CO. LTD H        YC 1, CERENCE INC.      DL-,001, CLARA TECH. CORP. O.N., CONTINENTAL AG O.N., ENERGIZER HLDG.NEW DL-,01, MOBILEYE GLO.INC. DL-,01, NIO INC. CL. A DL -,00025, RIVIAN AUTOMOT.A DL-,0001, SPOTIFY TECH. S.A.  EUR 1."
+Tech,Media/Games,"This sector covers gaming, streaming, and digital media companies creating interactive entertainment and content platforms. Key players include Meta, Unity Software, Spotify, Roblox, and Take-Two Interactive. Key holdings: MIMEDIA HLDGS INC., UNITY SOFTWARE DL-,000005, SPOTIFY TECH. S.A. EUR 1, ROBLOX CORP.CL.A DL-,0001, TAKE-TWO INTERACT. SOFTW., DRAFTKINGS INC. A -,0001, EL. ARTS INC. DL-,01, FLUTTER ENTMT PLC EO-,09, LG ELECT.(NEW)GDR144A 1/2, NETEASE INC. ADR/5. Key holdings: ADVANCED MIC.DEV.  DL-,01, DRAFTKINGS INC. A  -,0001, EL. ARTS INC.      DL-,01, FLUTTER ENTMT PLC  EO-,09, MATCH GR.INC. NEW DL-,001, MATTERPORT INC A DL-,0001, META PLATF.  A DL-,000006, NETEASE INC. ADR/5, NETFLIX INC.      DL-,001, NINTENDO CO. LTD."
+Tech,NaT,Key holdings: NaT.
+Tech,HVAC Controls,Key holdings: CAREL INDUSTRIES.
+Tech,Enterprise Software,Key holdings: CONSTELLATION SOFTWARE.
+Tech,Consumer Electronics / Semiconductors,"Key holdings: SAMS.EL.0,5SP.GDRS144A/95."
+Tech,HVAC / Climate Control,Key holdings: TRANE TECHNOLOG. PLC DL 1.
+Tech,Data Center Infrastructure,"Key holdings: VERTIV HOL.CL A DL-,0001."
+Tech,Data Storage,"Key holdings: WESTN DIGITAL      DL-,01."
+AIR & SPACE,Satellite Comm,"Satellite operators providing communications services: Iridium, Sky Perfect JSAT, Telesat, EchoStar, Globalstar"
+AIR & SPACE,Satellite Imagery,"Earth observation and imaging companies: BlackSky, Planet Labs, Satellogic, Intuitive Machines (lunar exploration)"
+AIR & SPACE,Launch Vehicles,"Rocket and launcher manufacturers: Virgin Galactic, Firefly, RTX (propulsion/engines)"
+AIR & SPACE,Space Infrastructure,"Space manufacturing and infrastructure: Redwire, Albany Intl (composites)"
+AIR & SPACE,Space Broadband,Space-based broadband and cellular backhaul: AST Spacemobile (Amazon-backed)
+AIR & SPACE,Small Satellites,"Nanosatellite and small satellite manufacturers: SPI, Satellogic"
+AIR & SPACE,Space IoT,"Satellite-enabled IoT connectivity: Globalstar, Iridium"
+AIR & SPACE,Space Tourism,Key holdings: VIRGIN GAL.HLDGS NEW O.N..
+AIR & SPACE,Space Technology,Key holdings: VOYAGER TECH.INC. A O.N..
+AIR & SPACE,Space Exploration,Key holdings: INTUITIVE MACH.INC.CL.A.
+AIR & SPACE,Aerospace Electronics,Key holdings: FREQUENCY EL. INC.   DL 1.
+AIR & SPACE,Satellite Data Services,"Key holdings: SPI.GL.INC. CL.A DL-,0001."
+AIR & SPACE,Satellite Communications,"Key holdings: ECHOSTAR CORP. A DL -,001, TELESAT CORP. A + B, IRIDIUM COMCTNS DL-,001, EUTELSAT COMMS       EO 1, GLOBALSTAR INC. O.N., SES S.A. FDR A."
+AIR & SPACE,Space-based Mobile Network,"Key holdings: AST SPACEMOBIL.A DL-,0001."
+AIR & SPACE,Satellite Broadcasting,Key holdings: SKY PERFECT JSAT CORP..
+AIR & SPACE,Space Launch Services,"Key holdings: ROCKET LAB CORP. DL-,0001, FIREFLY AB         SK-,50."
+AIR & SPACE,Defense & Aerospace,"Key holdings: RTX CORP.            -,01."
+AIR & SPACE,Aerospace Components,"Key holdings: ALBANY INTL A     DL-,001."
+AIR & SPACE,Aerospace Engines,"Key holdings: GE AEROSPACE      DL -,06."
+AIR & SPACE,Lunar Exploration,Key holdings: INTUITIVE MACH.INC.CL.A.
+AIR & SPACE,Satellite Imaging,"Key holdings: SATELLOGIC    O.N., BLACKSKY TECHN.CL.A NEW, PLANET LABS PBC A  -,0001."
+AIR & SPACE,Satellite Services,"Key holdings: SPI.GL.INC. CL.A DL-,0001."
+AIR & SPACE,Space Mobile Network,"Key holdings: AST SPACEMOBIL.A DL-,0001."
+AIR & SPACE,Launch Services,"Key holdings: ROCKET LAB CORP. DL-,0001, FIREFLY AB         SK-,50."
+AIR & SPACE,Aerospace & Defense,"Key holdings: RTX CORP.            -,01."
+AIR & SPACE,Aircraft Engines,"Key holdings: GE AEROSPACE      DL -,06."
+AIR & SPACE,Lunar Services,Key holdings: INTUITIVE MACH.INC.CL.A.
+AIR & SPACE,Space Electronics,Key holdings: FREQUENCY EL. INC.   DL 1.
+AIR & SPACE,Satellite Operator,"Key holdings: TELESAT CORP. A + B, EUTELSAT COMMS       EO 1, SES S.A. FDR A."
+AIR & SPACE,Earth Observation,"Key holdings: PLANET LABS PBC A  -,0001."
+AIR & SPACE,Satellite Electronics,Key holdings: FREQUENCY EL. INC.   DL 1.
+Data Center,US Data Center,"US data center REITs and operators including Equinix, Digital Realty focusing on connectivity and services"
+Data Center,AU Data Center,Australian data center infrastructure REITs with technology focus
+Data Center,EU Data Center,European data center infrastructure including NTT DC REIT
+Data Center,Mobile Infra US,"US mobile tower and broadcast infrastructure companies including American Tower, SBA Communications"
+Data Center,Mobile Infra EU,European mobile telecom and broadcast infrastructure including Cellnex
+Data Center,Asia Logistics REIT,"Asian logistics and industrial REITs including GLP J-REIT (Japan), Ascendas REIT (Singapore), Keppel DC REIT"
+Data Center,AU Logistics REIT,"Australian industrial and logistics REITs including Centuria Industrial REIT, Goodman Group"
+Data Center,EU Logistics REIT,"European logistics and industrial REITs including CTP (Czech/Netherlands), WDP (Belgium), Merlin Properties (mixed)"
+Data Center,UK Logistics REIT,UK logistics and commercial real estate including SEGRO PLC
+Data Center,LatAm Indus Realty,Latin American industrial and logistics real estate including Corp Inmobiliaria Vesta (Mexico)
+Data Center,ME Commercial,Middle East commercial and business district properties including Tecom Group (UAE)
+Data Center,DC Infrastructure,Data center infrastructure and power solutions including Generac Holdings generators
+Data Center,Global Indus Logist,Global industrial logistics platforms including Prologis with multi-currency listings
+Data Center,Data Center REIT,"Key holdings: DIGICO INFRASTRUCT. REIT, DIGITAL REALTY TR. DL-,01, EQUINIX INC.      DL-,001, KEPPEL DC REIT UTS, NTT DC REIT, IRON MOUNTAIN (NEW)DL-,01."
+Data Center,Wireless Tower REIT,"Key holdings: AMERICAN TOWER DL -,01, CELLNEX TELECOM SA EO-,25, SBA COMMUNICAT. A  DL-,01."
+Data Center,Logistics REIT,"Key holdings: CTP N.V.             EO 1, PROLOGIS INC.      DL-,01, GLP J-REIT, SEGRO PLC          LS-,10, WAREHOUSES DE PAUW N.V., JAPAN LOGISTICS FUND INC., MAPLETREE LOGS (REIT) UTS, NIPPON PROLOGIS REIT INC.."
+Data Center,Diversified REIT,"Key holdings: CAP.L.ASCEND UTS, MERLIN PPTYS SOCIMI  EO 1, STONEWEG EUROPE STAP.TR.."
+Data Center,Industrial REIT,"Key holdings: CENTURIA INDUSTR. REIT, GOODMAN GROUP UNITS, CORP.INMOBILIARIA VESTA."
+Data Center,Data Center Operator,"Key holdings: TECOM GROUP PJSC  VE -,10, NEBIUS GROUP CL.A  DL-,01."
+Data Center,Office REIT,Key holdings: CENTURIA OFFICE REIT STA..
+Data Center,Infrastructure Holding,Key holdings: CK INFRASTRUCTUR.HLD.HD 1.
+Data Center,Power Equipment Manufacturer,Key holdings: GENERAC HOLDINGS INC..
+Data Center,Construction Services,Key holdings: HOCHTIEF AG.
+Data Center,IT Infrastructure Provider,Key holdings: HEWLETT PACKARD ENT..
+Data Center,Telecom Tower REIT,"Key holdings: AMERICAN TOWER DL -,01, CELLNEX TELECOM SA EO-,25, SBA COMMUNICAT. A  DL-,01."
+Data Center,Industrial Logistics REIT,"Key holdings: CTP N.V.             EO 1, CAP.L.ASCEND UTS, PROLOGIS INC.      DL-,01, GOODMAN GROUP UNITS, SEGRO PLC          LS-,10."
+Data Center,Technology Park REIT,"Key holdings: TECOM GROUP PJSC  VE -,10."
+Data Center,Infrastructure Company,Key holdings: CK INFRASTRUCTUR.HLD.HD 1.
+Data Center,Data Center Equipment,Key holdings: GENERAC HOLDINGS INC..
+Data Center,Data Center Construction,Key holdings: HOCHTIEF AG.
+Data Center,Data Center Technology,Key holdings: HEWLETT PACKARD ENT..
+Data Center,Data Center Services,"Key holdings: NEBIUS GROUP CL.A  DL-,01."
+Data Center,Business Park REIT,"Key holdings: TECOM GROUP PJSC  VE -,10."
+Data Center,Critical Power Solutions,Key holdings: GENERAC HOLDINGS INC..
+Data Center,Data Center Hardware,Key holdings: HEWLETT PACKARD ENT..
+Data Center,Global Infrastructure,Key holdings: CK INFRASTRUCTUR.HLD.HD 1.
+Data Center,DC Construction,Key holdings: HOCHTIEF AG.
+Defense,ISR Solutions,"Intelligence, surveillance and reconnaissance solutions for defense and intelligence agencies including information analysis and reconnaissance systems"
+Defense,Intel Surveillance,"Companies providing intelligence, surveillance and reconnaissance (ISR) solutions for defense and intelligence agencies, including information analysis and reconnaissance technologies."
+Defense,Gov Intel,"Companies providing intelligence solutions including information analysis, surveillance, and reconnaissance for government intelligence agencies (e.g., Parsons Corp)."
+Defense,Aerospace & Defense,"Key holdings: AIRBUS SE, DASSAULT AVIAT.INH.EO-,80, LEONARDO S.P.A.   EO 4,40, BAE SYSTEMS PLC   LS-,025, LOCKHEED MARTIN    DL 1, TEXTRON INC.      DL-,125, NORTHROP GRUMMAN DL 1, RTX CORP.            -,01, SAAB AB B  O.N., BOEING CO.           DL 5, GENL DYNAMICS CORP.  DL 1."
+Defense,Unmanned Systems,"Key holdings: PARROT S.A. INH. EO-,1524, RED CAT HDGS INC.DL -,001, AEROVIRONMENT   DL -,0001, ONDAS INC.       DL-,0001."
+Defense,Land Defense Systems,Key holdings: RHEINMETALL AG.
+Defense,Defense Electronics,"Key holdings: HENSOLDT AG INH O.N., ELBIT SYS LTD, THALES S.A.          EO 3, KRATOS DEF.+SEC.NEW DL001, CURTISS-WRIGHT       DL 1, MERCURY SYSTEMS DL -,01, L3HARRIS TECHS INC.DL-,01, HONEYWELL INTL        DL1."
+Defense,Land Systems Components,Key holdings: RENK GROUP AG INH O.N..
+Defense,Aerospace Engines,"Key holdings: SAFRAN INH.       EO -,20, GE AEROSPACE      DL -,06, MTU AERO ENGINES NA O.N., ROLLS ROYCE H.ADR/ LS-20."
+Defense,Autonomous Systems,Key holdings: EXAIL TECHNOLOGIES   EO 1.
+Defense,Defense Support Services,"Key holdings: BABCOCK INTL GRP   LS-,60."
+Defense,Defense Technology,"Key holdings: QINETIQ GROUP PLC LS -,01."
+Defense,Defense IT & Electronics,"Key holdings: INDRA SISTEMAS INH.EO 0,2."
+Defense,Naval Shipbuilding,Key holdings: FINCANTIERI SPA   O.N..
+Defense,Aerospace Components,"Key holdings: HOWMET AEROSPACE   DL-,01, HEICO CORP.        DL-,01."
+Defense,Defense Services,"Key holdings: V2X INC.           DL-,01, KBR INC.         DL -,001."
+Defense,Defense Engineering,Key holdings: PARSONS CORP.         DL1.
+Defense,Defense Components,"Key holdings: LOAR HOLDINGS INC.DL-,01, EMCORE CORP. NEW O.N.."
+Defense,Software & Engineering,"Key holdings: DASSAULT SYS SE INH.EO0,1."
+Defense,Aerospace Services,Key holdings: AAR CORP.            DL 1.
+Defense,Defense Materials,"Key holdings: CARPENTER TECHNOLOGY DL 5, ALBANY INTL A     DL-,001."
+Defense,Drone Systems,"Key holdings: PARROT S.A. INH. EO-,1524, RED CAT HDGS INC.DL -,001."
+Defense,Land Defense,"Key holdings: RHEINMETALL AG, RENK GROUP AG INH O.N.."
+Defense,Military Aircraft,"Key holdings: DASSAULT AVIAT.INH.EO-,80."
+Defense,Aerospace Propulsion,"Key holdings: SAFRAN INH.       EO -,20, GE AEROSPACE      DL -,06, MTU AERO ENGINES NA O.N., ROLLS ROYCE H.ADR/ LS-20."
+Defense,Defense IT,"Key holdings: INDRA SISTEMAS INH.EO 0,2, V2X INC.           DL-,01."
+Defense,Defense Avionics,Key holdings: CURTISS-WRIGHT       DL 1.
+Defense,Defense Computing,"Key holdings: MERCURY SYSTEMS DL -,01."
+Defense,Defense Software,"Key holdings: DASSAULT SYS SE INH.EO0,1."
+Defense,Aerospace Support,Key holdings: AAR CORP.            DL 1.
+Photonic,Optical Transport,"Optical networking and transport systems including ADVA/ADTRAN, Ciena, and Nokia/Infinera for telecom infrastructure"
+Photonic,Data Center Networking,Data center switching solutions from Arista Networks
+Photonic,Co-packaged Optics,Co-packaged optics and advanced photonic components from Coherent and Lumentum for AI/data center interconnects
+Photonic,High-Speed Connectivity,High-speed SerDes and connectivity chips from Credo and Marvell for data center and AI applications
+Photonic,Fiber Infrastructure,"Fiber optic cables, management systems, and connectivity from Corning, Prysmian, Clearfield, and Hexatronic"
+Photonic,Energy Storage,Battery energy storage systems and UPS solutions from Fluence Energy
+Photonic,Optical Networking Equipment,Key holdings: ADTRAN NETW.SE INH O.N..
+Photonic,Optical Switching Solutions,Key holdings: ARISTA NETWORKS INC..
+Photonic,Optoelectronic Materials,Key holdings: ASAHI KASEI.
+Photonic,Optical Transport Systems,"Key holdings: CIENA CORP. NEW    DL-,01."
+Photonic,Fiber Optic Connectivity,Key holdings: CLEARFIELD INC.     DL-01.
+Photonic,Photonic Integrated Circuits,Key holdings: SIVERS SEMICONDUCTORS AB.
+Photonic,Laser & Photonic Systems,Key holdings: COHERENT CORP..
+Photonic,Optical Fiber & Components,"Key holdings: CORNING INC.      DL -,50."
+Photonic,High-Speed Optical Connectivity,"Key holdings: CREDO TEC.GRP.HLD.-,00005."
+Photonic,Industrial Photonic Systems,"Key holdings: EATON CORP.PLC    DL -,01."
+Photonic,Photonic Energy Applications,"Key holdings: FLUENCE ENER. CL.A-,00001."
+Photonic,Optical Sensor Integration,Key holdings: GENERAC HOLDINGS INC..
+Photonic,Fiber Optic Cables & Connectivity,Key holdings: HEXATRONIC GROUP AB AK.
+Photonic,Fiber Optic & RF Connectivity,"Key holdings: HUBER+SUHNER NA    SF-,25."
+Photonic,Photonic Components & Lasers,"Key holdings: LUMENTUM HLDGS IN.DL-,001."
+Photonic,Optical Networking Semiconductors,"Key holdings: MARVELL TECH. GRP DL-,002."
+Photonic,Telecom Optical Systems,"Key holdings: NOKIA OYJ EO-,06."
+Photonic,Optical Cable Management,"Key holdings: NVENT ELECTRIC PLC DL-,01."
+Photonic,Fiber Optic Cable Manufacturing,Key holdings: OPTICAL CABLE NEW.
+Photonic,Photonic IC Design,Key holdings: POET TECHS INC..
+Photonic,Fiber Optic Cable Producer,"Key holdings: PRYSMIAN S.P.A.   EO 0,10."
+Photonic,Electrical & Photonic Infrastructure,Key holdings: SCHNEIDER ELEC. INH. EO 4.
+Photonic,Industrial Photonic Solutions,Key holdings: TRANE TECHNOLOG. PLC DL 1.
+Photonic,Data Center Photonic Systems,"Key holdings: VERTIV HOL.CL A DL-,0001."
+Photonic,Infrared Optics & Photonics,"Key holdings: LIGHTPATH TECHS A  DL-,01."
+Photonic,Optical Manufacturing Services,Key holdings: CELESTICA INC. O.N..
+Photonic,Optical Storage Networking,Key holdings: NETAPP INC..
+Europa Branchen,Reinsurance,"Property and casualty reinsurance providers including Hannover Rueck and primary insurers like Allianz, NN Group, Aviva."
+Europa Branchen,Banking DACH,"German and Austrian banks including Deutsche Bank, Commerzbank, Erste Group Bank."
+Europa Branchen,Banking UK,"UK-domiciled banks including Lloyds, HSBC with 5.3% dividend yield."
+Europa Branchen,Banking France,"French banking groups BNP Paribas, Credit Agricole, Societe Generale with high dividend yields 6.8-7%."
+Europa Branchen,Banking Spain,Spanish banks Banco Santander and Banco Sabadell.
+Europa Branchen,Banking Netherlands,Dutch banks ING Groep and ABN AMRO.
+Europa Branchen,Banking Italy,Italian banks UniCredit and Mediobanca.
+Europa Branchen,Banking Belgium,Belgian bank KBC Groep.
+Europa Branchen,Banking Greece,"Greek banks Alpha Bank, Eurobank Ergasias, National Bank of Greece."
+Europa Branchen,Banking Switzerland,Swiss private bank Julius Baer Group.
+Europa Branchen,Banking Scandinavia,Scandinavian banks Skandinaviska Enskilda Banken.
+Europa Branchen,Stock Exchange,London Stock Exchange operator.
+Europa Branchen,Private Equity,"Private equity and investment holding companies including Partners Group, 3i Group."
+Europa Branchen,Truck OEM,Truck manufacturers Scania and Volvo.
+Europa Branchen,Commercial Vehicles,Specialty commercial vehicle makers including Shyft Group.
+Europa Branchen,Industrial Components,"Industrial component suppliers Assa-Abloy (locks), Atlas Copco (compressors)."
+Europa Branchen,Defense EU,"European defense contractors BAE Systems, Rheinmetall, Rolls-Royce, Safran."
+Europa Branchen,Auto Suppliers,Automotive component suppliers Knorr-Bremse.
+Europa Branchen,Airlines EU,European airline operators Ryanair.
+Europa Branchen,Elec Equipment,"Electrical equipment manufacturers Schneider Electric, Siemens Energy."
+Europa Branchen,Construction,"Construction and infrastructure companies Vinci, Hochtief."
+Europa Branchen,Constr Software,Construction software provider Nemetschek.
+Europa Branchen,Mining Equip,Mining equipment maker Weir Group.
+Europa Branchen,Semicap EU,Semiconductor equipment makers ASML and ASM International based in Netherlands.
+Europa Branchen,Telecom EU,"European telecom operators Deutsche Telekom, Vodafone, Elisa."
+Europa Branchen,Luxury Goods,Luxury goods companies LVMH and Richemont.
+Europa Branchen,Cosmetics EU,European cosmetics companies L'Oreal and Beiersdorf.
+Europa Branchen,Fish Farming,Salmon fish farming company Salmar.
+Europa Branchen,Container Shipping,Container shipping lines Hapag-Lloyd and Maersk.
+Europa Branchen,Real Estate EU,European real estate company Aroundtown.
+Europa Branchen,Utilities EU,European utilities E.ON and National Grid.
+Europa Branchen,Oil Gas EU,"European oil and gas producers BP, Shell, Repsol, TotalEnergies."
+Europa Branchen,Insurance,"Key holdings: HANNOVER RUECK SE NA O.N., MUENCH.RUECKVERS. NA O.N., SWISS RE AG NAM. DL -,12, ALLIANZ SE NA O.N., HELVETIA BA.HL.NA SF 0,02, TALANX AG NA O.N., NN GROUP NV EO -,12, GENERALI S.P.A., ZURICH INSUR.GR.NA.SF0,10, ADMIRAL GROUP PLC LS-,001."
+Europa Branchen,Financial Infrastructure,"Key holdings: LONDON STOCK EXCHANGE, DEUTSCHE BOERSE NA O.N., EURONEXT N.V. WI EO 1,60."
+Europa Branchen,Automobiles,"Key holdings: RENAULT INH.      EO 3,81, BAY.MOTOREN WERKE AG ST, MERCEDES-BENZ GRP NA O.N., VOLKSWAGEN AG VZO O.N., PORSCHE AUTOM.HLDG VZO, DR.ING.H.C.F.PORSCHE VZO, STELLANTIS NV     EO -,01, SCANIA CV 20/25 MTN, VOLVO B (FRIA), TRATON SE   INH O.N.."
+Europa Branchen,Logistics,"Key holdings: DSV AKTIER           DK 1, KUEHNE + NAGEL INTL  SF 1, DEUTSCHE POST AG NA O.N.."
+Europa Branchen,Banks,"Key holdings: COMMERZBANK AG, DEUTSCHE BANK AG NA O.N., LLOYDS BKG GRP     LS-,10, BCO SANTANDER N.EO0,5, BCO DE SABADELL A EO-,125, ERSTE GROUP BNK INH. O.N., BNP PARIBAS INH.     EO 2, SKAND.ENSK. BKN A FR.SK10, JUL. BAER GRP. NAM.SF-,02, CREDIT AGRICOLE INH. EO 3."
+Europa Branchen,Financial Services,Key holdings: BNPPE-M.W.SRI PAB UECEO.
+Europa Branchen,Industrial,"Key holdings: SHYFT GROUP INC.   DL-,01, ASSA-ABLOY AB B    SK-,33, ATLAS COPCO A, KNORR-BREMSE AG  INH O.N., SCHNEIDER ELEC. INH. EO 4, SIEMENS ENERGY AG NA O.N., WEIR GRP PLC      LS-,125."
+Europa Branchen,Aerospace & Defense,"Key holdings: BAE SYSTEMS PLC   LS-,025, RHEINMETALL AG, ROLLS ROYCE HLDGS LS 0.20, SAFRAN INH.       EO -,20."
+Europa Branchen,Airlines,"Key holdings: RYANAIR HLDGS PLC EO-,006."
+Europa Branchen,Technology,"Key holdings: ASML HOLDING    EO -,09, ASM INTL N.V.      EO-,04, AMADEUS IT GRP SA EO 0,01, CAPGEMINI SE INH. EO 8, COMPUTACENTER  LS-,075555, INFINEON TECHNOLOGIES AG, STMICROELECTRONICS, NEMETSCHEK SE O.N.."
+Europa Branchen,Telecommunications,"Key holdings: DT.TELEKOM AG NA, ORANGE INH.          EO 4, VODAFONE GROUP PLC, SWISSCOM AG NAM.    SF 1, TELEFONICA INH.      EO 1, ELISA OYJ A O.N., ERICSSON B (FRIA), NOKIA OYJ EO-,06."
+Europa Branchen,Consumer Goods,"Key holdings: L OREAL    INH.    EO 0,2, BEIERSDORF AG O.N., ESTEE LAUDER COS A DL-,01."
+Europa Branchen,Seafood,"Key holdings: MOWI ASA           NK 7,5, AKER ASA A          NK 28, BAKKAFROST P/F NAM.  DK 1, SALMAR ASA        NK -,25, CLEAN SEAS SEAFOOD LTD.."
+Europa Branchen,Shipping,"Key holdings: A.P.MOELL.-M.NAM A DK1000, HAPAG-LLOYD AG NA O.N., A.P.MOELL.-M.NAM B DK1000."
+Europa Branchen,Real Estate,"Key holdings: AROUNDTOWN EO-,01, VONOVIA SE NA O.N., TLG IMMOBILIEN AG, ALSTRIA OFFICE INH O.N., DEUTSCHE WOHNEN SE INH, TAG IMMOBILIEN AG."
+Europa Branchen,Utilities,"Key holdings: E.ON SE NA O.N., RWE AG   INH O.N., ENEL S.P.A.          EO 1, ENGIE S.A. INH.      EO 1, IBERDROLA INH.    EO -,75, NATIONAL GRID PLC, SSE PLC    LS-,50, REDEIA CORPO       EO-,50."
+Europa Branchen,Oil & Gas,"Key holdings: BP PLC             DL-,25, REPSOL S.A. INH.     EO 1, SHELL PLC           EO-07, TECHNIP ENERGIES  EO -,01, TENARIS S.A. ADR/2DL 1, TOTALEN. EP GABON   DL 17."
+US Branchen,US Banks,"Major US banking institutions including Goldman Sachs, JPMorgan Chase, PNC Financial, and Truist Financial."
+US Branchen,Canadian Banks,"Canadian financial institutions including National Bank of Canada, Royal Bank of Canada, and Bank of Nova Scotia."
+US Branchen,Insurance,Health and life insurance including Centene and Cigna.
+US Branchen,Brokerage & Asset Mgmt,"Brokerage firms and asset management companies including Charles Schwab, BlackRock, and investment holding companies."
+US Branchen,FinTech Payments,"Financial technology and payment processing companies including Visa, ACI Worldwide, Global Payments, and buy-now-pay-later providers."
+US Branchen,Crypto Digital Assets,"Cryptocurrency and digital asset companies including Bitcoin holdings, stablecoin operators, and crypto-native firms."
+US Branchen,Homebuilders US,"US residential homebuilders including Lennar, D.R. Horton, Pulte Group, KB Home, M/I Homes, and Toll Brothers. Key holdings: PULTE GROUP INC.  DL -,01."
+US Branchen,Homebuilders Energy-Efficient,Energy-efficient homebuilders and green home construction companies including Meritage Homes and Landsea Homes.
+US Branchen,Building Materials,"Cement, aggregates, wood products, hardware, and flooring including Cemex, CRH, Simpson, American Woodmark, Weyerhaeuser, Floor & Decor, Mohawk, Fastenal, TopBuild, Masco. Key holdings: LOUIS. PAC. CORP.    DL 1, CRH PLC            EO-,32."
+US Branchen,Home Building Supplies,"Home improvement and building supply companies including insulation, plumbing, decor, and general building materials."
+US Branchen,Flooring,Flooring manufacturers and retailers including Mohawk Industries and Floor + Decor.
+US Branchen,Wood Products,"Wood product manufacturers and timber companies including Weyerhaeuser, Holmen AB, and American Woodmark."
+US Branchen,Construction Services,"Construction service providers including home development, community development, and land development companies."
+US Branchen,Shipping Maritime,"Shipping and maritime transportation companies including tankers, container ships, and maritime logistics providers."
+US Branchen,Logistics Freight,"Logistics and freight companies including shipping carriers, trucking (LTL), and supply chain solutions."
+US Branchen,Infrastructure Software,Infrastructure software and digital fleet management companies serving transportation and logistics sectors.
+US Branchen,Infrastructure Consulting,Infrastructure engineering and consulting firms including power infrastructure and general infrastructure advisors.
+US Branchen,Airlines,Passenger airlines including Ryanair and American Airlines.
+US Branchen,Canadian Resources,"Canadian resource and industrial companies including nickel mining, carbon products, and specialty manufacturing."
+US Branchen,Canadian Consumer,Canadian consumer brands and holdings including premium apparel and lifestyle companies.
+US Branchen,Investment Banking,Key holdings: GOLDMAN SACHS GRP INC..
+US Branchen,Diversified Banking,"Key holdings: CITIGROUP INC. DL -,01, BANK AMERICA      DL 0,01, JPMORGAN CHASE       DL 1, WELLS FARGO + CO.DL 1,666."
+US Branchen,Regional Banking,"Key holdings: U.S. BANCORP       DL-,01, TRUIST FINL CORP.    DL 5, PNC FINL SERVICES GRP DL5."
+US Branchen,Brokerage Services,Key holdings: CHARLES SCHWAB CORP.DL-01.
+US Branchen,Consumer Lending,"Key holdings: LENDINGCLUB CORP.  DL-,01, UPSTART HOLDINGS DL-,0001."
+US Branchen,Managed Healthcare,"Key holdings: CENTENE CORP.     DL-,001."
+US Branchen,Payment Processing,"Key holdings: BLOCK INC. A, PAYPAL HDGS INC.DL-,0001, GLOBAL PAYMENTS INC.."
+US Branchen,Exchange Operator,"Key holdings: CBOE GLOB.MKTS INC.DL-,01."
+US Branchen,Credit Card Services,"Key holdings: AMER. EXPRESS     DL -,20."
+US Branchen,Payment Network,"Key holdings: VISA INC. CL. A DL -,0001, MASTERCARD INC.A DL-,0001."
+US Branchen,Payment Software,"Key holdings: ACI WORLDWIDE INC.DL-,005."
+US Branchen,Buy Now Pay Later,Key holdings: SEZZLE INC.       O.N..
+US Branchen,Cryptocurrency Exchange,"Key holdings: COINBASE GLB.CL.A -,00001."
+US Branchen,Cryptocurrency Mining,Key holdings: BITMINE IMMERSION TEC.NEW.
+US Branchen,Cryptocurrency Investment,Key holdings: STRATEGY     A NEW DL-001.
+US Branchen,Low-Cost Airline,"Key holdings: RYANAIR HLDGS PLC EO-,006."
+US Branchen,Full-Service Airline,"Key holdings: DELTA AIR LINES INC., AMERICAN AIRLINES GRP."
+US Branchen,Aerospace Manufacturing,Key holdings: BOEING CO.           DL 5.
+US Branchen,Engineering Services,Key holdings: JACOBS SOLUTIONS INC. DL1.
+US Branchen,Natural Gas Midstream,"Key holdings: ONEOK INC. (NEW)   DL-,01."
+US Branchen,Electrical Equipment,"Key holdings: NVENT ELECTRIC PLC DL-,01."
+US Branchen,Power Management,"Key holdings: EATON CORP.PLC    DL -,01."
+US Branchen,Infrastructure Construction,"Key holdings: STERLING INFRASTRU.DL-,01."
+US Branchen,Building Controls,"Key holdings: JOHNSON CONTR.INTL.DL-,01."
+US Branchen,Homebuilding,"Homebuilders including luxury (Toll Brothers), energy-efficient (Meritage), green (Landsea), manufactured housing (Sun Communities), land development (Forestar), and builders like M/I Homes, Lennar, D.R. Horton, KB Home, Pulte, NVR. Key holdings: NVR INC.           DL-,01."
+US Branchen,Building Products Distribution,"Key holdings: TOPBUILD CORP.    DL -,01."
+US Branchen,Cement and Aggregates,Key holdings: CEMEX SAB.CPO SP.ADR/10.
+US Branchen,Building Products,Key holdings: SIMPSON MANUFACT.CO.DL-01.
+US Branchen,Home Improvement Products,Key holdings: MASCO CORP.          DL 1.
+US Branchen,Building Materials Distribution,"Key holdings: BUILDERS FIRSTSOUR.DL-,01."
+US Branchen,Flooring Manufacturer,"Key holdings: MOHAWK INDS INC.   DL-,01."
+US Branchen,Timber and Forestry,Key holdings: WEST FRASER TIMBER CO.LTD.
+US Branchen,Cabinetry Manufacturer,Key holdings: AMER. WOODMARK CORP..
+US Branchen,Flooring Retail,"Key holdings: FLOOR + DECOR CL.A -,001."
+US Branchen,Timber REIT,"Key holdings: WEYERHAEUSER CO. DL 1,25, POTLATCHDELTIC CORP. DL 1."
+US Branchen,Manufactured Home Communities,"Key holdings: SUN COMM. INC.     DL-,01."
+US Branchen,Industrial Supplies Distribution,"Key holdings: FASTENAL CO.       DL-,01."
+US Branchen,Forestry and Paper,Key holdings: HOLMEN AB B         SK 25.
+US Branchen,Real Estate Development,Key holdings: FORESTAR GROUP INC. DL 1.
+US Branchen,Aggregates and Construction Materials,Key holdings: VULCAN MATERIALS CO  DL 1.
+US Branchen,Ocean Shipping,"Key holdings: INTERNATIONAL SEAWAYS INC, SAFE BULKERS INC. DL-,001, MATSON INC.."
+US Branchen,Container Shipping,"Key holdings: DANAOS CORP.     DL -,01, ZIM INTEGRATED SHIPP.SRV.."
+US Branchen,Container Leasing,"Key holdings: GLOBAL SHIP LEA. A DL-,01."
+US Branchen,Private Equity,"Key holdings: 3I GROUP PLC   LS-,738636."
+US Branchen,Health Insurance,"Key holdings: CIGNA GROUP, THE     DL 1."
+US Branchen,Asset Management,Key holdings: BLACKROCK INC.       O.N..
+US Branchen,Digital Banking,"Key holdings: NU HLDGS  CL.A DL-,000066."
+US Branchen,Consumer Finance App,"Key holdings: MONEYLION INC.A DL-,0001."
+US Branchen,Online Brokerage,"Key holdings: ROBINH.MKTS CL.A DL-,0001."
+US Branchen,Crypto Financial Services,"Key holdings: CIRCLE INT.GRP A DL-,0001."
+US Branchen,Specialty Metals,Specialty metals and materials including Carpenter Technology.
+US Branchen,Railcar Manufacturing,"Key holdings: GREENBRIER COS    DL-,001."
+US Branchen,Engineering and Construction,"Key holdings: AECOM             DL -,01."
+US Branchen,Oil Tanker Shipping,"Key holdings: NORDIC AMER.TANKER.DL-,01, TEEKAY TANKERS P.R.S.-,01."
+US Branchen,Marine Transportation,"Key holdings: KIRBY CORP.       DL 0,10."
+US Branchen,Dry Bulk Shipping,"Key holdings: NAVIOS MARITIME PARTNERS, STAR BULK CARR.NEW DL-,01, SAFE BULKERS INC. DL-,001."
+US Branchen,Clean Energy,"Key holdings: CAPITAL CLEAN EN.  DL-,01."
+US Branchen,Package Delivery,"Key holdings: UNITED PARCEL SE.B DL-01, FEDEX CORP.        DL-,10."
+US Branchen,Logistics Services,"Key holdings: RADIANT LOGISTICS DL-,001."
+US Branchen,IoT Fleet Management,"Key holdings: SAMSARA INC. A   DL-,0001."
+US Branchen,Trucking Logistics,"Key holdings: HUNT (J.B.) TRANS. DL-,01."
+US Branchen,Warehouse Automation,Key holdings: SYMBOTIC INC. CL.A   O.N..
+US Branchen,Fleet Management and Leasing,"Key holdings: RYDER SYST.        DL-,50."
+US Branchen,Logistics and Transportation,"Key holdings: XPO INC.         DL -,001."
+US Branchen,Canadian Banking,"Key holdings: NATL BK OF CDA, ROYAL BK CDA, BK NOVA SCOTIA."
+US Branchen,Apparel and Luxury,Key holdings: CANADA GOOSE HLDGS INC..
+US Branchen,Nickel Mining,Key holdings: CANADA NICKEL CO. INC..
+US Branchen,Carbon Mineral Exploration,Key holdings: CANADA CARBON INC..
+US Branchen,Financial Holding Company,Key holdings: POWER CORPORATION OF CDA.
+US Branchen,Banks,"US and Canadian banks including Goldman Sachs, JPMorgan Chase, Truist, PNC, Royal Bank of Canada, Bank of Nova Scotia, National Bank of Canada."
+US Branchen,Financial Services,"Asset management, brokerage, exchanges, consumer finance, buy now pay later, and digital banking including BlackRock, Charles Schwab, CBOE, Upstart, Sezzle, Nu Holdings, and 3i Group."
+US Branchen,Fintech,"Payment technology, digital payments, and fintech platforms including Visa, ACI Worldwide, Global Payments, MoneyLion, Robinhood."
+US Branchen,Cryptocurrency,"Stablecoins and Bitcoin investments including Circle, Bitmine, and Strategy."
+US Branchen,Aerospace & Defense,Aircraft manufacturing and space including Boeing.
+US Branchen,Infrastructure,"Power, electrical infrastructure, infrastructure software, and consulting including Jacobs Solutions, Sterling Infrastructure, Bentley Systems, AECOM."
+US Branchen,Shipping,"Ocean shipping including tankers (Nordic American Tanker), dry bulk (Navios), container (Matson), inland (Kirby), and other shippers like International Seaways, Danaos."
+US Branchen,Logistics,"Parcel delivery (FedEx), LTL (XPO), automation (Symbotic), and fleet management (Samsara)."
+US Branchen,Railroad Equipment,Railcar manufacturing including Greenbrier.
+US Branchen,Forest Products,"Timber, wood products, and land including Weyerhaeuser, Holmen, PotlatchDeltic."
+US Branchen,Canadian Financial Conglomerate,Power Corporation of Canada.
+US Branchen,Canadian Mining,Nickel and carbon mining including Canada Nickel and Canada Carbon.
+US Branchen,Canadian Apparel,Luxury apparel including Canada Goose.
+Asien Pazifiks BRA,China Internet,"Chinese internet platforms and social media companies including Tencent, Kuaishou, and video/entertainment apps."
+Asien Pazifiks BRA,China Banks,"State-owned and major commercial banks in mainland China including CCB, CMB, and state enterprise banks."
+Asien Pazifiks BRA,China Insurance,Chinese insurance companies including China Life and PICC Property & Casualty
+Asien Pazifiks BRA,China Infrastructure,"Chinese telecom, energy, cement and port operators including China Mobile, China Shenhua, Anhui Conch, China Merchants Port"
+Asien Pazifiks BRA,China Consumer,Chinese consumer and smart home companies including Haier Smart Home
+Asien Pazifiks BRA,India Equity,Indian listed companies including Reliance Industries GDR. Key holdings: INFOSYS LTD. ADR/1 IR5.
+Asien Pazifiks BRA,Korea Semicon,South Korean semiconductor memory and chip manufacturers including SK Hynix.
+Asien Pazifiks BRA,Korea Internet,Korean e-commerce and internet platform companies including Coupang
+Asien Pazifiks BRA,Japan Chip Equip,Japanese semiconductor equipment manufacturers including Tokyo Electron and Advantest
+Asien Pazifiks BRA,Japan Components,"Japanese electronic components and materials companies including Murata, Panasonic, TDK, Resonac"
+Asien Pazifiks BRA,Japan Trading,Japanese trading houses and conglomerates including Mitsui. Key holdings: SOFTBANK GROUP CORP..
+Asien Pazifiks BRA,Singapore Banks,Singapore-based banking groups including DBS Group
+Asien Pazifiks BRA,Singapore Tech Fin,Singapore-headquartered technology and financial services companies including Sea Ltd
+Asien Pazifiks BRA,SG REITs,"Singapore-listed real estate investment trusts including data center, industrial, healthcare, and pan-Asian property funds."
+Asien Pazifiks BRA,AU Data Center,Australian data center and infrastructure companies including Iren Ltd
+Asien Pazifiks BRA,China E-Commerce,"Leading Chinese e-commerce and internet retail platforms such as Alibaba, JD.com, and consumer-focused tech companies. Key holdings: JD.COM INC. ADR."
+Asien Pazifiks BRA,China Tech AI,"Chinese technology and artificial intelligence companies covering fintech, wind energy technology, and AI-driven credit services."
+Asien Pazifiks BRA,China Energy Mat,"Chinese energy and materials companies including coal mining, cement production, and commodity producers."
+Asien Pazifiks BRA,China Ports,Chinese port operators and maritime logistics infrastructure companies.
+Asien Pazifiks BRA,China REIT Ins,Chinese insurance companies and property casualty insurers with REIT-like characteristics.
+Asien Pazifiks BRA,HK Finance,Hong Kong-based financial services companies including AIA insurance group.
+Asien Pazifiks BRA,India Finance,Indian financial services and conglomerate holdings with GDR listings. Key holdings: HDFC BANK LTD ADR/3 IR 10.
+Asien Pazifiks BRA,SG ASEAN Finance,Singapore and Southeast Asian fintech and financial services including SEA Ltd and regional banking groups.
+Asien Pazifiks BRA,SG Bank,Singapore-based banking institutions including DBS and regional banking groups.
+Asien Pazifiks BRA,Semicon Equip,"Japanese semiconductor equipment and chip testing companies including Tokyo Electron, Advantest, and chip component manufacturers."
+Asien Pazifiks BRA,Japan Electronics,"Japanese electronics manufacturers, components, and materials companies including TDK, Murata, Panasonic, and Resonac. Key holdings: TDK CORP, YASKAWA EL. CORP.."
+Asien Pazifiks BRA,Korea Tech,"South Korean technology conglomerates and electronics companies including Samsung Electronics. Key holdings: SAMSUNG ELECTRONICS CO LTD GDR COM SHS, LG ELECT.(NEW)GDR144A 1/2."
+Asien Pazifiks BRA,Korea E-Commerce,South Korean e-commerce platforms and internet retail companies.
+Asien Pazifiks BRA,China Telecom,Chinese telecommunications operators including China Mobile.
+Asien Pazifiks BRA,China EV,"Chinese electric vehicle manufacturers and smart mobility companies. Key holdings: XPENG INC. CL.A DL-,00001."
+Asien Pazifiks BRA,AUS Data Center,Australian data center infrastructure and digital asset companies.
+Asien Pazifiks BRA,Germany Media,German media and publishing company. Key holdings: CASH.MEDIEN AG.
+Asien Pazifiks BRA,Japan Banks,"Japanese regional banking institution. Key holdings: CHIBA KOGYO BK, DAISHI HOKUETSU FINL GRP, FUKUOKA FINL GROUP, MITSUBISHI UFJ FINL GRP, MIZUHO FINL GROUP, RESONA HOLDINGS INC, SENSHU IKEDA HLDGS INC, SHIZUOKA FIN. GROUP INC, SUMITOMO MITSUI FINL GRP."
+Asien Pazifiks BRA,Japan Utilities,Japanese regional electric utility company. Key holdings: HOKURIKU EL. PWR.
+Asien Pazifiks BRA,Global Internet,Global social media and online community platform. Key holdings: REDDIT INC. CL.A.
+Asien Pazifiks BRA,Japan Tires,Japanese tire and rubber products manufacturer. Key holdings: YOKOHAMA RUBBER.
+China BRA,Semiconductors,Chip manufacturing and packaging companies including ASMPT for chip packaging solutions.
+China BRA,Electric Vehicles,"Electric vehicle manufacturers and suppliers including BYD, NIO, and CATL battery technology."
+China BRA,Solar Energy,Solar panel and renewable energy companies including Ming Yang Smart Energy.
+China BRA,Wind Energy,Wind turbine manufacturers including Goldwind Science and Technology.
+China BRA,Industrial Robot,Robotics companies including Horizon Robotics focused on AI chips and robotics solutions.
+China BRA,Autonomous Driving,Autonomous vehicle technology including LiDAR developer Hesai Group.
+China BRA,Internet,"Major internet platforms including Alibaba, PDD Holdings, Baidu, NetEase, and Meituan."
+China BRA,E-Commerce,E-commerce and online retail platforms including JD.com.
+China BRA,Data Center,Data center and cloud infrastructure providers including GDS Holdings.
+China BRA,Smart Home,Smart home appliances and consumer electronics including Haier Smart Home.
+China BRA,Consumer Goods,Consumer product companies including Pop Mart for entertainment merchandise and China Resources Beer.
+China BRA,Banking,Commercial banks including China Construction Bank.
+China BRA,Insurance,Insurance companies including China Life Insurance and PICC Property.
+China BRA,Finance HK,Hong Kong-based financial services including AIA Group.
+China BRA,Telecom,Telecommunications services including China Mobile.
+China BRA,Pharma,Pharmaceutical companies including CSPC Pharmaceutical Group.
+China BRA,Industrial,Industrial and infrastructure companies including ZCZL Industrial Tech and Foxconn.
+China BRA,Materials,Raw materials producers including China Hongqiao Group for aluminum.
+China BRA,Cement,Building materials and cement producers including Anhui Conch Cement.
+China BRA,Energy Coal,Coal mining and energy production including China Shenhua Energy.
+China BRA,Port,Port and logistics operators including China Merchants Port Holdings.
+China BRA,Education,Education services providers including New Oriental Education.
+Comm Edel,Gold Miner,"Companies primarily involved in gold mining. Key holdings: AGNICO EAGLE MINES LTD, WEST RED LAKE GOLD MINES LTD.."
+Comm Edel,Gold Streaming,"Precious metals streaming and royalty companies specializing in gold offtake agreements including Franco-Nevada, Royal Gold, and Wheaton Precious Metals."
+Comm Edel,Gold ETF,Exchange-traded products that track the price of gold.
+Comm Edel,Silver Miner,Companies primarily involved in silver mining.
+Comm Edel,GB Silver Miner,"UK-listed silver mining companies including Fresnillo plc, a major producer of silver and gold."
+Comm Edel,Multi-Metal Miner,"Mining companies producing multiple precious and base metals including Fortuna Mining (gold, silver, lead, zinc) and OR Royalties (gold, copper)."
+Comm Edel,Platinum Miner,Companies focused on mining platinum group metals.
+Comm Edel,Precious Metals Streamer/Royalty,Companies that provide financing to miners in exchange for streams or royalties on precious metals production.
+Comm Edel,Silver Miners ETF,Exchange-traded fund that tracks an index of silver mining companies.
+Comm Edel,Diversified Precious Metals Miner,"Companies that mine multiple metals including gold, silver, copper, lead, and zinc."
+Comm Edel,Gold-Linked Certificate,"Gold-linked certificate or warrant tracking the gold price, e.g., WITR MET.SEC.Z09/UN.XAU."
+DVD,Oil Gas EU,"High-yield European energy companies: Equinor (Norway), Engie (France), Woodside (Australia)"
+DVD,Banks N Europe,"Nordic and European banks with high dividends: Nordea, HSBC, BNP Paribas"
+DVD,Telecom EU,"European telecommunications providers: Freenet, Telefonica, ProSiebenSat.1"
+DVD,Insurance EU,"European insurers and reinsurers: Allianz, AXA, Swiss Re, Zurich, Old Republic"
+DVD,Auto Indl Germany,"German automotive and industrial companies: Volkswagen, Mercedes-Benz, BASF, Hochtief"
+DVD,Pharma Healthcare,"Pharmaceutical and healthcare dividend payers: Sanofi, Walgreens"
+DVD,Basic Materials EU,"European basic materials and commodities: Rio Tinto, Covestro, Siltronic"
+DVD,Logistics Transport,"Transport and logistics companies: Kuehne+Nagel, A.P. Moeller-Maersk"
+DVD,Divd Aristocrats,"Dividend aristocrat strategies focusing on consistent payers: S&P Divid. Aristocrats, DJ Sel. Divd."
+DVD,Quality Income Global,"Global quality and income ETFs: World Qual ESG, Global Quality Income, MSCI W Divd"
+DVD,Quality Income EU,"European quality income strategies: EU Quality Income, ESTX Divd 30, DivDAX"
+DVD,High Divd EU,"European high dividend yield funds: Euro Hi Divd, EUR Divd"
+DVD,EM Dividend,"Emerging markets dividend-focused ETFs: EM Divd, EM Quality Income, EM sm.Divd"
+DVD,Asia Divd,"Asian regional dividend strategies: Japan Divd, CHINA, A&P Asia"
+DVD,US Dividend,"US equity dividend strategies: US Quality Income, S&P500 Divid"
+DVD,Sector ETF,Broad market quality dividend ETFs tracking MSCI/FTSE/S&P World indices
+Energy,Integrated Oil Majors,"Major diversified oil and gas companies: ENI, BP, TotalEnergies, Shell, Exxon Mobil. Key holdings: ENI S.P.A, BP PLC, CHEVRON CORP, BP PLC             DL-,25, CHEVRON CORP.      DL-,75."
+Energy,Oil Refining,"Refining and petrochemical companies: Phillips 66, HF Sinclair"
+Energy,Oil & Gas E&P,"Oil and gas exploration and production companies: ConocoPhillips, Devon Energy, Cenovus Energy, APA Corp, Woodside Energy, HighPeak Energy, Helix Energy. Key holdings: OCCIDENTAL PET, OVINTIV INC, CHORD ENERGY, OCCIDENTAL PET.    DL-,20, OVINTIV INC.       DL-,01, CHORD ENERGY      DL -,01."
+Energy,Oilfield Services,"Oilfield services and equipment providers: Halliburton, ChampionX, Oceaneering International, Tidewater. Key holdings: OCEANEERG INTL INC, SLB LTD, SLB LTD.           DL-,01."
+Energy,Offshore Drilling,"Offshore drilling contractors: Transocean, Helix Energy Solutions"
+Energy,N Gas E&P,North American natural gas producers: EQT Corp
+Energy,Gas E&P EUR,European natural gas producers: Equinor
+Energy,Gas Utilities,"Gas distribution and utility companies: Pacific Gas, OGE Energy, Enel, National Grid, Atmos Energy, Exelon, Alliant Energy, CMS Energy, Northwest Energy"
+Energy,LNG Infrastructure,"LNG terminals, regasification and infrastructure: New Fortress Energy, Cheniere Energy, NextDecade, Enbridge"
+Energy,LNG Shipping,"LNG shipping companies: Golar LNG, Flex LNG"
+Energy,Midstream Pipelines,"Pipeline and midstream operators: Kinder Morgan, Williams Companies, ONEOK, Antero Midstream, Pembina Pipeline, TC Energy"
+Energy,Uranium Mining,"Uranium mining companies: Kazatomprom, Cameco, Energy Fuels, Ur-Energy, Denison Mines, Uranium Energy, NexGen Energy, Paladin Energy, ISO Energy, Global Uranium. Key holdings: ISOENERGY LTD NEW."
+Energy,Nuclear Tech,"Nuclear reactor technology and SMR developers: NuScale Power, BWX Technologies, Rolls-Royce, Rolls-Royce SMR. Key holdings: NUSCALE POWER COR."
+Energy,Nuclear Fuel,Uranium enrichment and nuclear fuel services: Centrus Energy
+Energy,Nuclear Utilities,"Nuclear power generation utilities: Constellation Energy, Vistra, NRG Energy"
+Energy,Nuclear Decommissioning,Nuclear decommissioning and waste management: Fluor
+Energy,Power Generation,"Power generation equipment and plant construction: GE Vernova, Argan, Consolidated Edison. Key holdings: GE VERNOVA INC.."
+Energy,Energy Infrastructure,"Companies building and operating energy infrastructure such as pipelines, storage, and grids (e.g., Sempra, Williams, Quanta Services, Primoris Services)."
+Energy,Solar Energy,Solar energy providers: Sunnova Energy
+Energy,Building Tech,"Building climate control and HVAC systems: Trane Technologies, Johnson Controls, Vertiv, Valmet, nVent Electric"
+Energy,Power Management,"Power management and electrical distribution equipment: Powell Industries, Power Integrations, Rexel, Eaton. Key holdings: REXEL S.A.     INH. EO 5."
+Energy,Grid Infrastructure,"Electric grid and transmission infrastructure: Hubbell, Grid Dynamics, Vicor"
+Energy,Energy Solutions,"Energy management and efficiency solutions: Enphase Energy, Willdan Group, Emerson Electric"
+Energy,Hydrogen Electrolyzer,"Hydrogen electrolyzer technology: Thyssenkrupp Nucera. Key holdings: NEL ASA            NK-,20."
+Energy,Energy,"Energy sector encompasses all activities related to production, distribution, and consumption of energy including oil, gas, nuclear, and electricity"
+Energy,Energy.Oil,Oil companies and exploration production activities
+Energy,Energy.Oil.OilCompanies,"Major integrated oil companies including ENI, BP, TotalEnergies, Shell, ExxonMobil, Cenovus Energy"
+Energy,Energy.Oil.ExplorationProduction,"Oil and gas exploration and production companies including Devon Energy, ConocoPhillips, APA Corp, HighPeak Energy, Woodside Energy"
+Energy,Energy.Oil.Midstream,Oil and gas transportation and storage infrastructure including pipelines and terminals
+Energy,Energy.Oil.Services,"Oil and gas services including offshore services, equipment providers, and service companies like Halliburton, ChampionX, Tidewater"
+Energy,Energy.Gas,"Natural gas exploration, production, and distribution activities"
+Energy,Energy.Gas.ExplorationProduction,"Gas exploration companies including EQT Corp, Pacific Gas"
+Energy,Energy.Gas.Companies,"Natural gas companies including Equinor, Atmos Energy"
+Energy,Energy.Gas.Services,Gas services and midstream operations
+Energy,Energy.LNG,"Liquefied natural gas shipping, infrastructure, and terminals"
+Energy,Energy.LNG.Shipping,"LNG shipping companies including Golar LNG, Flex LNG"
+Energy,Energy.LNG.Infrastructure,"LNG infrastructure including terminals, pipelines - companies like Cheniere Energy, NextDecade, New Fortress Energy"
+Energy,Energy.LNG.Midstream,"LNG midstream operations including Enbridge, ONEOK, Pembina Pipeline"
+Energy,Energy.Nuclear,"Nuclear energy including power generation, SMR, uranium, and nuclear services"
+Energy,Energy.Nuclear.PowerGeneration,"Nuclear power generation companies including Constellation Energy, NuScale Power, Oklo"
+Energy,Energy.Nuclear.SMR,"Small Modular Reactor technology providers including NuScale Power, BWX Technologies, Rolls Royce"
+Energy,Energy.Nuclear.Uranium,"Uranium mining, exploration, and processing including Kazatomprom, Paladin Energy, NexGen Energy, Cameco, Uranium Energy, Energy Fuels"
+Energy,Energy.Nuclear.Services,"Nuclear services including fuel supply, waste management - companies like Centrus Energy, Fluor Corp"
+Energy,Energy.Nuclear.Construction,Nuclear power plant construction companies including Argan
+Energy,Energy.Electricity,Electric utilities and power distribution
+Energy,Energy.Electricity.Generation,"Electricity generation companies including Vistra, NRG Energy, GE Vernova"
+Energy,Energy.Electricity.Utilities,"Electric utility companies including Consolidated Edison, Exelon, Alliant Energy, CMS Energy, OGE Energy, Enel, National Grid. Key holdings: EXELON CORP, ENTERGY CORP, AMER. EL. PWR, DUKE EN.CORP, OGE EN. CORP, PPL CORP, THE SOUTHERN CO, ENEL S.P.A, E.ON SE NA O.N, IBERDROLA INH.    EO -,75, EDP S.A.             EO 1, ENEL S.P.A.          EO 1."
+Energy,Energy.Electricity.Distribution,Electricity distribution and metering services
+Energy,Energy.Electricity.OffshoreWind,"Offshore wind and transmission services including Eversource Energy. Key holdings: ORSTED A/S, ORSTED A/S          DK 10."
+Energy,Energy.Infrastructure,"Energy infrastructure construction and services. Key holdings: QUANTA SVCS     DL-,00001, IES HLDGS INC.     DL-,01."
+Energy,Energy.Infrastructure.Pipeline,"Pipeline construction and grid development companies including Primoris Services, Kinder Morgan"
+Energy,Energy.Infrastructure.Power,"Power infrastructure construction including Quanta Services, Ameresco"
+Energy,Energy.Equipment,Energy equipment manufacturing and supply. Key holdings: FLEX LTD..
+Energy,Energy.Equipment.PowerGeneration,"Power generation equipment including turbines from GE Vernova. Key holdings: HITACHI LTD, SIEMENS AG  NA O.N, CUMMINS INC.      DL 2,50."
+Energy,Energy.Equipment.Electrical,"Electrical equipment including transformers, switches, grid equipment - companies like Hubbell, Eaton, Nvent Electric, Power Integrations, Vicor. Key holdings: SCHNEIDER ELEC. INH. EO 4, PRYSMIAN S.P.A.   EO 0,10."
+Energy,Energy.Equipment.Building,"Building technology and climate control including Trane Technologies, Johnson Controls, Vertiv"
+Energy,Energy.Services,Energy services and technology solutions
+Energy,Energy.Services.Management,"Energy management solutions including Enphase Energy, Willdan Group, Rexel. Key holdings: HEXAGON COMP       NK-,10."
+Energy,Energy.Services.Measurement,Measurement and analysis equipment including Emerson Electric
+Energy,Energy.Services.Consulting,Energy efficiency consulting and advisory services
+Energy,Energy.Renewables,Renewable energy and clean technology
+Energy,Energy.Renewables.Hydrogen,Hydrogen technology including electrolysis - companies like Thyssenkrupp nucera
+Energy,Energy.Renewables.Solar,"Solar energy including Sunnova Energy. Key holdings: NEXTPOWER INC.  A  -,0001, SOLAREDGE TECHN. DL-,0001, LONGI GREEN ENERG.T.A YC1."
+Energy,Energy.Storage,"Energy storage solutions and midstream operations including Antero Midstream. Key holdings: TESLA INC. DL -,001."
+Energy,Energy.EVCharging,Electric vehicle charging station networks and infrastructure. Key holdings: CHARGEPOINT HLDGS O.N..
+Energy,Energy.IndustrialGases,"Industrial gas production and distribution including oxygen, nitrogen, argon, and specialty gases. Key holdings: LINDE PLC, AIR LIQUIDE SA, AIR PRODUCTS & CHEMICALS INC."
+Energy,Energy.FuelCells,"Fuel cell development and manufacturing for stationary and mobile power applications. Key holdings: POWERCELL SWEDEN  SK-,022, BALLARD PWR SYS."
+Energy,Energy.Renewables.Wind,"Key holdings: VESTAS WIND ADR 1/3/DK 1, NORDEX SE O.N.."
+Energy,Energy.Storage.Battery,"Key holdings: ENERSYS            DL-,01, PANASONIC HOLDINGS CORP, ADVANCED EN. INDS DL-,001."
+Energy,Energy.Lithium,"Lithium mining and production companies including Albemarle Corporation, a major global lithium producer. Key holdings: ALBEMARLE CORP.    DL-,01, VULCAN ENERGY RESOURCES, FMC CORP.          DL-,10, LITHIUM AMERICAS CORP, STANDARD LITHIUM LTD, SIGMA LITHIUM CORP. O.N, SOC. QUIMICA MIN.ADR B 1, GL X ETF-GXLIBATC DLA, LITHIUM IONIC CORP, ATLAS LITHIUM    DL -,001, SPARK ENERGY MINER. INC.."
+Energy,Oil & Gas - Integrated,"Major integrated oil and gas companies including exploration, production, refining, and marketing (e.g., BP, Shell, TotalEnergies, Exxon Mobil, ENI)."
+Energy,Oil & Gas - Production,"Companies focused on upstream oil and gas exploration and production (e.g., ConocoPhillips, Devon Energy, APA Corp., Cenovus Energy)."
+Energy,Oil & Gas - Midstream,"Companies involved in transportation, storage, and pipeline infrastructure for oil, gas, and natural gas liquids (e.g., Kinder Morgan, Enbridge, Pembina, Williams)."
+Energy,Oil & Gas - Services,"Providers of equipment, drilling, and support services to the oil and gas industry (e.g., Halliburton, ChampionX, Transocean, Tidewater)."
+Energy,Natural Gas & LNG,"Companies focused on natural gas exploration, production, liquefaction, and LNG shipping (e.g., EQT, Cheniere Energy, Golar LNG, Flex LNG)."
+Energy,Nuclear Energy - Uranium,"Companies involved in uranium mining, exploration, and processing (e.g., Cameco, Kazatomprom, Paladin Energy, UR-Energy)."
+Energy,Nuclear Energy - Technology,"Companies developing nuclear reactor technology, components, and small modular reactors (SMRs) (e.g., NuScale Power, BWX Technologies, Oklo)."
+Energy,Utilities - Electric & Gas,"Electric and gas utility companies serving residential, commercial, and industrial customers (e.g., National Grid, Enel, Exelon, Eversource Energy). Key holdings: EXELON CORP.."
+Energy,Utilities - Regulated,"Regulated natural gas and electric utilities with stable cash flows (e.g., Atmos Energy, Alliant Energy, CMS Energy, OGE Energy)."
+Energy,Energy Management & Efficiency,"Companies providing energy management, efficiency solutions, and consulting (e.g., Enphase Energy, Willdan Group, Emerson Electric, Powell Industries)."
+Energy,Electrical Equipment & Components,"Manufacturers of electrical equipment, connectors, and grid components (e.g., Eaton, nVent Electric, Hubbell, Vicor, Prysmian)."
+Energy,"Heating, Cooling & HVAC","Companies specializing in heating, ventilation, air conditioning, and thermal management (e.g., Trane Technologies, Johnson Controls, Vertiv)."
+Energy,Renewable Energy & Hydrogen,"Companies focused on renewable energy generation, hydrogen technology, and electrolysis (e.g., Thyssenkrupp Nucera, GE Vernova's renewable arm)."
+Energy,Diversified Energy,"Companies with operations across multiple energy subsectors including midstream, utilities, and renewables (e.g., TC Energy, Enbridge)."
+Energy,Energy Services & EPC,"Engineering, procurement, and construction companies serving the energy sector (e.g., Argan, Ameresco, Primoris Services)."
+Energy,Gas & LNG Infrastructure,"Companies building and operating LNG terminals and gas transport infrastructure (e.g., New Fortress Energy, NextDecade, Golar LNG)."
+Energy,Oil & Gas - Refining & Petrochemicals,"Companies involved in refining petroleum and producing petrochemicals (e.g., Phillips 66, HF Sinclair)."
+Energy,Energy Storage & Solutions,"Companies providing energy storage, microgrids, and integrated energy solutions (e.g., Viper Energy, Energy Fuels)."
+Energy,Nuclear Services & Waste,"Companies providing decommissioning, waste management, and support services for nuclear facilities (e.g., Fluor Corp., Nano Nuclear Energy)."
+Indus Com,Lithium Mining,"Lithium extraction and processing companies including Lithium Chile, Piedmont Lithium, Livent, European Energy Metals (Finland), and Neo Performance Materials (permanent magnets)."
+Indus Com,Copper Chile,"Copper producers and miners based in or focused on Chile, including Antofagasta PLC."
+Indus Com,Copper Americas,"Copper mining companies in the Americas including Freeport-McMoRan, Teck Resources, Copper One, Copper Giant Resources, and Gladiator Metals. Key holdings: TECK RESOURCES LTD.."
+Indus Com,Nickel Mining,"Nickel mining and production including ERAMET, Canada Nickel, Nickelx, Aurubis, Altius Minerals, and Calibre Mining."
+Indus Com,Aluminum,"Aluminum producers, including primary aluminum and related products like NOR Alu. Key holdings: ALCOA CORP."
+Indus Com,Industrial Gases,"Major industrial gas producers such as Linde, Air Liquide, and Air Products."
+Indus Com,Carbon Materials,"Carbon fiber, carbon products, and advanced carbon material manufacturers across USA, Japan, and Europe. Key holdings: CABOT CORP.."
+Indus Com,Graphene,Companies developing and producing graphene materials for advanced applications. Key holdings: GRAPHENE MANUFACT.GROUP.
+Indus Com,Rare Earths,"Rare earth mining and development including Arafura Rare Earths, Lynas, MP Materials, Anglo American, and USA Rare Earth."
+Indus Com,Uranium,Uranium mining and production companies including Energy Fuels.
+Indus Com,Steel,Steel production companies including Cleveland-Cliffs.
+Indus Com,Diversified Mining,"Diversified metals companies including Mogotes Metals. Key holdings: GLENCORE PLC ADR, NEWMONT CORP, RIO TINTO PLC REGISTERED SHARES LS -,10."
+Indus Com,Rare Earth Recycling,"Rare earth recycling including Umicore, Resonac Holdings, Lynas (Lynx project), and Arafura. Key holdings: SOLVAY S.A.."
+Indus Com,General Recycling,"General recycling services including Veolia Environnement. Key holdings: REPUBLIC SERVIC. DL-,01."
+Indus Com,Lithium Battery ETF,ETF providing exposure to lithium and battery supply chain including Global X Lithium & Battery ETF.
+Indus Com,Dividend Mining,High-dividend paying mining companies including Rio Tinto.
+Indus Com,Specialty Chemicals,"Specialty chemical producers including Toray Industries (advanced polymers). Key holdings: FMC CORPORATION, TRONOX HLDGS PLC  DL -,01, ILUKA RES."
+Indus Com,Steel Production,Integrated steel production including Cleveland-Cliffs.
+Indus Com,Nickel Producers,Refined nickel producers including ERAMET and Aurubis.
+Indus Com,Rare Earth Development,"Rare earth exploration and development stage companies including Meteoroid Resources and NioCorp Developments. Key holdings: SOC. QUIMICA MIN.ADR B 1, BRAZ.RARE EARTHS LTD.O.N, VHM LTD."
+Indus Com,Rare Earth,"Companies exploring, mining, and producing rare earth elements and minerals for various industrial applications. Key holdings: MATERION CORP.       DL 1, NORTHERN MINERALS LTD.."
+Indus Com,Rare Earth Recycle,Companies involved in recycling rare earth materials from end-of-life products and manufacturing scrap.
+Indus Com,Lithium,"Lithium mining and exploration companies, including producers in Chile and Finland. Key holdings: LITHIUM IONIC CORP, ATLAS LITHIUM    DL -,001."
+Indus Com,Permanent Magnets,Producers of permanent magnetic materials used in electric motors and clean energy applications. Key holdings: NEO PERFORM.MAT..
+Indus Com,Copper Miner,"Copper mining companies, including major producers in Chile and North America. Key holdings: MASON RES INC, SOUTHERN COPPER CORP.."
+Indus Com,Nickel Miner,"Nickel mining and exploration companies, including Canadian and Australian producers. Key holdings: IGO LTD.."
+Indus Com,Zinc Miner,Companies focused on zinc mining and production.
+Indus Com,Battery Materials,"Materials and chemicals for battery production including lithium and other critical battery metals. Key holdings: TALGA GROUP LTD, SPARK ENERGY MINERALS INC, PERPETUA RES CORP.."
+Indus Com,Metals Diversified,"Diversified metal producers and miners with exposure to multiple base metals and minerals. Key holdings: SOUTH32 LTD SP. ADR/5, BHP GROUP LTD, VALE S.A. ADR."
+Indus Com,Polymers,"Polymer and plastic material producers, particularly in Japan."
+Indus Com,Corporate Bond,"Corporate bond issuance from BHP Billiton, an Australian multinational mining company. Key holdings: BARRIK (PD) AUSTR. 09/39."
+Indus Com,Strategic Materials,"Australian Strategic Materials Ltd, a producer of strategic materials including titanium, zirconium, and rare earths for advanced manufacturing. Key holdings: AUSTRALIAN STRAT.MAT.."
+Indus Com,Energy Storage Systems,"EnerSys, a manufacturer and marketer of industrial batteries and energy storage solutions for various applications."
+Indus Com,Environmental Services,"Environmental and industrial cleaning services provider offering hazardous waste management, remediation, and environmental solutions. Key holdings: CLEAN HARBORS      DL-,01."
+Indus Com,Utilities,"French multinational utility company engaged in electricity generation, natural gas distribution, and energy services. Key holdings: ENGIE S.A. INH.      EO 1."
+SOFT Com,Fertilizers,"Companies producing fertilizers, plant nutrients, and agricultural inputs including Mosaic, Nutrien, Yara, ICL Group, and K+S."
+SOFT Com,Ag Equipment,"Agricultural machinery manufacturers such as Deere, CNH Industrial, Titan Machinery producing farm equipment"
+SOFT Com,Agritech Robotics,Agricultural technology and robotics including smart farming solutions for precision agriculture
+SOFT Com,Water Utilities,"Municipal water services, water distribution, and sewage treatment companies including American Water Works and Severn Trent. Key holdings: CALIF. WATER SERV. GRP, AMERICAN STAT.WTR DL 2,50, ARTESIAN RES A NON-VTG, GELSENWASSER AG, PURE CYCLE CORP. NEW."
+SOFT Com,Water Infrastructure,"Water infrastructure providers covering pipes, meters, pumps including Mueller Water, Lindsay Corp, Badger Meter, Pentair. Key holdings: KSB AG VZ."
+SOFT Com,Water Treatment,"Water desalination, purification, and wastewater treatment technology companies including Consolidated Water and Energy Recovery."
+SOFT Com,Water Tech,"Water infrastructure technology including pipes, meters, pumps, filtration, and flow control equipment from companies like Xylem, Badger Meter, Belimo, and Veolia. Key holdings: VEOLIA ENVIRONNEMENT S.A.."
+SOFT Com,Waste Management,"Waste collection and disposal services including Waste Management, Waste Connections, Republic Services, Casella Waste, GFL Environmental"
+SOFT Com,Environmental Svcs,"Environmental and hazardous waste services from Clean Harbors handling industrial cleanup and remediation. Key holdings: CLEAN HARBORS      DL-,01."
+SOFT Com,Food Processing Equip,"Food processing machinery and equipment manufacturers including GEA Group, Kubota for food production systems. Key holdings: KUBOTA CORP."
+SOFT Com,Soft Drinks,"Carbonated beverage companies including Coca-Cola, PepsiCo producing cola and soft drink products"
+SOFT Com,Breweries,"Beer brewing companies including Anheuser-Busch InBev, Heineken, Molson Coors for alcoholic beverages"
+SOFT Com,Packaged Foods,"Processed and packaged food manufacturers including meat producers, food service providers, and frozen food companies."
+SOFT Com,Restaurants,Restaurant chains and food service operators including Shake Shack and Korean BBQ restaurant groups.
+SOFT Com,Bldg Materials Waterproof,Building materials and waterproofing products including Carlisle Companies for roofing and construction materials
+SOFT Com,Construction Services,Construction and infrastructure services including Knife River for building materials distribution
+SOFT Com,Home Improvement Retail,Home improvement retail chains including Lowe's for DIY home renovation products
+SOFT Com,Timber Forest Prod,"Timber and forest products companies including Weyerhaeuser, Rayonier for lumber and wood products. Key holdings: WEST FRASER TIMBER CO.LTD, RAYONIER INC, HOLMEN AB B         SK 25, POTLATCHDELTIC CORP. DL 1."
+SOFT Com,Aquaculture,"Fish farming and seafood production companies including Salmar and Clean Seas Seafood. Key holdings: MOWI ASA           NK 7,5, BAKKAFROST P/F NAM.  DK 1."
+SOFT Com,Seeds & Crop Sci,"Companies developing seeds, crop protection chemicals, and agricultural biotechnology such as Bayer and Corteva. Key holdings: FMC CORPORATION."
+SOFT Com,Agri Machinery,"Manufacturers of agricultural equipment, tractors, and harvesting machinery including Deere, CNH Industrial, and Titan Machinery. Key holdings: CNH INDUSTRIAL    EO -,01, AGCO CORP.."
+SOFT Com,Food Innovation,"Food processing equipment, food technology, and alternative food product companies including GEA Group and Kubota."
+SOFT Com,Beverages,"Soft drink, juice, and non-alcoholic beverage companies including PepsiCo, Coca-Cola, and Monster Beverage. Key holdings: MONSTER BEVER.NEW DL-,005."
+SOFT Com,Alcohol,"Beer, wine, and spirit producers including Heineken, Molson Coors, Anheuser-Busch InBev, and March International."
+SOFT Com,Waste Mgmt,"Solid waste collection, recycling, and environmental services including Waste Management, Waste Connections, Republic Services, and Clean Harbors."
+SOFT Com,Home Improve,"Home improvement retailers, building materials, and renovation services including Lowe's, Howden Joinery, and Knife River. Key holdings: HOWDEN JOINERY GRP LS-,10."
+SOFT Com,Lumber & Wood,"Timberland, wood products, and lumber manufacturing including Weyerhaeuser and Rayonier. Key holdings: LOUIS. PAC. CORP.    DL 1, UFP INDS INC.."
+SOFT Com,Equipment Rental,Equipment rental services for construction and industrial applications including United Rentals.
+SOFT Com,Agri Robots,Agricultural robotics and automation technology including Serve Robotics and autonomous farm equipment.
+SOFT Com,Consumer Staples Broad,"Consumer staples company producing personal care, home care, and food products including Hellmann's, Dove, and Lipton. Key holdings: UNILEVER PLC."
+SOFT Com,Agri Trading & Processing,"Agricultural commodity trading and processing company handling grains, oilseeds, and agricultural feedstocks. Key holdings: ARCHER DANIELS MIDLAND CO."
+SOFT Com,Irrigation & Infrastructure,"Manufacturer of irrigation systems, utility poles, and infrastructure products for agriculture and utilities. Key holdings: VALMONT IND. INC.    DL 1."
+SOFT Com,Professional Kitchen Equip,Manufacturer of professional cooking equipment and combi ovens for commercial kitchens and restaurants. Key holdings: RATIONAL AG.
+SOFT Com,Drainage Infrastructure,"Provider of corrugated high-density polyethylene drainage pipes and water management solutions for agriculture and infrastructure. Key holdings: ADVANCED DRAIN.SYS.DL-,01."
+SOFT Com,Specialty Flooring Retail,"Specialty retailer of hard surface flooring including tile, wood, and laminate for residential and commercial projects. Key holdings: FLOOR + DECOR CL.A -,001."
+SOFT Com,Construction Fastening,"Manufacturer of construction fastening products including anchors, fasteners, and connectors for building and construction applications. Key holdings: SIMPSON MANUFACT.CO.DL-01."
+SOFT Com,Industrial Conglomerate,"Norwegian industrial holding company with investments in seafood, renewable energy, and maritime sectors including majority stakes in Aker BioMarine and Aker Horizons. Key holdings: AKER ASA A          NK 28."
+SOFT Com,Aquaculture Equipment,"Norwegian aquaculture technology company providing equipment, systems, and solutions for fish farming including cages, feeding systems, and containment solutions for salmon and trout production. Key holdings: AKVA GROUP ASA       NK 1."
+US BAU,Residential Homebuilder,"US residential housing developers and builders constructing single-family homes including D.R. Horton, Lennar, PulteGroup, NVR, and other national homebuilders."
+US BAU,Infrastructure,"Companies providing infrastructure engineering, design software, and construction services for public works and utility systems."
+US BAU,Infra CAD,Specialized software and technology platforms for infrastructure design and engineering including Bentley Systems.
+US BAU,Building Matls,"Manufacturers and distributors of building materials, construction supplies, and building products including Fastenal, Mohawk, Vulcan Materials, and Builders FirstSource. Key holdings: CEMEX SAB.CPO SP.ADR/10, CRH PLC            EO-,32, FLOOR + DECOR CL.A -,001, SIMPSON MANUFACT.CO.DL-01, TOPBUILD CORP.    DL -,01."
+US BAU,Wood Supplier,"Lumber and wood product manufacturers and suppliers for construction including West Fraser Timber and Louisiana-Pacific. Key holdings: WEYERHAEUSER CO. DL 1,25, LOUIS. PAC. CORP.    DL 1."
+US BAU,Sanitary Bldg,"Manufacturers of bathroom fixtures, plumbing products, and sanitary building components including Masco Corp. Key holdings: AMER. WOODMARK CORP.."
+US BAU,Electrical/Power,"Manufacturers of electrical components, power management systems, and smart building solutions. Key holdings: JOHNSON CONTR.INTL.DL-,01, NVENT ELECTRIC PLC DL-,01."
+US BAU,Energy,"Midstream energy companies involved in natural gas gathering, processing, and transmission."
+US BAU,Homebuilding,"Residential homebuilders constructing single-family homes and planned communities for homebuyers. Key holdings: TOLL BROTHERS     DL -,01, KB HOME              DL 1, NVR INC.           DL-,01, PULTE GROUP INC.  DL -,01."
+US BAU,Building Materials,"Suppliers of construction materials including aggregates, cement, flooring, fasteners, and industrial products for builders."
+US BAU,Wood Products,"Manufacturers of lumber, engineered wood products, and wood-based building materials."
+US BAU,Plumbing,"Companies producing faucets, valves, bathroom fixtures, and other plumbing hardware for residential and commercial construction."
+ETF ENERGY & POWER,Energy Broad,"Broad energy ETFs covering global, US, and North American energy sectors and US energy infrastructure."
+ETF ENERGY & POWER,Oil & Gas,"ETFs focusing on oil and gas companies in Europe and globally, including exploration and production."
+ETF ENERGY & POWER,Midstream,ETFs investing in midstream energy infrastructure such as pipelines and storage.
+ETF ENERGY & POWER,Natural Gas,ETFs and ETCs tracking natural gas price movements.
+ETF ENERGY & POWER,Crude Oil,"ETFs and ETCs covering crude oil (Brent, WTI) and refined petroleum products (diesel, heating oil). Key holdings: WITR COM.SEC.Z08/UN.IDX, WITR MU.AS.I.BRENTOIL, UBS AG O.E. INDEX, WITR COM.SEC.Z07/UN.INDEX, BNP PAR.ISS. O.E. ETC (1), WITR H.COM.SEC.Z12/UN.IDX, BNP PAR.ISS. O.E. ETC (2), WITR COM.SEC.Z06/UN.WTI, BNP PAR.ISS. O.E. ETC (3)."
+ETF ENERGY & POWER,Solar,ETFs focused on solar energy producers and related technology.
+ETF ENERGY & POWER,Hydro,ETFs investing in hydroelectric power generation companies.
+ETF ENERGY & POWER,Uranium & Nuclear,"ETFs covering uranium mining and nuclear energy sector. Key holdings: VNKETF-UR.NU.T. DLA, HANETF-SPROT.URAN.MNG.DLA."
+ETF ENERGY & POWER,Battery & Lithium,"ETFs tracking battery technology, lithium mining, and battery supply chain companies."
+ETF ENERGY & POWER,Smart Grid,ETFs focused on smart grid and power distribution technology.
+ETF ENERGY & POWER,Future Mobility,"ETFs investing in companies driving future transportation and mobility solutions. Key holdings: THEMATICA-FUT.MOB.RDL, STR.SOL.-NEXT GEN.RES.FD, AS I-CN NE.GEN. A HGDEOA."
+ETF ENERGY & POWER,Clean Energy Small Cap,ETFs targeting small‑cap clean energy and alternative technology firms.
+ETF ASIEN,Asia ex-Japan,"Asia ex-Japan equity ETF, various currencies and share classes including USD and EUR accumulating"
+ETF ASIEN,Asia ex-Japan ex-China,East Asia excluding China and Japan equity ETF
+ETF ASIEN,Asia ex-Japan Mid Cap,Asia ex-Japan mid-cap equity ETF
+ETF ASIEN,MSCI EM Asia,MSCI Emerging Markets Asia equity ETF
+ETF ASIEN,Asia Dividend,SPDR S&P Asia Pacific Dividend ETF
+ETF ASIEN,Asia Internet,Asia Internet equity ETF tracking Lang & Schwarz Online Economy Index
+ETF ASIEN,Asia Pacific ex-Japan,"Asia Pacific ex-Japan equity ETF, USD accumulating"
+ETF ASIEN,China MSCI,China MSCI equity ETF in USD or EUR
+ETF ASIEN,China A,China A-shares equity ETF (MSCI or other indices)
+ETF ASIEN,China Offshore,"China offshore equity ETF (e.g., DJ China Offshore 50)"
+ETF ASIEN,China FTSE A50,China FTSE A50 equity ETF
+ETF ASIEN,China Large Cap,China large cap equity ETF (FTSE or similar)
+ETF ASIEN,China CSI 300,China CSI 300 equity ETF
+ETF ASIEN,China ESG,China ESG equity ETF
+ETF ASIEN,China Growth,China growth equity ETF
+ETF ASIEN,China Consumer,China consumer discretionary equity ETF (MSCI)
+ETF ASIEN,China Automobile,China automobile equity ETF
+ETF ASIEN,China Tech,China technology equity ETF (MSCI China Tech or SOLACT). Key holdings: UBSSOLACTCHINATEC HAE.
+ETF ASIEN,Hang Seng,Hang Seng index equity ETF
+ETF ASIEN,Hang Seng Tech,Hang Seng Tech index equity ETF
+ETF ASIEN,Hang Seng Enterprises,Hang Seng China Enterprises index equity ETF
+ETF ASIEN,Japan Nikkei 225,"Japan Nikkei 225 equity ETF, including hedged and unhedged variants"
+ETF ASIEN,Japan Nikkei 400,"Japan Nikkei 400 equity ETF, EUR hedged"
+ETF ASIEN,Japan Topix,"Japan TOPIX equity ETF, yen and EUR variants"
+ETF ASIEN,Japan MSCI,"Japan MSCI equity ETF, yen and EUR"
+ETF ASIEN,Japan Growth,"Japan growth equity ETF, EUR"
+ETF ASIEN,Japan Strategic Value,"Japan strategic value equity ETF, USD acc. Key holdings: NOMURA FDS-JAP.STR.V.ADLH."
+ETF ASIEN,Japan Small Cap,"Japan small cap equity ETF (MSCI or others), various currencies"
+ETF ASIEN,Japan Core,"Japan core equity ETF, EUR. Key holdings: MAN-M.JP.COREA.EQ.IHEO."
+ETF ASIEN,Japan ESG,"Japan ESG equity ETF, USD acc"
+ETF ASIEN,Japan Flexible,Japan flexible equity ETF
+ETF ASIEN,Japan Targeted,"Japan targeted return equity ETF, EUR"
+ETF ASIEN,Korea MSCI,"Korea MSCI equity ETF, USD or EUR"
+ETF ASIEN,Korea FTSE,"Korea FTSE equity ETF, USD acc"
+ETF ASIEN,Korea Equity,"Korea equity ETF (JPM), EUR or USD acc"
+ETF ASIEN,Taiwan MSCI,"Taiwan MSCI equity ETF, USD acc or dis"
+ETF ASIEN,Taiwan Equity,"Taiwan equity ETF (JPM), EUR"
+ETF ASIEN,Vietnam SWAP,Vietnam SWAP equity ETF
+ETF ASIEN,Vietnam Equity,Vietnam equity ETF (Dragon Capital or Aquis Lumen)
+ETF ASIEN,Japan MSCI IMI,"MSCI Japan IMI equity ETF by iShares, covering large, mid, and small cap Japanese equities. Key holdings: ISHS III-C.MSCI J.IMI MNH."
+ASIEN,Asia Ex Japan,"Funds focusing on Asian markets excluding Japan, including mid-cap variants."
+ASIEN,Asia Ex China Ex Japan,Funds focusing on Asian markets excluding both China and Japan.
+ASIEN,Asia Ex China,Funds focusing on Asian markets excluding China.
+ASIEN,Emerging Markets Asia,MSCI Emerging Markets Asia index funds.
+ASIEN,Asia Dividend,Funds focusing on Asian dividend-paying stocks.
+ASIEN,Asia Internet,Funds focusing on Asian internet-related companies.
+ASIEN,Asia Pacific Ex Japan,Funds covering Asia Pacific region excluding Japan.
+ASIEN,China,"Broad China equity funds (including MSCI, FTSE, CSI 300, etc.)."
+ASIEN,China ESG,Funds specifically labeled as ESG in China.
+ASIEN,China Offshore,"China offshore index funds (e.g., DJ China Offshore 50)."
+ASIEN,China Large Cap,China large-cap equity funds.
+ASIEN,China Growth,Funds targeting Chinese growth companies.
+ASIEN,China Consumer Discretionary,China consumer discretionary sector.
+ASIEN,China Automobile,China automobile sector funds.
+ASIEN,China Tech,"Funds tracking Chinese technology indices (MSCI China Tech, Solactive, etc.). Key holdings: UBSSOLACTCHINATEC HAE."
+ASIEN,China Tech ESG,Funds combining Chinese technology exposure with ESG criteria.
+ASIEN,Hang Seng,Funds tracking the Hang Seng index (main and leveraged).
+ASIEN,Japan,"Broad Japan equity funds (Nikkei, TOPIX, MSCI Japan). Key holdings: ISHS III-C.MSCI J.IMI MNH."
+ASIEN,Japan Hedged,Japan equity funds with currency hedging.
+ASIEN,Japan Growth,Funds targeting Japanese growth companies.
+ASIEN,Japan Target,Funds with a specific target strategy in Japanese equities.
+ASIEN,Japan Core,Funds focusing on Japanese core equity holdings. Key holdings: MAN-M.JP.COREA.EQ.IHEO.
+ASIEN,Japan ESG,Funds integrating ESG criteria in Japanese equities.
+ASIEN,Japan Value,"Funds focusing on value investing in Japanese stocks. Key holdings: NOMURA FDS-JAP.STR.V.ADLH, JPM INV-JAP.STR.V.C ADLH."
+ASIEN,Japan Flexible,Funds with flexible allocation across Japanese equities.
+ASIEN,Japan Small Cap,"Funds focusing on Japanese small-cap stocks (MSCI Japan Small Cap, etc.)."
+ASIEN,Korea,"Funds tracking Korean equity indices (MSCI Korea, FTSE Korea)."
+ASIEN,Taiwan,"Funds tracking Taiwanese equity indices (MSCI Taiwan, FTSE Taiwan)."
+ASIEN,Vietnam,Funds investing in Vietnamese equity market (swap-based and active).
+ASIEN,Asia MSCI EM,Funds tracking MSCI Emerging Markets Asia indices.
+ASIEN,China Broad,"Funds tracking broad Chinese market indices (MSCI, FTSE, CSI 300, etc.) and general China equity."
+ASIEN,China A Shares,Funds investing in China A-shares via various managers.
+ASIEN,China Sustainable,Funds focusing on Chinese sustainable or ESG-oriented investments.
+ASIEN,China Consumer,Funds focused on Chinese consumer discretionary sector.
+ASIEN,China Auto,Funds focused on Chinese automobile industry.
+ASIEN,Hang Seng Tech,Funds tracking the Hang Seng Tech index.
+ASIEN,Hang Seng Enterprises,Funds tracking the Hang Seng China Enterprises index.
+ASIEN,Japan Nikkei,Funds tracking the Nikkei 225 index (hedged and unhedged).
+ASIEN,Japan Nikkei 400,Funds tracking the Nikkei 400 index.
+ASIEN,Japan TOPIX,Funds tracking the TOPIX index (various currency and distribution variants).
+ASIEN,Japan Broad,"Funds covering broad Japanese equity market (MSCI Japan, TOPIX variants, currency-hedged)."
+COM Indus,Commodities & Mining,Broad commodity and mining index.
+COM Indus,Materials,"Broad exposure to U.S. materials sector, including chemicals, construction materials, and packaging."
+COM Indus,Industrial Metals,"Diversified industrial metals index. Key holdings: BNP PAR.ISS. O.E. ETC (ISIN DE000PB8R1M6), WITR H.COM.SEC.Z12/UN.IDX (ISIN JE00B78NPW60), BNP PAR.ISS. O.E. ETC (ISIN DE000PB8REM3), BNP PAR.ISS. O.E. ETC (ISIN DE000PR5RMU7), FID.FDS-GL INDUSTR.YACCEO (ISIN LU0346389181)."
+COM Indus,Base Metals,"Includes producers and exposure to aluminum, lead, copper, nickel, zinc, and tin."
+COM Indus,Steel,Includes steel producers and related indices.
+COM Indus,Graphene,Companies involved in graphene production and development. Key holdings: MASON GRAPHITE INC..
+COM Indus,Battery Materials,Materials used in battery production.
+COM Indus,Rare Earths,"Companies engaged in mining and processing of rare earth elements. Key holdings: VONTOBEL-TRANS. RES. R EO, STRSOL-N.G.RES. I1EOD, STRSOL-N.G.RES. I2EOD."
+COM Indus,Comm & Mining,Covers exchange-traded funds focusing on communications and mining sectors.
+COM Indus,Battery Mat,Companies focused on materials for battery production.
+Com Edel,Gold,"Tracks the price of gold via exchange‑traded commodities, including physical gold and gold index products."
+Com Edel,Gold Minen,Equity ETFs providing exposure to companies engaged in gold mining operations.
+Com Edel,Silber,Physical and synthetic silver ETCs tracking the spot price of silver per troy ounce. Key holdings: WITR MET.SEC.Z07/UN.XAG.
+Com Edel,Silber Minen,Equity ETFs providing exposure to companies engaged in silver mining operations.
+Com Edel,Palladium,Provides exposure to palladium prices via physically backed or synthetic exchange‑traded commodities.
+Com Edel,Platin,"Platinum ETCs and certificates tracking the spot price of platinum per troy ounce. Key holdings: ISHARES PHYS.MET.O.END ZT, INV.PHY.MKT.O.E.ETC00 XPT, WITR COM.SEC.Z08/UN.IDX, UNICREDIT OPENEND PLAT, UNICREDIT OE ZT XPT, BNP PAR.ISS.ZT O.END XPT, GOLDM.S. OPENE.Z XPT."
+Com Edel,Gold Mining,Invests in equities of companies engaged in gold mining and extraction worldwide.
+Com Edel,Silver,"Tracks the price of silver through exchange‑traded commodities, both physical and synthetic."
+Com Edel,Silver Mining,Invests in equities of silver mining and production companies globally.
+Com Edel,Platinum,Provides exposure to platinum prices via physically backed or synthetic exchange‑traded commodities.
+Com Soft,Soft Commodities,"ETFs and instruments covering soft commodities such as cannabis, cocoa, coffee, and cotton."
+Com Soft,Grains,ETFs and futures focused on wheat and other grain commodities.
+Com Soft,Food & Bev,ETFs investing in food and beverage companies across the supply chain.
+Com Soft,Agri Business,"ETFs that provide exposure to agricultural business and farming operations. Key holdings: ISV-AGRIBUSIN.U.ETF DLA, VANECK AGRIBUSINESS ETF, ISHSINC-MSCI GL.AGR.PROD.."
+Com Soft,Forestry,"ETFs focusing on timber, forest products, and related forestry companies."
+Com Soft,Agritech,ETFs targeting companies that develop technology solutions for agriculture.
+Com Soft,Water,"ETFs covering water resources, utilities, and infrastructure related to water."
+DTLD DACH,German Equity,"German Equity funds and trackers focusing on equities listed in Germany. Key holdings: DWS DEUTSCHLAND LC, DWS CONCEPT-PLATOW  LC, DWS DEUTSCHLAND TFC, MPPM-DEUTSCHLAND R."
+DTLD DACH,DAX Index,"Indices and trackers that replicate the performance of the DAX, Germany's primary large-cap equity index."
+DTLD DACH,MDAX Index,"Indices and trackers covering the MDAX, the mid-cap segment of the German equity market."
+DTLD DACH,SDAX Index,"Indices and trackers representing the SDAX, Germany's small-cap equity index."
+DTLD DACH,Industrials,"Industrial companies and machinery manufacturers in Germany, Austria, and Switzerland. Key holdings: F.A.Z. MASCHINENBAU EUR."
+DTLD DACH,Tech & IT,"Companies in technology hardware, software, IT services, and tech-driven efficiency solutions. Key holdings: F.A.Z. IT + ELEKTRONIK EO, UNICREDIT OE ZT FAZIELEC."
+DTLD DACH,Consumer,"Consumer goods and retail companies, including food, beverages, and personal care. Key holdings: F.A.Z. KONSUMG. + MED.EO."
+DTLD DACH,Chem & Pharm,"Chemical and pharmaceutical companies developing and producing chemicals, drugs, and healthcare products."
+DTLD DACH,Construction & Real Estate,"Construction and real estate firms focusing on building, property development, and management. Key holdings: F.A.Z. BAU + IMMOBIL. EUR."
+DTLD DACH,Renewable Energy,"Companies involved in renewable energy generation, including wind, solar, and other sustainable power sources. Key holdings: F.A.Z. ERNEUERB. ENER. EO."
+DTLD DACH,Dividends,"Funds and strategies focused on dividend-paying stocks and dividend yield optimization. Key holdings: UBS AG O.E. ZT, UC-HVB IDX.ZT O.-END GSUL, ISHARES DIVDAX UCITS ETF."
+DTLD DACH,Stockpicker,Actively managed funds that select individual stocks based on fundamental or quantitative analysis. Key holdings: ALPHA STAR AKTIEN.
+DTLD DACH,German Bayern,Funds and companies with a primary focus on the Bavarian region of Germany.
+DTLD DACH,Telecom,Telecommunications service providers and equipment manufacturers. Key holdings: UNICREDIT O.END UNL..
+DTLD DACH,DTLD (Deutschland),Fund focused on German equities and companies listed in Germany. Key holdings: ELM DEUTSCHLAND R.
+EMU,EMU STX Banks,Invests in European banks covered by the Euro Stoxx Banks index.
+EMU,EMU Health,Invests in European healthcare companies from the Euro Stoxx Health index.
+EMU,EMU Small Cap,Invests in small‑capitalization European equities.
+EMU,EMU Value,Invests in European equities selected by value factors such as low valuation ratios.
+EMU,EMU Dividend,"Focuses on European dividend‑paying stocks, including high‑dividend and dividend‑growth strategies. Key holdings: UBS AG ZT O.END DJ.30."
+EMU,EMU Quality Income,Combines quality and income by investing in high‑quality European companies with stable cash flows and dividend yields.
+EMU,EMU Large Cap,"Invests in large‑capitalization European equities, primarily from the Euro Stoxx 50 and related large‑cap indices."
+EMU,EMU Mid Cap,Invests in mid‑capitalization European equities.
+EMU,EMU Future Leaders,"Targets innovative European companies expected to lead future growth, often in technology and consumer sectors."
+EMU,EMU Research Enhanced,Uses quantitative research and data‑driven models to enhance portfolio selection in European equities.
+EMU,EMU QuantData Fds,Employs quantitative data analytics and algorithmic strategies to manage a portfolio of European equities.
+EMU,EMU Broad Equity,"A diversified pool of European equities across sectors and market caps, not limited to a specific factor."
+EMU,EMU Sustainable,"Invests in European small‑cap companies with strong environmental, social and governance (ESG) credentials."
+EMU,Euro Stoxx 50,"Tracks the Euro Stoxx 50 index, representing the 50 largest European blue‑chip companies."
+ENERGY & POWER,Energy Indexes,"Broad energy sector indices tracking global, North American, and US energy companies across major benchmarks."
+ENERGY & POWER,Energy US Infra,US-focused energy infrastructure including master limited partnerships (MLPs) and energy income-focused strategies.
+ENERGY & POWER,Crude Oil,"Commodity exposure to Brent and WTI crude oil prices through ETCs and futures. Key holdings: WITR COM.SEC.Z08/UN.IDX, WITR MU.AS.I.BRENTOIL, UBS AG O.E. INDEX, WITR COM.SEC.Z07/UN.INDEX, BNP PAR.ISS. O.E. ETC, WITR H.COM.SEC.Z12/UN.IDX, WITR COM.SEC.Z06/UN.WTI."
+ENERGY & POWER,Refined Oil,Refined petroleum products including diesel (gas oil) and heating oil commodities.
+ENERGY & POWER,Natural Gas,Natural gas commodity exposure through ETCs and related instruments.
+ENERGY & POWER,Oil & Gas,Integrated oil and gas producers including European and exploration-focused companies.
+ENERGY & POWER,Midstream,"Oil and gas pipeline, storage, and transportation infrastructure companies."
+ENERGY & POWER,Solar,Solar energy companies and projects across utility-scale and distributed generation.
+ENERGY & POWER,Uranium,"Uranium mining and nuclear energy sector exposure. Key holdings: VNKETF-UR.NU.T. DLA, HANETF-SPROT.URAN.MNG.DLA."
+ENERGY & POWER,Clean Energy,"Clean energy sources including hydroelectric and small/mid-cap alternative energy companies. Key holdings: LGUE-HYDR.ECO. DLA, SG ISSUER INDEX NTS OE, UNICREDIT OE ZT, UBS AG PERF.Z27 BSKT."
+ENERGY & POWER,Smart Grid,Smart power grid infrastructure and grid modernization technologies.
+ENERGY & POWER,Battery & Lithium,"Battery technology, lithium mining, and energy storage solutions."
+ENERGY & POWER,Future Mobility,"Future mobility themes including electric vehicles, autonomous driving, and related technologies. Key holdings: THEMATICA-FUT.MOB.RDL, STR.SOL.-NEXT GEN.RES.FD, AS I-CN NE.GEN. A HGDEOA."
+ENERGY & POWER,Hydrogen,"Companies involved in hydrogen production, infrastructure, and clean hydrogen technology for energy transition applications. Key holdings: GG WASSERSTOFF R."
+EUR BRA,Eurozone Banks,"Tracks large and mid-cap banks in the Eurozone, covering Stoxx 600 banking index and related products. Key holdings: UNICREDIT OE ZT FAZIUBNK, BNP PAR.ISS.OPEN END."
+EUR BRA,Auto,"Invests in European automotive companies, including manufacturers of cars and components."
+EUR BRA,Basic Resources,"Includes producers of raw materials such as metals, chemicals, construction materials, and related sectors. Key holdings: IS.S.E.600 BA.RE.U.ETF A, MUF-AM.STXXEO600B.MAT.UED, INVESCOMI STXE600 BASICR, INVESCOMI STXE600 CHEMIC, UNICREDIT OE ZT SXOT, ISH.S.EU.600 C+M U.ETF A.."
+EUR BRA,Financials,"Covers diversified financial services firms, including banks, asset managers, and other financial intermediaries. Key holdings: XTR.MSCI EUR.FI.SC.1C, UNICREDIT OE ZT SXFT, IS.S.E.600 FIN.S.U.ETF A, UNICREDIT OE ZT FAZIENGN."
+EUR BRA,Food & Beverage,"Targets European food and beverage producers, including food processing and beverage companies."
+EUR BRA,Health,"Includes healthcare and life sciences companies across pharmaceuticals, medical devices, and health services in the Eurozone."
+EUR BRA,Household & Personal,"Covers producers of household goods and personal care products for European consumers. Key holdings: INVESCOMI STXE600 P.HH.G, UC-HVB IDX.ZT O.-END SXQT, UNICREDIT OE ZT Q2A."
+EUR BRA,Industrials,"Invests in industrial goods and services, including capital goods, machinery, and manufacturing. Key holdings: MUL-AM.ST.EU.600 IND.UEAC, XTR.MSCI EUR.IND.SC.1C, ISVP.-IS.M.EIS EOA, SS SPDR MSCI EUR.IND.UETF, DMG MORI CO. LTD.."
+EUR BRA,Insurance,"Tracks European insurance companies offering life, property, and casualty coverage."
+EUR BRA,E-Commerce,Focuses on European e‑commerce platforms and online retail technology providers.
+EUR BRA,Consumer Staples,"Includes European consumer staples companies involved in essential goods distribution. Key holdings: UNICREDIT OE ZT FAZESKTR, SPDR MSCI EUROPE C.S.UETF, ISVP.-IS.M.ECSS EOA."
+EUR BRA,Media,"Covers European media and entertainment firms, including broadcasting, publishing, and advertising."
+EUR BRA,Oil & Gas,"Invests in European oil and gas exploration, production, and related services."
+EUR BRA,Real Estate,"Tracks European real estate investment trusts and property management companies. Key holdings: IS.S.E.600 R.EST.U.ETF A, UC-HVB IDX.ZT O.-END SXRT, UNICREDIT OE ZT Q2D."
+EUR BRA,Eurozone Small Cap,Targets small‑capitalization Eurozone equities beyond the large‑cap benchmark.
+EUR IDX,Large Cap,"Indices and funds covering large capitalization European equities, typically the top 200-300 companies by market cap. Key holdings: ISHS II-STXX EUR.50 EODIS."
+EUR IDX,Mid Cap,"Indices and funds focusing on mid-sized European companies, generally ranking between 200 and 600 by market cap."
+EUR IDX,Small Cap,"Indices and funds focusing on small capitalization European companies, generally ranking between 600 and 2000 by market cap. Key holdings: IN-I.C.E.S.E ZEOA, CTL.EUR.SM.COS  1EEOA."
+EUR IDX,Micro Cap,"Indices and funds focusing on micro capitalization European companies, representing the smallest listed equities."
+EUR IDX,Dividend,"Strategies that target high dividend-yielding European equities. Key holdings: SGA DJES DIV.IDX ZT05/UN, UBS AG ZT O.END DJ.30, UC-HVB IDX.ZT O.-END SD3T, UC-HVB IDX.ZT O.-END SD3P, UC-HVB IDX.ZT O.-END SD3R, GS EUROZ.EQ.INC RCDLHI, UBS AG O.E. ZT.."
+EUR IDX,Dividend ESG,"Dividend strategies that incorporate environmental, social, and governance (ESG) criteria."
+EUR IDX,Growth,Strategies focusing on European equities with high growth potential.
+EUR IDX,Value,Strategies focusing on undervalued European equities relative to fundamentals.
+EUR IDX,Quality,Strategies focusing on high-quality European companies with strong profitability and stability.
+EUR IDX,Momentum,Strategies focusing on European equities with recent positive price momentum. Key holdings: BNPPE.-E.MO.EU.UECEO.
+EUR IDX,ESG,"Strategies that integrate environmental, social, and governance factors into European equity selection."
+EUR IDX,Sustainable,Strategies focusing on sustainable or socially responsible European equities.
+EUR IDX,Sector Rotation,Strategies that rotate across European sectors to capitalize on macroeconomic cycles. Key holdings: AMUNDI EUR.SECT.ROT.I 3D..
+EUR IDX,Broad Market,Indices covering a broad set of European equities across all market caps and sectors. Key holdings: ISHSIII-C.M.E.U.E.EO ACC.
+EUR IDX,Eurozone,Indices and funds focused specifically on Eurozone countries.
+EUR IDX,Europe ex-UK,European equities excluding the United Kingdom.
+EUR IDX,Eurozone Small/Mid Cap,Indices and funds covering small and mid-sized Eurozone companies.
+EUR IDX,Banks Sector,Indices and funds focusing on the European banking sector.
+EUR IDX,Eurozone Small Cap Sustainable,Fund focusing on sustainable small capitalization equities in the Eurozone. Key holdings: LUPUS ALP.-SM.EU.CH. A.
+EUR LÄNDER,Nordic - Fds,"Nordic equity fund focusing on Swedish and other Nordic markets, denominated in SEK."
+EUR LÄNDER,Nordic - E,"MSCI Nordic Index tracker providing exposure to large and mid‑cap equities in Denmark, Finland, Norway and Sweden."
+EUR LÄNDER,Nordi-small Fds,DNB Nordic Small Cap fund targeting small‑cap companies across the Nordic region.
+EUR LÄNDER,Norway Fds,"Norwegian equity fund managed by Nordea, investing primarily in Norwegian listed equities."
+EUR LÄNDER,Norway Z,"Index‑based fund tracking a Norwegian market index, offered by Lang & Schwarz."
+EUR LÄNDER,OMX STOCK,"iShares OMX Stockholm Cap Index ETF, covering large‑cap Swedish equities."
+EUR LÄNDER,OMX COPE,"BNP Paribas‑issued OMX Copenhagen index product, exposing to the Danish equity market."
+EUR LÄNDER,Schweiz,Xtrackers Switzerland equity ETF providing exposure to Swiss large‑cap stocks.
+EUR LÄNDER,Schweiz Perl,"Lang & Schwarz Swiss index fund, tracking a broad Swiss market benchmark."
+EUR LÄNDER,SMI,"Swiss Market Index (SMI) tracker from UBS, covering the 20 largest Swiss equities."
+EUR LÄNDER,SLI,"Xtrackers Swiss Leadership Index (SLI) ETF, focusing on Swiss mid‑cap and large‑cap stocks."
+EUR LÄNDER,SMI Z,UBS Z‑tier SMI futures‑based product offering exposure to the Swiss market index.
+EUR LÄNDER,SMIM,"iShares SMIM ETF, tracking the Swiss Mid Index (SMIM) of mid‑cap Swiss companies."
+EUR LÄNDER,AEX,"iShares AEX Index ETF, providing exposure to the 25 largest Dutch companies."
+EUR LÄNDER,Austria,"iShares ATX UCITS ETF, tracking the Austrian Traded Index of the leading Austrian equities."
+EUR LÄNDER,Cac40,"Amundi CAC 40 ESG ETF, covering the 40 largest French equities with ESG screening."
+EUR LÄNDER,ITALY,"iShares FTSE MIB ETF, exposing to the 40 biggest Italian companies."
+EUR LÄNDER,ITALY Banks,"WITR Italy Banks ETP, a sector‑specific product focusing on Italian banking stocks."
+EUR LÄNDER,Spain,"Xtrackers Spain ETF, providing exposure to the Spanish equity market."
+EUR LÄNDER,Spain Ibex 35,"Amundi IBEX 35 ETF, tracking the 35 largest Spanish stocks on the IBEX 35 index."
+EUR LÄNDER,Spain Ibex 36,"Amundi IBEX 35 (UR) ETF, offering a synthetic exposure to the IBEX 35 index."
+EUR LÄNDER,Greece,"Amundi MSCI Greece ETF, focusing on Greek equities listed on the Athens Exchange."
+EUR LÄNDER,UK,"UBS MSCI UK ETF, covering large and mid‑cap UK equities."
+EUR LÄNDER,UK Fds,"INV UK Equity fund, an actively managed fund investing in a diversified portfolio of UK stocks."
+EUR LÄNDER,Ftse 100,"iShares FTSE 100 ETF, tracking the 100 largest UK‑listed companies."
+EUR LÄNDER,Gbp,"iShares MSCI UK LS ETF, providing exposure to the UK equity market with GBP returns."
+EUR LÄNDER,UK Fds Inc $,"UK Equity Income fund denominated in USD, focusing on income‑generating UK stocks."
+EUR LÄNDER,UK Ftse 100,"UBS FTSE 100 ETF, delivering exposure to the UK blue‑chip index."
+EUR LÄNDER,UK Ftse 101,"Vanguard FTSE 100 ETF, a low‑cost tracker of the FTSE 100."
+EUR LÄNDER,UK Ftse 102,"iShares FTSE 100 ETF (LSD), offering a GBP‑hedged exposure to the FTSE 100."
+EUR LÄNDER,UK Ftse 103,"Multi‑manager FTSE 100 Swap ETF, providing synthetic FTSE 100 exposure."
+EUR LÄNDER,UK Divd,"SPDR S&P UK Dividend Aristocrats ETF, investing in UK companies with a history of dividend growth."
+EUR LÄNDER,UK Ftse 250,"Vanguard FTSE 250 ETF, covering mid‑cap UK equities."
+EUR LÄNDER,UK Ftse 251,"Xtrackers FTSE 250 ETF, providing exposure to the FTSE 250 mid‑cap index."
+EUR LÄNDER,EAST EUR,"Amundi Eastern Europe ETF, covering equity markets of Eastern European countries."
+EUR LÄNDER,CECE,"BNP Paribas CECE index product, tracking Central European (Czech, Hungarian, Polish) equities."
+EUR LÄNDER,CECE MID,"Raiffeisen CECE Mid index fund, focusing on mid‑cap companies in the CECE region."
+EUR LÄNDER,CECE & STX  SO,"Erste Group Bank combined CECE & STX index product, offering exposure to Central and South‑Eastern Europe."
+EUR LÄNDER,Polen,"iShares MSCI Poland ETF, covering the largest Polish equities."
+EUR LÄNDER,Polen Wig 20,"Expat Poland WIG20 ETF, tracking the 20 largest companies on the Warsaw Stock Exchange."
+MY WAY,Swiss Shares,Swiss equity securities listed on Swiss exchanges.
+MY WAY,Asia Pacific ex Japan,Equities from Asian and Pacific markets excluding Japan. Key holdings: UBSMSCIPACEXJP DLAA.
+MY WAY,China Broad,Broad Chinese equity exposure across all share classes.
+MY WAY,China A-Share,Chinese A-shares traded on mainland exchanges like Shanghai and Shenzhen.
+MY WAY,Emerging Markets Equity,"Equity investments in developing economies across Asia, Latin America, Africa, and EMEA. Key holdings: N.O.GS-EM.MKTS EQU. JC DL, RCGF-S.EM.ST.E. YDLA."
+MY WAY,EMU Active Equity,Actively managed European Monetary Union equities targeting the Eurozone.
+MY WAY,EMU Passive Equity,Index-tracking European Monetary Union equity funds.
+MY WAY,EMU Sustainable,Sustainable and responsible investing focused on Eurozone companies.
+MY WAY,EMU Small Cap,Small-capitalization equities in European Monetary Union countries.
+MY WAY,Global Equity Active,"Actively managed global equity strategies across developed and emerging markets. Key holdings: CIF-CGNPF L LDLA, FTGF PUT.US RES P1DLA, MUL.MAN.ACC.-EUR.EQ.FEOA, UBS FDSO-MSCI ACW.SF AAHE, UBS FDSO-MSCI ACW.SF AADL."
+MY WAY,Global Equity Climate,Global equities aligned with climate themes and environmental transition.
+MY WAY,Global ESG Engagement,Global equities where managers actively engage with companies on ESG practices.
+MY WAY,Global ESG Leaders,"Global equities of companies with leading ESG ratings and practices. Key holdings: RCG-R.NZ50 CLIM.EQS IDLA, UBS-SHTRANS F-DLA, NOR.1-G.CLI ENG BIDLA, UIE-ACWI C.P.A. ADLA."
+MY WAY,Global Sustainable,Global equities meeting sustainability and responsible investment criteria.
+MY WAY,Global Income,Global equities focused on income generation through dividends and distributions.
+MY WAY,Global Value,Global equities targeting underpriced securities with intrinsic value characteristics.
+MY WAY,Global Tech,Global equities in technology and innovation-driven companies.
+MY WAY,Global Health,"Global equities in healthcare, medical devices, and life sciences. Key holdings: VARIOP.-MIV G.MEDTEC.I3DL, BGF-WORL.HEALTHS. I2 DL."
+MY WAY,Global Climate,"Global equities aligned with climate transition and environmental objectives. Key holdings: BNPP SM.FOOD UP RHDLA, RCG-ROB.SMART MOB.IEOA, AL.GL.I-A.G.WA WT7DLA, VONT.GL.ENV.CH GDLA."
+MY WAY,Digital Economy,"Equities in digital infrastructure, e-commerce, fintech, and internet companies."
+MY WAY,Global Extended Dev,"Broad global developed market equities including US, Europe, Japan, and Canada."
+MY WAY,Japan Equity,"Japanese equity securities across large, mid, and small capitalizations."
+MY WAY,UK Equity,"United Kingdom equity securities listed on London Stock Exchange. Key holdings: UBSLFS-MSCI UK H-EO AAC, UBSLFS-MSCI UK AALS."
+MY WAY,US Equity,"United States equity securities across all market capitalizations. Key holdings: MUL.MAN.ACC-US EQS FEOHA, UBS(L)E.-USA GR.DL FA.EOH, RCG-BPUSPREQ YDLA, RCG-BPUSPREQ Y HDEOA, MUL.MAN.ACC-US EQS FDLA, UBS(L)EQ.-USA GR.DL F-ACC."
+MY WAY,US Tech,"US technology sector equities including software, hardware, and internet companies. Key holdings: INVESCOMI NASDAQ100 SWAP."
+MY WAY,US ETF,Exchange-traded funds providing US market exposure.
+MY WAY,Global Small Cap,Small-capitalization equities across global developed markets.
+MY WAY,Gold,Precious metals exposure primarily through gold securities.
+MY WAY,Commodities,"Broad commodity exposure including energy, metals, and agricultural products. Key holdings: UBS FDSO-UBS C.C.SF EOAA."
+PAZIFIK,Asia ex-China,Tracks Asian equities excluding Chinese companies.
+PAZIFIK,Asia Pacific ex-Japan,"Invests in Asia-Pacific equities excluding Japan, focusing on regional growth opportunities."
+PAZIFIK,Asia REIT,Provides exposure to real estate investment trusts across the Asia-Pacific region.
+PAZIFIK,Asia Pacific,Offers diversified investment in large and mid‑cap equities across the Asia‑Pacific region.
+PAZIFIK,Asia Income,Targets income through dividend‑paying stocks and income‑generating instruments in Asia.
+PAZIFIK,Pacific,"Tracks the MSCI Pacific index, covering large and mid‑cap stocks across Pacific Rim markets."
+PAZIFIK,India Equity,"Invests in Indian listed equities, focusing on large and mid‑cap companies."
+PAZIFIK,India Thematic,"Captures thematic investment opportunities in India, such as growth sectors and trends."
+PAZIFIK,India RE,Provides exposure to Indian real estate and property‑related securities.
+PAZIFIK,India Consumer,Targets Indian consumer discretionary and staples companies serving domestic demand. Key holdings: COL.ETF T.II-COL.IND.CON..
+PAZIFIK,India Select,Selectively invests in high‑conviction Indian equity ideas based on manager outlook.
+PAZIFIK,India MSCI,"Tracks the MSCI India index for broad, liquid exposure to Indian equities."
+PAZIFIK,India Internet,"Focuses on Indian internet and digital economy companies, including e‑commerce and fintech."
+PAZIFIK,India Nifty,"Tracks the Nifty 50 index, representing the 50 largest Indian stocks."
+PAZIFIK,India FTSE,Tracks the FTSE India index for exposure to Indian large‑cap equities.
+PAZIFIK,India TR,"Offers total‑return exposure to Indian equities, aiming for capital appreciation and income."
+PAZIFIK,India Tech,"Invests in Indian technology and software services firms, leveraging the sector’s growth."
+PAZIFIK,ASEAN Front,"Invests in leading companies across ASEAN front‑markets, targeting early‑stage growth economies."
+PAZIFIK,ASEAN,"Provides diversified exposure to equities across Southeast Asian nations, including Indonesia, Malaysia, Singapore, Thailand and the Philippines."
+PAZIFIK,Thailand MSCI,Tracks the MSCI Thailand index for liquid exposure to Thai equities.
+PAZIFIK,Thailand SET50,Invests in the 50 largest Thai companies via the SET50 index.
+PAZIFIK,Thailand,Offers broad investment in Thai equities across all market capitalisations.
+PAZIFIK,Singapore MSCI,"Tracks the MSCI Singapore index, covering Singapore’s leading listed companies."
+PAZIFIK,Malaysia,Provides exposure to Malaysian equities through the MSCI Malaysia index.
+PAZIFIK,Indonesia,Invests in Indonesian equities via the MSCI Indonesia index.
+PAZIFIK,Philippines,Tracks the MSCI Philippines index for exposure to Philippine stocks.
+PAZIFIK,Australia,"Offers diversified investment in Australian equities, including the S&P/ASX 200."
+Tech_un-merged,Semiconductor,"Companies involved in the design, manufacturing, and distribution of semiconductor chips and related indices. Key holdings: HSBC NASDAQ GL SEMIC, MUL-AM.MSCI SEMICOND. EOA, MUL-AM.MSCI SEMICOND. EOD, VANECK SEMICONDUCT UC.ETF, ISIV-M.GL.SEMI. DLA."
+Tech_un-merged,Technology,"Broad technology companies across software, hardware, IT services, and internet platforms. Key holdings: UNICREDIT OE ZT SX8P, VONTOBEL O.END PART.ZT, DPAM B-EQ.N.GEM.SU. WEOA, ARK ETF TR.-INNOVAT.ETF, F.TEM.INV-F.TECHN.A A.EUR, BGF-WORLD TECH.N.A2 EO, JHH-JHH GL TEC.LE.H2AEO, FID.FDS-GL TECHNOL.A GL, JSS S.EQ-TECHD. CEOA, AM-SPWLDINF.TECHSCR. UE D, BGF-NEXT GEN.T. A2EOA, UBS AG O.E. ZERT, CTL.GLOB.TECH.   AUP, CTL.GLOB.TECH. AEH EO, MUL-AM.MSCI DI.TECH. DLA, BGF-NEXT GEN.T. D2EOA, UNICREDIT OE ZT FAZIELEC, MUL AMUN W INFTEC ETF ACC, ISHSV-S+500INF.T.SECT.DLA."
+Tech_un-merged,Digital Infra,"Companies providing cybersecurity, cloud computing, IT infrastructure, artificial intelligence, and IoT solutions. Key holdings: ISHSIV-DIGITALISATION DLA, ISHSIV-DIGITIL.SECUR.DL A, L+G-L+G CYBER SEC.U.ETF, ARK IU-R.CYB S+D PR.UEDLA, FTGF-NASDQ CYBSEC.UE ADLA, LG-CYB.SEC.INNOV. ETFDLA, L+G-L+G ART.INTEL.U.ETF, WISDOMTREE ART. INT.DLAC, X(I)-AI+BIG DATA ETF 1CDL, DWS ARTIFIC.INTELLIGEN.ND, DWS IN.-AR.INT. LDEOD, DWS IN.-AR.INT. LCEOA, AGIF-A.GL.ART.INTEL.A EO, LANG+SCHWARZ O.E. INDEX."
+Tech_un-merged,Automation & Robotics,"Firms engaged in industrial automation, robotics, and related automation technologies. Key holdings: AIS-A.MSCI ROB+AI UEA, GL X ETF-GXROBSAI DLA, LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9ESN2), LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9FDZ5), ARK AR.I.RO. ETFDLA (ISIN IE0003A512E4), LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9EEY9)."
+Tech_un-merged,Telecom & 5G,"Telecommunications providers and companies building 5G networks and next-generation connectivity. Key holdings: UC-HVB IDX.ZT O.-END SXKT (ISIN DE000HV16E20), SS SPDR MSCI EU.CO.S.UETF (ISIN IE00BKWQ0N82), XTR.MSCIECMSVCS 1C (ISIN LU0292104030), ST.S.SP U CS  A (ISIN IE00BFWFPX50), NBIF-NXTGEN.CONCTY  AEOA (ISIN IE00BMPRXP56), LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9LAW6), MUL-AMUN ST600 TELEC ETFA (ISIN LU1834988609)."
+Tech_un-merged,Wearables,"Manufacturers of wearable devices such as smartwatches, fitness trackers, and health monitoring gadgets."
+Tech_un-merged,Quantum Computing,"Companies developing quantum computing hardware, software, and related quantum technologies. Key holdings: VANECK QUAN.CO.  1DLA (ISIN IE0007Y8Y157), ISIV-QNTM COMP DLA (ISIN IE000C6ITGC8)."
+Tech_un-merged,Space,"Companies involved in space exploration, satellite manufacturing, launch services, and space-related infrastructure."
+Tech_un-merged,Defense,"Defense contractors and aerospace companies providing military technology, equipment, and services."
+Tech_un-merged,Gaming,"Video game publishers, esports organizations, and interactive entertainment platforms. Key holdings: VONTOBEL O.END PART.ZT (ISIN DE000VP9VJV9), LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9KTE6)."
+Tech_un-merged,Social Media,"Companies operating social media platforms, digital content creation, and online communities."
+Tech_un-merged,E-Commerce,"Online retail, digital marketplaces, and e-commerce technology providers."
+Tech_un-merged,Metaverse,"Companies building virtual reality, augmented reality, and metaverse platforms for digital experiences."
+Tech_un-merged,Mobility,"Electric vehicle manufacturers, autonomous driving technology, and mobility-as-a-service providers."
+Tech_un-merged,3D Printing,"Companies in 3D printing, additive manufacturing, and related printing technologies. Key holdings: ARK ETF TR.-3D PRINT ETF (ISIN US00214Q5009), PROTO LABS INC.   DL-,001 (ISIN US7437131094)."
+Tech_un-merged,Spin-Off,Investment funds and companies focused on corporate spin-off events and restructuring opportunities.
+Tech_un-merged,Emerging Tech,"German thematic index tracking companies in emerging technology sectors including robotics, AI, 5G, quantum computing, and other cutting-edge innovations. Key holdings: LANG+SCHWARZ O.E. INDEX (ISIN DE000LS9NL47)."
+Tech_un-merged,Digital Infrastructure,"Exchange-traded fund providing exposure to digital infrastructure companies involved in data centers, cloud computing, and network connectivity solutions. Key holdings: ETF SER.SOL.-DE.N.G.C.ETF (ISIN US26922A2895), FRST TR.IDXX NXTG UETFADL (ISIN IE00BWTNM743)."
+TRENDS,Real Estate,"Covers diversified real estate holdings across multiple regions and property types, including residential, commercial, and mixed-use assets."
+TRENDS,Real Estate EU,"Targets real estate securities and funds focused on European markets, including REITs and direct property investments in EU countries. Key holdings: UNICREDIT OE ZT FAZICNRE, GRUNDBESITZ EUROPA RC."
+TRENDS,Real Estate Asia,"Invests in real estate investment trusts (REITs) and property companies listed in Asian markets, targeting top 20 regional performers."
+TRENDS,Real Estate Global,"Offers exposure to global real estate securities, including international REITs and property funds spanning multiple continents. Key holdings: AIS-A.FTSE E.N.G.2 U.ETFD, SPDR DW JNES GL.RL.EST.DL, AIS-AM.FTSE EPR.N.G. UEUD."
+TRENDS,Real Estate Germany,"Focuses on German real estate assets, primarily REITs and property companies listed on German exchanges."
+TRENDS,Real Estate Climate,"Invests in climate-focused real estate funds, such as European long‑term investment funds emphasizing sustainable and energy‑efficient properties. Key holdings: KLIMAVEST ELTIF EOD."
+TRENDS,Green Building,Includes funds and ETFs that invest in green‑certified buildings and environmentally sustainable real estate projects.
+TRENDS,US Homebuilding,Provides exposure to US home construction companies and ETFs focusing on residential building and housing development. Key holdings: ISHS TR.-US HOME CONS.ETF.
+TRENDS,Office REIT,Invests in publicly traded office real estate investment trusts (REITs) and office property companies.
+TRENDS,Education Real Estate,"Covers real estate assets dedicated to educational facilities, such as school buildings, universities, and training centers."
+TRENDS,Private Equity,"Comprises private equity funds and swap strategies that invest in unlisted equity, including buyouts and growth capital across sectors."
+TRENDS,Education,"Includes funds and investments focused on educational services, content, and technology, such as private education providers and ed‑tech firms. Key holdings: WEL.3-NE.GEN.ED EDLA."
+US BRA,Finance,"Covers banks, financial services, and related institutions in the US market."
+US BRA,Communication Services,Includes telecom and media companies providing communication services.
+US BRA,ESG SRI,"Targets environmental, social, governance, and socially responsible investment funds."
+US BRA,Energy Materials,Encompasses companies involved in energy production and raw materials such as metals and chemicals.
+US BRA,Infrastructure Util,"Includes infrastructure and utility companies providing essential services like electricity, water, and transportation."
+US BRA,Industrials Defense,Covers industrial conglomerates and defense contractors.
+US BRA,Health Care,"Includes healthcare providers, biotech, and medical device companies."
+US BRA,Real Estate Homebuilding,Covers real estate investment trusts (REITs) and home construction companies.
+US BRA,Consumer Staples,"Includes companies producing essential consumer goods like food, beverages, and household items."
+US BRA,Consumer Discretionary,"Covers non‑essential consumer goods and services, including retail, automotive, and leisure."
+WELT BRA,Security Services,"Companies providing security services including guarding, surveillance, and protection solutions."
+WELT BRA,FinTech,"Financial technology companies and funds focused on digital payments, lending platforms, and financial software. Key holdings: FACTSET RESH SYS   DL-,01."
+WELT BRA,Finance,General financial services companies and broad-based finance indices.
+WELT BRA,Industrials,"Industrial sector including manufacturing, machinery, and related services."
+WELT BRA,Industrie 4.0,"Industrial automation, smart manufacturing, and fourth industrial revolution technologies. Key holdings: FID.FDS-GL INDUSTR.YACCEO."
+WELT BRA,Metal & Mining,Mining companies and metal producers including precious and industrial metals.
+WELT BRA,Infrastructure,"Infrastructure assets including utilities, transportation, and energy infrastructure. Key holdings: BNP-ECPIGESG U.ETFEOA, ISHSII-GL INFRASTR.DLDIS, VII-DFFPH.GLLI IDLA, AIS-A.GLO.INFRASTRUC.UEEO, VII-DFFPH.GLLI BDLA, FTGF-CLBR.INFR.VAL.AADLH, XTR.S+P GBL INFR.SWAP 1C, DWS INV INFR IDQDLD, GLXETFGXUSIDEV DLA, DWS INV INFR TFCH(P)DLA, MSIF-QA GL.INFRASTR.IDLA, ISHS TR.-GL.INFRASTR. ETF, PIMCO GL I.-MLP+EN. E INC, LAZ.G.A.-L.G.L.I.EQ.BADLH, ST.S MS M.A.G."
+WELT BRA,E-Commerce,Online retail and e-commerce platforms and related logistics services.
+WELT BRA,Consumer Staples,"Consumer staples companies focused on essential goods and everyday products. Key holdings: MUL-LYX.MSCI WCS TRUE AEO, X(IE)-MSCI WO.CO.ST. 1CDL."
+WELT BRA,Consumer Brands,"Consumer discretionary brands and retail companies across various product categories. Key holdings: FF-GLBL CONS.BR. AEO, ISHS.V-M.W.C.ST.S.ESG DLD, BNPP CON.INNOVATORS CLCAP, JSS-SUSEQNXTGNC PAEO, ST.STR.SP.MS.ACWIM UC.ETF, ROBECO GL CON.TRDS. Z EO."
+WELT BRA,Luxury Brands,"Luxury goods companies including fashion, accessories, and premium lifestyle brands. Key holdings: GAM MULT.-LUXBE-EUR B, AIS-AMUNDI GL.LUX.UE DLA, ECHIQUIER LUXRY AEOA, AIS-AMUNDI GL.LUX.UE EOA."
+WELT BRA,REITS,Real estate investment trusts focused on digital infrastructure properties.
+WELT BRA,Luxury Fashion Indices,"Indices tracking European luxury fashion stocks including fashion, leather goods, cosmetics, watches, and jewelry companies. Key holdings: LANG+SCHWARZ O.E. INDEX."
+USA PLUS,Dow Jones,"ETFs tracking the Dow Jones Industrial Average, including hedged versions. Key holdings: ISHSVII-DJIA DL ACC."
+USA PLUS,US Tech MSCI,US technology sector ETFs based on MSCI USA Information Technology index.
+USA PLUS,S&P Tech Sector,US technology sector ETFs based on the S&P US Technology Sector index. Key holdings: INVESCOMI S+P US TEC SEC.
+USA PLUS,US Tech EqW,"Equal-weight US technology index ETFs, such as Amundi US Tech 100 Equal Weight."
+USA PLUS,Nasdaq 100,"ETFs tracking the Nasdaq 100 index, including leveraged and currency-hedged variants. Key holdings: MUL AMUN CN100SU A."
+USA PLUS,S&P 500,Standard and swap-based S&P 500 ETFs.
+USA PLUS,S&P 500 Hedged,Currency-hedged S&P 500 ETFs. Key holdings: UBS-U.CORE SP500 ETF HEOA.
+USA PLUS,S&P 500 Quanto,Quanto (cross-currency) S&P 500 ETFs.
+USA PLUS,S&P 500 Leveraged,Leveraged S&P 500 ETFs with 2x or 3x exposure.
+USA PLUS,S&P 500 EqW,S&P 500 Equal Weight index ETFs.
+USA PLUS,S&P 500 ESG EqW,S&P 500 Equal Weight ESG-screened index ETFs.
+USA PLUS,US MSCI,"Broad US equity ETFs tracking the MSCI USA index. Key holdings: SLFL-EQU.USA IEOA, SWIS.L.F.L.EQU.USA IACCDL, LYXOR MSCI USA ETF I."
+USA PLUS,US MSCI Leveraged,Leveraged MSCI USA ETFs (2x daily).
+USA PLUS,US Dividend Quality,"US dividend quality and quality income ETFs (e.g., Fidelity US Quality Income)."
+USA PLUS,S&P Dividend Aristocrats,ETFs tracking the S&P US Dividend Aristocrats index.
+USA PLUS,S&P 500 High Div Low Vol,S&P 500 High Dividend Low Volatility index ETFs. Key holdings: INVESCOM3 SP500 HD LV A.
+USA PLUS,US Quality Growth,US quality growth ETFs.
+USA PLUS,MSCI World,Global equity ETFs tracking the MSCI World index.
+USA PLUS,US Value,"US value equity ETFs, including Barclay CapVal and undervalued strategies. Key holdings: OSS.S.B.EU.S.V.T U.ETF1CE."
+USA PLUS,US CROCI,US value ETF using the CROCI (Cash Return on Capital Invested) methodology.
+USA PLUS,DJ Select Dividend,ETFs tracking the Dow Jones U.S. Select Dividend index.
+USA PLUS,S&P 400 Mid,S&P 400 Mid Cap index ETFs.
+USA PLUS,MSCI Mid Cap,US mid cap ETFs based on MSCI indices.
+USA PLUS,US Mid Cap EqW,Equal-weight US mid cap index ETFs.
+USA PLUS,US Small & Mid Blend,ETF that blends US small and mid cap stocks.
+USA PLUS,S&P 600 Small,"S&P 600 Small Cap index ETFs, including ESG versions."
+USA PLUS,Russell 2000,ETFs tracking the Russell 2000 small cap index.
+USA PLUS,MSCI Small Cap,MSCI US Small Cap index ETFs.
+USA PLUS,Other Small Cap,"Other US small cap ETFs from various providers (e.g., NEUB.BER., JPM, KBC)."
+USA PLUS,US Private Equity,Listed private equity ETFs tracking US private equity. Key holdings: ISHSII-LIST.PRIV.EQ.DLDIS.
+USA PLUS,North America,Broad North America equity ETFs (FTSE North America).
+USA PLUS,Canada MSCI,Canadian equity ETFs based on MSCI Canada index.
+USA PLUS,Canada Other,"Other Canadian equity ETFs (e.g., UBS, QBDL)."
+USA PLUS,Latin America Mexico,Mexico equity ETFs (MSCI Mexico).
+USA PLUS,Latin America Broad,Broad Latin America equity ETFs (MSCI EM Latin America).
+USA PLUS,Latin America Argentina,Argentina equity ETFs (MSCI Argentina).
+USA PLUS,Latin America Brazil,"Brazil equity ETFs, including MSCI and FTSE indices. Key holdings: FT ICAV-FTSE BRAZ.ETF DLA."
+USA PLUS,Latin America Chile,Chile equity ETFs (MSCI Chile).
+A & P,Data Center,"Companies providing data center infrastructure and colocation services, primarily in Australia."
+A & P,REIT,"Real Estate Investment Trusts holding commercial, industrial, or residential properties, concentrated in Singapore. Key holdings: CAP.L.ASCEND UTS, MAPLETREE PAN ASIA C.REGS."
+A & P,Fintech,"Financial technology companies providing digital payments, gaming, and e-commerce financial services in Southeast Asia."
+A & P,IT Services,Information technology consulting and software services companies based in India serving global clients.
+A & P,Energy,"Oil, gas, and energy production companies with significant operations in India."
+A & P,Bank,Commercial banking institutions operating in India and Singapore serving retail and corporate customers.
+A & P,Electronics,"Consumer and industrial electronics manufacturing companies in Korea, including major device makers."
+A & P,Semicon,Semiconductor design and manufacturing companies in Korea producing memory and logic chips.
+A & P,Tech,"Diversified technology companies in Korea encompassing displays, chemicals, and other tech components."
+CHINA,Autonomous Driving,"Companies developing autonomous driving technologies in China, including Alibaba Group, Galaxy Entertainment, and Hesai Group. Total market cap: 259.88."
+CHINA,Banking,Chinese banking sector represented by China Construction Bank. Market cap: 10.69.
+CHINA,Cement,Cement production sector featuring Anhui Conch Cement. Market cap: 26.55.
+CHINA,Consumer Goods,Consumer goods companies such as China Res Beer and Pop Mart. Combined market cap: 249.58.
+CHINA,Data Center,Data center services provider GDS Holdings. Market cap: 53.46.
+CHINA,E-Commerce,E‑commerce platforms JD.com and PDD Holdings (Pinduoduo). Combined market cap: 159.19.
+CHINA,Education,Education services provider New Oriental Education & Technology. Market cap: 70.61.
+CHINA,Electric Vehicles,"Electric vehicle manufacturers including BYD, CATL, Li Auto, NIO, and XPENG. Combined market cap: 1,026.24."
+CHINA,Energy Coal,Coal energy provider China Shenhua Energy. Market cap: 50.39.
+CHINA,Finance HK,"Hong Kong financial services firms: AIA Group, HKT Trust, Hong Kong Exchanges & Clearing, and Link REIT. Combined market cap: 618.21."
+CHINA,Industrial,Industrial manufacturers such as Foxconn and ZCZL Industry Technology. Combined market cap: 38.11.
+CHINA,Industrial Robot,Industrial robotics companies Horizon Robotics and UBTECH Robot. Combined market cap: 168.18.
+CHINA,Insurance,Insurance providers China Life Insurance and PICC Property & Casualty. Combined market cap: 55.12.
+CHINA,Internet,"Major Chinese internet platforms: Alibaba, Baidu, Meituan, NetEase, and Tencent. Combined market cap: 824.66."
+CHINA,Materials,Materials sector represented by China Hongqiao Group. Market cap: 43.95.
+CHINA,Pharma,Pharmaceutical company CSPC Pharmaceutical Group. Market cap: 11.57.
+CHINA,Bank,Banking and port conglomerate China Merchants Port (classified as Bank). Market cap: 16.64.
+CHINA,Semiconductors,"Semiconductor firms including ASMPT, Bank of China (Hong Kong), China Mengniu (?), and China Resources Power. Combined market cap: 91.55 (excludes one entry without data)."
+CHINA,Smart Home,Smart home solutions provider Haier Smart Home. No market cap data provided.
+CHINA,Solar Energy,Solar energy equipment maker Ming Yang Smart Energy. No market cap data provided.
+CHINA,Telecom,"Telecommunications operators China Mobile, China Telecom, and China Unicom (HK). Combined market cap: 112.15."
+CHINA,Wind Energy,Wind turbine manufacturer Goldwind Science & Technology. Market cap: 18.88.
+CHINA,Tech Fin HK,Technology finance sector in Hong Kong represented by AIA Group. Market cap: 104.4.
+CHINA,Tech Fin CN,Technology finance sector in mainland China represented by Goldwind Science & Technology. Market cap: 18.89.
+CHINA,China Consumer,Consumer-focused Chinese companies such as Haier Smart Home. No market cap data provided.
+CHINA,China E-Commerce,E‑commerce platform JD.com. Market cap: 41.25.
+CHINA,China EV,Electric vehicle sector covering QFin Holdings and XPENG. Combined market cap: 171.35.
+CHINA,China Infrastructure,Infrastructure materials provider Anhui Conch Cement. Market cap: 26.55.
+CHINA,China Insurance,Insurance sector represented by PICC Property & Casualty. Market cap: 18.99.
+CHINA,China Internet,"Internet and technology companies in China including China Construction Bank, China Life Insurance, China Merchants Bank, China Merchants Port, China Mobile, China Shenhua Energy, and Kuaishou Technology. Combined market cap: 340.03."
+CHINA,IT Service CN,Information technology services provider Tencent Holdings. Market cap: 97.39.
+JAPAN,Banks,"Japanese banks providing deposit taking, lending, and other financial services."
+JAPAN,Chip Equip Test,Companies specializing in semiconductor test and measurement equipment.
+JAPAN,Chip Equip Production,Manufacturers of semiconductor production equipment and fabrication tools.
+JAPAN,Chip Equip Materials,Suppliers of materials and chemicals used in semiconductor manufacturing.
+JAPAN,Components,"Producers of electronic components such as capacitors, inductors, and sensors."
+JAPAN,Electronics Components,Manufacturers of passive electronic components and magnetic materials.
+JAPAN,Electronics Systems,"Companies developing electric motors, robotics, and automation systems."
+JAPAN,Tires,Producers of automotive tires and rubber products.
+JAPAN,Trading,Diversified trading firms engaged in global commerce and resource distribution.
+JAPAN,Investment,Investment and venture capital firms focusing on technology and growth assets.
+JAPAN,Utilities,Electric utility companies generating and supplying power in Japan.
+JAPAN,Tech Fin,Financial technology firms offering digital banking and innovative financial services.
+TECH HARD,TECH HARD,"Hardware technology sector covering semiconductors, 5G, cloud computing, data centers, and AI data analytics."
+TECH HARD,5G,"Companies developing 5G network infrastructure, RF solutions, and related semiconductor components."
+TECH HARD,Chip Design,"Entities that design semiconductors, including fabless chip companies, integrated device manufacturers (IDMs), and semiconductor design houses. Key holdings: tag."
+TECH HARD,Chip Equip,"Manufacturers of semiconductor fabrication, testing, and packaging equipment, as well as materials suppliers."
+TECH HARD,Cloud,"Providers of cloud services, platforms, and data center solutions for enterprise and consumer applications."
+TECH HARD,Data & AI,"Organizations focused on data analytics, artificial intelligence, machine learning, and generative AI technologies."
+TECH HARD,Data Center,"Companies operating data centers, including REITs, server and storage hardware providers, and related infrastructure firms."
+TECH HARD,Quantum Computing,"IONQ develops quantum computing systems and software. Key holdings: IONQ INC. CL.A   DL-,0001, D-WAVE QUANTUM   DL-,0001, QUANTUM COMPUT.INC. DL-01, RIGETTI COMPUTNG DL-,0001, ETF S.SO.-DEFIANCE QUANT.."
+TECH SOFT,Data & AI,"Companies providing data analytics, artificial intelligence platforms, and machine learning infrastructure for enterprise and consumer applications."
+TECH SOFT,Enterprise Software,"Providers of business management, productivity, and vertical-specific software solutions for enterprises including ERP, CAD, and workflow automation."
+TECH SOFT,IT Services,"Companies delivering information technology consulting, system integration, managed services, and IT infrastructure support to businesses."
+TECH SOFT,CRM/Mktg,"Providers of customer relationship management, marketing automation, and digital marketing platforms for B2B and B2C engagement."
+TECH SOFT,Media/Games,"Entertainment companies spanning video game development, interactive media, streaming services, and digital content platforms."
+TECH SOFT,Cybersec,"Companies offering network security, endpoint protection, threat intelligence, and cybersecurity compliance solutions for enterprises."
+TECH SOFT,Fintech,"Financial technology providers including payment processing, financial software platforms, and digital banking infrastructure."
+TECH SOFT,EdTech,"Education technology companies offering online learning platforms, educational content delivery, and academic management systems."
+W E L T,Developed Markets,"Equity funds providing broad exposure to large and mid-cap stocks across established economies like the US, Europe, and Japan. Key holdings: GQG PRT.GL.EQ. AEOA, X(IE)-MSCIACWLDSC 1C, ST.STR.SP.MS.ACWIM UC.ETF, ISHSV-MSCI ACWI DL A, ST.S.SPDR MS.ACW UE UHDLA, MUL AMUN ACWLD ETF E ACC."
+W E L T,Emerging Markets,Funds investing in equities of developing economies with higher growth potential but elevated political and currency risks.
+W E L T,Frontier Markets,"Funds focusing on small, less accessible markets with limited liquidity but significant long-term growth opportunities."
+W E L T,Climate Transition,"Funds targeting companies enabling or benefiting from the shift to a low-carbon economy, including renewable energy and sustainable infrastructure. Key holdings: AIS-AM.MSCI WD.CL.TR.AEC."
+W E L T,Robotics/AI,"Thematic funds investing in companies involved in robotics, automation, artificial intelligence, and related technologies."
+W E L T,Disruptive Tech,Funds focused on companies driving transformative innovation and disruptive business models across industries.
+W E L T,Global Tech,Funds concentrated in the world's largest technology companies with dominant market positions and strong growth characteristics.
+W E L T,Healthcare,"Funds specializing in pharmaceuticals, biotechnology, medical devices, and healthcare services globally."
+W E L T,Value,"Funds seeking undervalued companies trading below intrinsic value based on fundamentals like book value and earnings. Key holdings: OSS.S.B.US S.V.T U.ETF1CE, OSS.S.B.EU.S.V.T U.ETF1CE."
+W E L T,Dividend,"Funds emphasizing regular dividend income from stocks with attractive yield and sustainable payout histories. Key holdings: VANECK MSTR.DM DIV.UC.ETF, VA.FTSE A.W.H.D.Y.UETFDLA, VA.FTSE A.W.H.D.Y.UETFDLD."
+W E L T,Quality,"Funds investing in companies with strong balance sheets, high profitability, and competitive advantages. Key holdings: UBS AG O.END."
+W E L T,Premium,Funds focused on industry-leading companies with pricing power and sustainable competitive moats.
+W E L T,Small Cap,Funds targeting smaller publicly traded companies with higher growth potential and volatility.
+W E L T,Enhanced,Funds using quantitative or alternative methods to enhance returns relative to a benchmark index.
+W E L T,Titans,Funds providing concentrated exposure to the 50 largest global corporations by market capitalization.
+W E L T,USA ex-US,Funds providing international equity exposure excluding the United States market.
+W E L T,Growth,Funds focused on companies with above-average earnings growth rates and expansion potential.
+W E L T,Multi-Factor,"Funds combining multiple investment factors like value, quality, and momentum in a single strategy."
+W E L T,Future Leaders,"Fund investing in next-generation global leaders and emerging champions across sectors with strong long-term growth potential. Key holdings: ECHIQ-WLDNEXLDS KEOA, ECHIQ-WLDNEXLDS AEOA."

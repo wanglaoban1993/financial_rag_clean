@@ -1,0 +1,15 @@
+[theme]
+base = "light"
+primaryColor = "#1d7fff"
+backgroundColor = "#f5f7fa"
+# Light yellow on purpose: the dataframe's row-hover color is a 30% blend of
+# secondaryBackgroundColor into backgroundColor and can only be themed here.
+# Other widgets that Streamlit paints with this color are pinned back to the
+# console color in server_app/dashboard.py's CSS.
+secondaryBackgroundColor = "#ffe066"
+textColor = "#1a2b3c"
+font = "Arial, sans-serif"
+codeFont = "Arial, sans-serif"
+
+[browser]
+gatherUsageStats = false

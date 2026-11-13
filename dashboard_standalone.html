@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Financial Dashboard Standalone</title>
+    <style>
+      :root {
+        --bg: #040d1a;
+        --console: #071726;
+        --panel: #0b1e30;
+        --row-a: #071726;
+        --row-b: #091c2c;
+        --row-hover: #0f2840;
+        --border: #0f2035;
+        --border-hi: #1a3d5c;
+        --pos: #00d48c;
+        --pos-dim: rgba(0, 212, 140, 0.12);
+        --neg: #ff3d55;
+        --neg-dim: rgba(255, 61, 85, 0.12);
+        --gold: #f0a500;
+        --text: #c6ddf0;
+        --sub: #3d6080;
+        --muted: #1e3d55;
+        --mono: Consolas, "SF Mono", monospace;
+        --sans: "Segoe UI", system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .ticker-wrap {
+        overflow: hidden;
+        background: var(--console);
+        border-bottom: 1px solid var(--border);
+        height: 26px;
+        display: flex;
+        align-items: center;
+      }
+
+      .ticker {
+        display: flex;
+        animation: ticker 50s linear infinite;
+      }
+
+      .ticker:hover {
+        animation-play-state: paused;
+      }
+
+      .ticker span.item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 14px;
+        border-right: 1px solid var(--border);
+        white-space: nowrap;
+        font-family: var(--mono);
+        font-size: 9px;
+      }
+
+      @keyframes ticker {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      .tabs {
+        background: var(--console);
+        border-bottom: 1px solid var(--border);
+        padding: 0 16px;
+        display: flex;
+        overflow-x: auto;
+      }
+
+      .tab {
+        padding: 10px 16px;
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        color: var(--sub);
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .tab.active {
+        color: var(--text);
+      }
+
+      .count {
+        font-family: var(--mono);
+        font-size: 9px;
+        padding: 1px 5px;
+        border-radius: 10px;
+      }
+
+      .header {
+        background: linear-gradient(180deg, #071f38 0%, var(--bg) 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 20px;
+      }
+
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .title-main {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+      }
+
+      .title-sub,
+      .live {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--sub);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .cards {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px 14px;
+        flex: 1 1 130px;
+        min-width: 110px;
+      }
+
+      .card-label {
+        color: var(--sub);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .card-value {
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .card-sub {
+        color: var(--sub);
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      .filters {
+        background: var(--console);
+        border-bottom: 1px solid var(--border);
+        padding: 7px 16px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .seg {
+        display: flex;
+        border-radius: 5px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+
+      .seg button {
+        padding: 4px 12px;
+        background: transparent;
+        color: var(--sub);
+        border: 0;
+        cursor: pointer;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .spacer {
+        flex: 1;
+      }
+
+      input,
+      select {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        color: var(--text);
+        font-size: 11px;
+        font-family: var(--mono);
+        padding: 5px 10px;
+        outline: none;
+      }
+
+      input {
+        width: 170px;
+      }
+
+      .results {
+        color: var(--sub);
+        font-size: 10px;
+        font-family: var(--mono);
+      }
+
+      .chart-wrap {
+        padding: 12px 20px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .chart-title {
+        font-size: 9px;
+        color: var(--sub);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .chart {
+        height: 95px;
+        display: grid;
+        grid-template-columns: repeat(14, minmax(28px, 1fr));
+        gap: 6px;
+        align-items: end;
+        border-bottom: 1px solid var(--border-hi);
+        overflow-x: auto;
+      }
+
+      .bar-box {
+        height: 78px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 3px;
+      }
+
+      .bar {
+        width: 14px;
+        min-height: 2px;
+        border-radius: 3px 3px 0 0;
+      }
+
+      .bar-label {
+        color: var(--sub);
+        font-family: var(--mono);
+        font-size: 7px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+
+      th {
+        padding: 7px 10px;
+        color: var(--sub);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        user-select: none;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+        background: var(--console);
+        text-align: left;
+      }
+
+      th.active {
+        color: var(--text);
+      }
+
+      td {
+        padding: 6px 10px;
+        white-space: nowrap;
+      }
+
+      tr:hover td {
+        background: var(--row-hover) !important;
+      }
+
+      .mono {
+        font-family: var(--mono);
+      }
+
+      .sub {
+        color: var(--sub);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .pct {
+        display: inline-block;
+        border-radius: 4px;
+        padding: 2px 7px;
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 62px;
+        text-align: right;
+      }
+
+      .badge {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 9px;
+        font-weight: 700;
+        padding: 1px 5px;
+        border-radius: 3px;
+        margin: 0 1px;
+      }
+
+      .footer {
+        border-top: 1px solid var(--border);
+        padding: 8px 16px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 9px;
+      }
+
+      .error {
+        color: #ff8a8a;
+        background: var(--console);
+        padding: 20px;
+        white-space: pre-wrap;
+        font-family: var(--mono);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const FIELD_NAMES = [
+        "wkn",
+        "exch",
+        "country",
+        "sector",
+        "tgt",
+        "tgtCcy",
+        "rat",
+        "isin",
+        "name",
+        "bid",
+        "ask",
+        "ccy",
+        "d1",
+        "m1",
+        "y1",
+      ];
+
+      const TABS = [
+        { key: "airspace", raw: "as", label: "AIR & SPACE", icon: "A/S", accent: "#1d7fff" },
+        { key: "datacenter", raw: "dc", label: "DATA CENTER", icon: "DC", accent: "#0891b2" },
+        { key: "health", raw: "hl", label: "HEALTH", icon: "HL", accent: "#10b981" },
+        { key: "photonic", raw: "ph", label: "PHOTONIC", icon: "PH", accent: "#8b5cf6" },
+        { key: "power", raw: "pw", label: "POWER", icon: "PW", accent: "#f59e0b" },
+        { key: "robotic", raw: "rb", label: "ROBOTIC", icon: "RB", accent: "#ef4444" },
+        { key: "tech", raw: "tc", label: "TECH", icon: "TC", accent: "#22c55e" },
+        { key: "usbranches", raw: "us", label: "US BRANCHES", icon: "US", accent: "#38bdf8" },
+        { key: "europabranches", raw: "eu", label: "EUROPE BRANCHES", icon: "EU", accent: "#f97316" },
+      ];
+
+      const state = {
+        tab: "airspace",
+        sub: "merged",
+        sortK: "d1",
+        sortD: "desc",
+        search: "",
+        sector: "all",
+      };
+
+      let DATA = {};
+
+      const byId = (id) => document.getElementById(id);
+      const isAnomaly = (v) => v != null && Math.abs(v) > 50;
+      const pct = (v) => (v == null ? "-" : `${v >= 0 ? "+" : ""}${Number(v).toFixed(2)}%`);
+      const price = (v, c) => (v == null ? "-" : `${Number(v).toFixed(2)} ${c || ""}`.trim());
+      const pColor = (v) => (v == null ? "var(--sub)" : v >= 0 ? "var(--pos)" : "var(--neg)");
+      const pBg = (v) => (v == null ? "transparent" : v >= 0 ? "var(--pos-dim)" : "var(--neg-dim)");
+      const rowObj = (row) => Object.fromEntries(FIELD_NAMES.map((name, i) => [name, row[i]]));
+      const esc = (value) =>
+        String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        })[c]);
+
+      async function loadData() {
+        const response = await fetch("./Multi_Dashboard.jsx", { cache: "no-store" });
+        const source = await response.text();
+        const match = source.match(/const RAW = ([\s\S]*?);\n\nconst F =/);
+        if (!match) throw new Error("Could not find RAW data inside Multi_Dashboard.jsx");
+        const raw = JSON.parse(match[1]);
+        DATA = Object.fromEntries(
+          TABS.map((tab) => [
+            tab.key,
+            {
+              merged: (raw[tab.raw]?.m || []).map(rowObj),
+              toplist: (raw[tab.raw]?.t || []).map(rowObj),
+            },
+          ])
+        );
+      }
+
+      function currentTab() {
+        return TABS.find((t) => t.key === state.tab) || TABS[0];
+      }
+
+      function currentRowsRaw() {
+        return DATA[state.tab]?.[state.sub] || DATA[state.tab]?.merged || [];
+      }
+
+      function filteredRows() {
+        const q = state.search.toLowerCase();
+        return [...currentRowsRaw()]
+          .filter((s) => {
+            const textMatch =
+              !q ||
+              String(s.name || "").toLowerCase().includes(q) ||
+              String(s.wkn || "").toLowerCase().includes(q) ||
+              String(s.isin || "").toLowerCase().includes(q);
+            return textMatch && (state.sector === "all" || s.sector === state.sector);
+          })
+          .sort((a, b) => {
+            const av = a[state.sortK];
+            const bv = b[state.sortK];
+            if (av == null) return 1;
+            if (bv == null) return -1;
+            if (typeof av === "string") {
+              return state.sortD === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+            }
+            return state.sortD === "asc" ? av - bv : bv - av;
+          });
+      }
+
+      function render() {
+        const tab = currentTab();
+        document.documentElement.style.setProperty("--accent", tab.accent);
+        const dataset = currentRowsRaw();
+        const rows = filteredRows();
+        const normal = dataset.filter((s) => s.d1 != null && !isAnomaly(s.d1));
+        const avg = normal.length ? normal.reduce((a, s) => a + s.d1, 0) / normal.length : 0;
+        const best = [...normal].sort((a, b) => b.d1 - a.d1)[0];
+        const worst = [...normal].sort((a, b) => a.d1 - b.d1)[0];
+        const posC = normal.filter((s) => s.d1 >= 0).length;
+        const sectors = ["all", ...new Set(dataset.map((s) => s.sector).filter(Boolean))];
+        const hasTop = (DATA[state.tab]?.toplist || []).length > 0;
+        const chart = [...(DATA[state.tab]?.merged || [])]
+          .filter((s) => s.d1 != null && !isAnomaly(s.d1))
+          .sort((a, b) => b.d1 - a.d1)
+          .slice(0, 14);
+        const maxAbs = Math.max(1, ...chart.map((s) => Math.abs(s.d1)));
+        const ticker = [...(DATA[state.tab]?.merged || [])]
+          .filter((s) => s.d1 != null && !isAnomaly(s.d1))
+          .sort((a, b) => Math.abs(b.d1) - Math.abs(a.d1))
+          .slice(0, 15);
+
+        byId("root").innerHTML = `
+          <div class="ticker-wrap">
+            <div class="ticker">${[...ticker, ...ticker]
+              .map(
+                (s) => `<span class="item">
+                  <b style="color:${tab.accent}">${esc(s.wkn)}</b>
+                  <span>${esc(price(s.bid, s.ccy))}</span>
+                  <b style="color:${pColor(s.d1)}">${s.d1 >= 0 ? "▲" : "▼"}${Math.abs(s.d1).toFixed(2)}%</b>
+                </span>`
+              )
+              .join("")}</div>
+          </div>
+
+          <div class="tabs">${TABS.map(
+            (t) => `<button class="tab ${t.key === state.tab ? "active" : ""}" data-tab="${t.key}" style="border-bottom-color:${t.key === state.tab ? t.accent : "transparent"}">
+              <span>${t.icon}</span>${t.label}
+              <span class="count" style="background:${t.key === state.tab ? t.accent + "33" : "transparent"};color:${t.key === state.tab ? t.accent : "var(--muted)"}">${DATA[t.key]?.merged?.length || 0}</span>
+            </button>`
+          ).join("")}</div>
+
+          <section class="header">
+            <div class="header-top">
+              <div class="title">
+                <span style="font-family:var(--mono);font-weight:800;color:${tab.accent}">${tab.icon}</span>
+                <div>
+                  <div class="title-main">${tab.label} PORTFOLIO</div>
+                  <div class="title-sub">${state.sub === "merged" ? "Merged Holdings" : "Top List"}</div>
+                </div>
+              </div>
+              <div class="live" style="text-align:right">
+                <div style="color:${tab.accent};font-weight:700">◉ LIVE DATA</div>
+                <div>Latest exported data</div>
+              </div>
+            </div>
+            <div class="cards">
+              ${stat("Holdings", dataset.length, state.sector === "all" ? "All sectors" : state.sector)}
+              ${stat("Avg 1D", pct(avg), `${posC}/${normal.length} gainers`, pColor(avg))}
+              ${best ? stat("Top Gainer", best.wkn, `${best.name.split(" ").slice(0, 2).join(" ")} · ${pct(best.d1)}`, "var(--pos)") : ""}
+              ${worst ? stat("Top Loser", worst.wkn, `${worst.name.split(" ").slice(0, 2).join(" ")} · ${pct(worst.d1)}`, "var(--neg)") : ""}
+            </div>
+          </section>
+
+          <section class="filters">
+            ${hasTop ? `<div class="seg">
+              ${["merged", "toplist"].map((k) => `<button data-sub="${k}" style="background:${state.sub === k ? tab.accent : "transparent"};color:${state.sub === k ? "#fff" : "var(--sub)"}">${k === "merged" ? "MERGED" : "TOP LIST"} (${DATA[state.tab]?.[k]?.length || 0})</button>`).join("")}
+            </div>` : ""}
+            <div class="spacer"></div>
+            <input id="search" value="${esc(state.search)}" placeholder="Name / WKN / ISIN..." />
+            <select id="sector">${sectors.map((s) => `<option value="${esc(s)}" ${s === state.sector ? "selected" : ""}>${s === "all" ? "All Sectors" : esc(s)}</option>`).join("")}</select>
+            <div class="results">${rows.length} result${rows.length === 1 ? "" : "s"}</div>
+          </section>
+
+          <section class="chart-wrap">
+            <div class="chart-title">▪ 1-Day Top Movers</div>
+            <div class="chart">${chart.map((s) => `<div class="bar-box" title="${esc(s.name)} ${pct(s.d1)}">
+              <div class="bar" style="height:${Math.max(2, Math.abs(s.d1) / maxAbs * 72)}px;background:${s.d1 >= 0 ? "var(--pos)" : "var(--neg)"}"></div>
+              <div class="bar-label">${esc(s.wkn)}</div>
+            </div>`).join("")}</div>
+          </section>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr>${[
+                ["WKN", "wkn", ""],
+                ["Name", "name", ""],
+                ["Sector", "sector", ""],
+                ["Exch", "exch", ""],
+                ["Bid", "bid", "right"],
+                ["Ask", "ask", "right"],
+                ["Target", "tgt", "right"],
+                ["1D %", "d1", "right"],
+                ["1M %", "m1", "right"],
+                ["1Y %", "y1", "right"],
+                ["Rtg", "rat", "center"],
+              ].map(([label, key, cls]) => `<th class="${state.sortK === key ? "active" : ""} ${cls}" data-sort="${key}">${label}${state.sortK === key ? (state.sortD === "asc" ? " ↑" : " ↓") : " ·"}</th>`).join("")}</tr></thead>
+              <tbody>${rows.length ? rows.map(rowHtml).join("") : `<tr><td colspan="11" class="center muted" style="padding:30px">No results</td></tr>`}</tbody>
+            </table>
+          </div>
+
+          <footer class="footer">
+            <div>Values flagged as "data" indicate anomalies &gt;50% single-day change.</div>
+            <div>Rating: A = Add/Buy · X = Neutral/Hold</div>
+          </footer>
+        `;
+
+        bindEvents();
+      }
+
+      function stat(label, value, sub, color = "var(--text)") {
+        return `<div class="card">
+          <div class="card-label">${esc(label)}</div>
+          <div class="card-value" style="color:${color}">${esc(value)}</div>
+          ${sub ? `<div class="card-sub">${esc(sub)}</div>` : ""}
+        </div>`;
+      }
+
+      function pctCell(v) {
+        if (v == null) return `<span class="muted mono">-</span>`;
+        if (isAnomaly(v)) return `<span class="mono" style="color:var(--neg);font-size:9px">! data</span>`;
+        return `<span class="pct" style="color:${pColor(v)};background:${pBg(v)}">${pct(v)}</span>`;
+      }
+
+      function rating(rat) {
+        const parts = String(rat || "").split(/\s+/).filter(Boolean).slice(0, 2);
+        if (!parts.length) return `<span class="muted">-</span>`;
+        return parts.map((p) => {
+          const good = p === "A";
+          return `<span class="badge" style="background:${good ? "rgba(0,212,140,0.18)" : "rgba(90,112,140,0.18)"};color:${good ? "#00d48c" : "#5a8aa8"};border:1px solid ${good ? "#00d48c44" : "#5a8aa844"}">${esc(p)}</span>`;
+        }).join("");
+      }
+
+      function rowHtml(s, i) {
+        const bg = i % 2 === 0 ? "var(--row-a)" : "var(--row-b)";
+        return `<tr>
+          <td style="background:${bg};padding-left:16px;color:var(--accent);font-weight:700" class="mono">${esc(s.wkn)}<div class="muted" style="font-size:8px">${esc(s.country)}</div></td>
+          <td style="background:${bg}"><b>${esc(s.name)}</b><div class="sub mono" style="font-size:8px">${esc(s.isin)}</div></td>
+          <td style="background:${bg}">${esc(s.sector)}</td>
+          <td style="background:${bg}" class="mono sub">${esc(s.exch || "-")}</td>
+          <td style="background:${bg}" class="right mono">${esc(price(s.bid, s.ccy))}</td>
+          <td style="background:${bg}" class="right mono sub">${esc(price(s.ask, s.ccy))}</td>
+          <td style="background:${bg};color:var(--gold)" class="right mono">${s.tgt == null ? '<span class="muted">-</span>' : esc(`${Number(s.tgt).toLocaleString()} ${s.tgtCcy}`)}</td>
+          <td style="background:${bg}" class="right">${pctCell(s.d1)}</td>
+          <td style="background:${bg}" class="right">${pctCell(s.m1)}</td>
+          <td style="background:${bg}" class="right">${pctCell(s.y1)}</td>
+          <td style="background:${bg}" class="center">${rating(s.rat)}</td>
+        </tr>`;
+      }
+
+      function bindEvents() {
+        document.querySelectorAll("[data-tab]").forEach((el) => {
+          el.onclick = () => {
+            state.tab = el.dataset.tab;
+            state.sub = "merged";
+            state.search = "";
+            state.sector = "all";
+            state.sortK = "d1";
+            state.sortD = "desc";
+            render();
+          };
+        });
+        document.querySelectorAll("[data-sub]").forEach((el) => {
+          el.onclick = () => {
+            state.sub = el.dataset.sub;
+            render();
+          };
+        });
+        document.querySelectorAll("[data-sort]").forEach((el) => {
+          el.onclick = () => {
+            const key = el.dataset.sort;
+            if (state.sortK === key) state.sortD = state.sortD === "asc" ? "desc" : "asc";
+            else {
+              state.sortK = key;
+              state.sortD = "desc";
+            }
+            render();
+          };
+        });
+        byId("search").oninput = (event) => {
+          state.search = event.target.value;
+          render();
+          byId("search").focus();
+        };
+        byId("sector").onchange = (event) => {
+          state.sector = event.target.value;
+          render();
+        };
+      }
+
+      loadData()
+        .then(render)
+        .catch((error) => {
+          byId("root").innerHTML = `<pre class="error">${esc(error && error.stack ? error.stack : error)}</pre>`;
+        });
+    </script>
+  </body>
+</html>

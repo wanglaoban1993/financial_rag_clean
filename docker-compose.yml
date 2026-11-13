@@ -1,0 +1,184 @@
+name: financial-rag
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-financial_rag}
+      POSTGRES_USER: ${POSTGRES_USER:-financial_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      TZ: ${TZ:-Europe/Berlin}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./ops/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-financial_rag}
+      POSTGRES_USER: ${POSTGRES_USER:-financial_user}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+      TZ: ${TZ:-Europe/Berlin}
+    volumes:
+      - ./backups/postgres:/backups
+    command: >
+      sh -c '
+        set -eu;
+        mkdir -p /backups;
+        while true; do
+          ts="$$(date -u +%Y%m%dT%H%M%SZ)";
+          file="/backups/$${POSTGRES_DB}_$${ts}.dump";
+          echo "Creating PostgreSQL backup: $$file";
+          pg_dump -h postgres -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -Fc -f "$$file";
+          find /backups -type f -name "*.dump" -mtime +"$${BACKUP_RETENTION_DAYS}" -delete;
+          sleep "$${BACKUP_INTERVAL_SECONDS}";
+        done
+      '
+
+  stage1-check:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./ops/stage1-check:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1 >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT_INTERNAL: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-financial_rag}
+      POSTGRES_USER: ${POSTGRES_USER:-financial_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      WATCHLIST_CSV_ROOT: /app/csv_update
+      ISIN_SYMBOL_MAP_PATH: /app/isin_symbol_candidates.yaml
+      EODHD_API_KEY: ${EODHD_API_KEY:-}
+      TZ: ${TZ:-Europe/Berlin}
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      # rw: POST /instruments appends new EQUITY/ETF rows to their source CSV,
+      # and a new ISIN->symbol mapping so the price-history chart works too
+      - ./csv_update:/app/csv_update
+      - ./isin_symbol_candidates.yaml:/app/isin_symbol_candidates.yaml
+    command: uvicorn server_app.api:app --host 0.0.0.0 --port 8000
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5).read()\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  agent-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT_INTERNAL: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-financial_rag}
+      POSTGRES_USER: ${POSTGRES_USER:-financial_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      FIN_RAG_CONFIG: /run/config/financial_rag_config.yaml
+      TZ: ${TZ:-Europe/Berlin}
+      # Persist the downloaded BAAI/bge-m3 embedding model in a named volume (see below)
+      # so it's fetched once, not re-downloaded (~2GB) on every container recreate.
+      HF_HOME: /hf-cache
+    ports:
+      - "127.0.0.1:${AGENT_API_PORT:-8100}:8100"
+    volumes:
+      - ${FIN_RAG_CONFIG:?set FIN_RAG_CONFIG in .env to the host config.yaml path}:/run/config/financial_rag_config.yaml:ro
+      - ./data:/app/data:ro
+      - ./csv_update:/app/csv_update:ro
+      - hf_cache:/hf-cache
+    command: uvicorn server_app.agent_api:app --host 0.0.0.0 --port 8100
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8100/health', timeout=5).read()\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      # First boot downloads/loads the BAAI/bge-m3 embedding model, which can take a while.
+      start_period: 180s
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_URL: http://api:8000
+      AGENT_API_URL: http://agent-api:8100
+      DASHBOARD_REFRESH_SECONDS: ${DASHBOARD_REFRESH_SECONDS:-30}
+      TZ: ${TZ:-Europe/Berlin}
+    ports:
+      - "127.0.0.1:${DASHBOARD_PORT:-8501}:8501"
+    command: >
+      streamlit run server_app/dashboard.py
+      --server.address=0.0.0.0
+      --server.port=8501
+      --server.headless=true
+      --browser.gatherUsageStats=false
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501', timeout=5).read()\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  topflop:
+    build:
+      context: .
+      dockerfile: Dockerfile.topflop
+    profiles:
+      - jobs
+    environment:
+      TZ: ${TZ:-Europe/Berlin}
+      OUTPUT_DIR: /app/csv_update/TOP_LIST
+      WRITE_CSV: ${TOPFLOP_WRITE_CSV:-1}
+      UPDATE_DAX_TECDAX: "1"
+      EODHD_API_KEY: ${EODHD_API_KEY:-}
+    volumes:
+      - .:/app
+    command: ["bash", "scripts/run_finanzen_topflop_update.sh"]
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TUNNEL_TOKEN:-}
+    environment:
+      TZ: ${TZ:-Europe/Berlin}
+
+volumes:
+  postgres_data:
+  hf_cache:
