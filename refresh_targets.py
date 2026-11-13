@@ -1,6 +1,6 @@
 """Refresh the shared analyst-target (TMP) cache.
 
-Run at 10:00 and 16:30 (see README, "Target price (TMP) refresh"). Collects the
+Run at 10:00 and 16:30 (see docs/reference.md, "Target price (TMP) refresh"). Collects the
 ISINs of every list that shows a target price (EQUITY watchlists, INDEX lists
 and the Top list), looks each one up on Yahoo once and writes the result to
 target_cache.py's file. It never touches the list CSVs, so it cannot collide

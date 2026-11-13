@@ -8,7 +8,7 @@ index, the code or the data provider, not assumed. Dates are October 2026.
 Short version of the architecture this refers to: `rag/orchestrator.py` routes a question to
 `DocumentAgent` (PDFs, emails, watchlists) and/or `MarketAgent` (EODHD / Finnhub market data);
 each is a `ToolCallingAgent` (`rag/tool_calling_agent.py`), a ReAct-style loop that parses tool
-calls out of the model's text. See the README for the full flow.
+calls out of the model's text. See the [reference](reference.md) for the full flow.
 
 ## 1. Reading documents
 
@@ -46,7 +46,7 @@ calls out of the model's text. See the README for the full flow.
 |---|---|
 | **Symptom** | "What does today's newsletter say about the DAX?" (and a query almost identical to today's subject line) returned emails of earlier days: in a check on the live index the top three were dated 09-23, 10-07 and 10-01, not 10-08. When no document existed for the day, the assistant still produced an answer, or invented an email. |
 | **Cause** | Retrieval is BM25 + FAISS + reranker over all chunks; metadata (the email `date`, the date in a PDF file name) was stored but never used to narrow a search. The daily newsletters share most of their text, so near-identical days compete. |
-| **Solution** | Date-aware search (`rag/date_filter.py`): the range is read from the user's *original* question, only when it names a document and a date, and applied to both retrievers **before** ranking (a filter after the top-k would find nothing: the matching day is a tiny part of the index). An empty day returns `no_documents_in_range` plus the newest available date, and the agent says so. Details are in the README section "Date-aware document search". |
+| **Solution** | Date-aware search (`rag/date_filter.py`): the range is read from the user's *original* question, only when it names a document and a date, and applied to both retrievers **before** ranking (a filter after the top-k would find nothing: the matching day is a tiny part of the index). An empty day returns `no_documents_in_range` plus the newest available date, and the agent says so. Details are in the [reference](reference.md#date-aware-document-search), section "Date-aware document search". |
 | **Found while testing** | (a) FAISS filters only the `fetch_k` nearest neighbours, so `fetch_k` must be the whole index. (b) A tool-description variable named `label` was overwritten inside a loop, so the "only documents dated ..." note printed an email subject. (c) The model sent `search_documents` with dates but no `query`, got a validation error, resent it unchanged and ended in `[Incomplete]`; a missing query now falls back to the user's question. (d) The relevance grader treated "no document is dated X" as a bad retrieval and would have pushed the model to search again without the date; that result now skips grading. |
 | **Limit** | Documents have a date, not a time. "Today" is the server date. Other relative ranges ("last week") and filters by source or file name are not implemented. |
 

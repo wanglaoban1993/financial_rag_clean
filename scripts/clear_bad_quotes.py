@@ -3,7 +3,7 @@
 
 2026-10-28 around 17:50, after the Xetra close, the onvista parser read digits of knock-out
 certificate product codes as a price (Siemens Ask 74 at about 269, ASML 66 at 1468, Infineon 0).
-The parser is fixed (README "Bid/Ask guards"), but the rows that were written keep their
+The parser is fixed (docs/reference.md "Bid/Ask guards"), but the rows that were written keep their
 value until onvista has a real quote again. This blanks them instead of leaving nonsense:
 
   a Bid or Ask that is no price next to REF_PREV_CLOSE (csv_analyse_watchlist._is_garbage_quote_side):
